@@ -1,17 +1,19 @@
-ervices:
+services:
   - type: web
     name: digquest
     env: node
     plan: starter
-    repo: https://github.com/DigQuestor/digquest
-    branch: main
-    rootDir: .
     buildCommand: |
       echo "=== RENDER BUILD DEBUG ==="
-      pwd && ls -la
-      npm install --production=false --verbose
-      npx vite build --config vite.config.minimal.ts --mode production
-      npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist --target=node18
+      echo "Working directory: $(pwd)"
+      echo "Directory contents:"
+      ls -la
+      echo "=== INSTALLING DEPENDENCIES ==="
+      npm install --production=false
+      echo "=== BUILDING CLIENT ==="
+      npx vite build --config vite.config.minimal.ts
+      echo "=== BUILDING SERVER ==="
+      npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
       echo "=== BUILD COMPLETE ==="
     startCommand: node dist/index.js
     envVars:
