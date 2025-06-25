@@ -3,17 +3,7 @@ services:
     name: digquest
     env: node
     plan: starter
-    repo: https://github.com/DigQuestor/digquest
-    branch: main
-    buildCommand: |
-      echo "=== Build Debug Info ==="
-      pwd
-      ls -la
-      echo "=== Installing Dependencies ==="
-      npm ci
-      echo "=== Building Application ==="
-      npm run build
-      echo "=== Build Complete ==="
+    buildCommand: node build.js
     startCommand: node dist/index.js
     envVars:
       - key: NODE_ENV
