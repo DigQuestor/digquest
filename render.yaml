@@ -3,7 +3,7 @@ services:
     name: digquest
     env: node
     plan: starter
-    buildCommand: node build.js
+    buildCommand: node build-render.js
     startCommand: node dist/index.js
     envVars:
       - key: NODE_ENV
