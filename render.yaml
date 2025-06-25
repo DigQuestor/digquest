@@ -3,18 +3,7 @@ services:
     name: digquest
     env: node
     plan: starter
-    buildCommand: |
-      echo "=== RENDER BUILD DEBUG ==="
-      echo "Working directory: $(pwd)"
-      echo "Directory contents:"
-      ls -la
-      echo "=== INSTALLING DEPENDENCIES ==="
-      npm install --production=false
-      echo "=== BUILDING CLIENT ==="
-      npx vite build --config vite.config.minimal.ts
-      echo "=== BUILDING SERVER ==="
-      npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
-      echo "=== BUILD COMPLETE ==="
+    buildCommand: echo "Working in $(pwd)" && ls -la && npm install --production=false && npx vite build --config vite.config.minimal.ts && npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
     startCommand: node dist/index.js
     envVars:
       - key: NODE_ENV
