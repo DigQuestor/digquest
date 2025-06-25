@@ -1,9 +1,18 @@
-services:
+ervices:
   - type: web
     name: digquest
     env: node
     plan: starter
-    buildCommand: node build-render.js
+    repo: https://github.com/DigQuestor/digquest
+    branch: main
+    rootDir: .
+    buildCommand: |
+      echo "=== RENDER BUILD DEBUG ==="
+      pwd && ls -la
+      npm install --production=false --verbose
+      npx vite build --config vite.config.minimal.ts --mode production
+      npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist --target=node18
+      echo "=== BUILD COMPLETE ==="
     startCommand: node dist/index.js
     envVars:
       - key: NODE_ENV
@@ -12,18 +21,6 @@ services:
         fromDatabase:
           name: digquest-db
           property: connectionString
-      - key: AWS_ACCESS_KEY_ID
-        sync: false
-      - key: AWS_SECRET_ACCESS_KEY
-        sync: false
-      - key: SENDGRID_API_KEY
-        sync: false
-      - key: STRIPE_SECRET_KEY
-        sync: false
-      - key: VITE_STRIPE_PUBLIC_KEY
-        sync: false
-      - key: VITE_GOOGLE_MAPS_API_KEY
-        sync: false
       - key: SESSION_SECRET
         generateValue: true
 databases:
