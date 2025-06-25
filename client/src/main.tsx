@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import "./index.css";
+import "../index.css";
 
 // Add meta tags for SEO
 const meta = document.createElement('meta');
