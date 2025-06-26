@@ -85,15 +85,15 @@
   border-color: hsl(var(--border));
 }
 
-  body {
-    @apply font-sans antialiased bg-sand-beige text-foreground;
-    font-family: 'Quicksand', sans-serif;
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Cabin Sketch', cursive;
-    @apply text-earth-brown;
-  }
+ body {
+  @apply font-sans antialiased;
+  font-family: 'Quicksand', sans-serif;
+  background-color: hsl(var(--sand-beige));
+  color: hsl(var(--foreground));
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cabin Sketch', cursive;
+  color: hsl(var(--earth-brown));
 }
 
 @layer components {
