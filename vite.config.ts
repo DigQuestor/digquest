@@ -1,28 +1,22 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { resolve } from 'path';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
 export default defineConfig({
   plugins: [react()],
-  root: './client',
-  build: {
-    outDir: '../dist/public',
-    emptyOutDir: true,
-    rollupOptions: {
-      input: './client/index.html',
-    },
-  },
+  root: ".",
   resolve: {
     alias: {
-      '@': resolve(__dirname, './client/src'),
-      '@shared': resolve(__dirname, './shared'),
-      '@assets': resolve(__dirname, './attached_assets'),
+      "@": path.resolve("./client/src"),
+      "@shared": path.resolve("./shared"),
+      "@assets": path.resolve("./attached_assets"),
     },
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
   },
-  server: {
-    host: '0.0.0.0',
-    port: 5173,
-  },
-  optimizeDeps: {
-    include: ['react', 'react-dom'],
+  build: {
+    outDir: "dist/client",
+    emptyOutDir: true,
+    rollupOptions: {
+      input: "./index.html",
+    },
   },
 });
