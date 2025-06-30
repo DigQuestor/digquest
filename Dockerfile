@@ -10,8 +10,10 @@ RUN npm ci
 COPY . .
 # Build the application
 RUN cp index.html ./entry.html && sed -i 's|./src/main.tsx|./client/src/main.tsx|g' entry.html && \
-    # Replace missing asset imports with placeholder URLs
-    find client/src -name "*.tsx" -o -name "*.ts" | xargs sed -i 's|@assets/[^'"'"']*\.jpg|data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect width="100%" height="100%" fill="%23f0f0f0"/%3E%3Ctext x="50%" y="50%" text-anchor="middle" dy=".3em" fill="%23666"%3EImage Placeholder%3C/text%3E%3C/svg%3E|g' && \
+    # Create missing asset directory and placeholder images
+    mkdir -p attached_assets && \
+    echo '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="#f0f0f0"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#666">Image Placeholder</text></svg>' > attached_assets/360_F_854499176_sbmU8CqMpL0O18JjL40wMPNJzd4pNWEw.jpg && \
+    echo '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="#f0f0f0"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#666">Image Placeholder</text></svg>' > attached_assets/1000_F_663771771_aa8TxQ2mYeUPRnDLfo4qFN0rX5Dpp8PO.jpg && \
     npx vite build --config vite.config.minimal.ts --outDir dist/client && npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
 # Clean up dev dependencies after build
 RUN npm ci --only=production && npm cache clean --force
