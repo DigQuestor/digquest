@@ -1,10 +1,10 @@
 services:
   - type: web
     name: digquest-v2
-    env: node
+    env: docker
     plan: starter
-    buildCommand: npm install && cp client/index.html . && npx vite build --config vite.config.minimal.ts --outDir dist/client && npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
-    startCommand: node dist/index.js
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     envVars:
       - key: NODE_ENV
         value: production
@@ -24,7 +24,6 @@ services:
         sync: false
       - key: SESSION_SECRET
         generateValue: true
-
 databases:
   - name: digquest-db
     databaseName: digquest
