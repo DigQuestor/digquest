@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigQuest - Metal Detecting Community</title>
+    <meta name="description" content="Join the ultimate metal detecting community. Share finds, connect with fellow detectorists, and discover treasure hunting locations worldwide.">
+    
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'digquest-brown': '#8B5A2B',
+                        'digquest-dark': '#6B4423', 
+                        'digquest-gold': '#D4AF37',
+                        'digquest-light': '#F5E6D3'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="DigQuest - Metal Detecting Community">
+    <meta property="og:description" content="Join the ultimate metal detecting community. Share finds, connect with fellow detectorists, and discover treasure hunting locations worldwide.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://digquest.onrender.com">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DigQuest - Metal Detecting Community">
+    <meta name="twitter:description" content="Join the ultimate metal detecting community. Share finds, connect with fellow detectorists, and discover treasure hunting locations worldwide.">
+</head>
+<body class="bg-digquest-light">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>
