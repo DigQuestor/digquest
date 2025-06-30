@@ -17,7 +17,7 @@ export default defineConfig({
     outDir: "dist/client",
     emptyOutDir: true,
     rollupOptions: {
-      input: "./client/index.html",
+  input: "./index.html",
     },
   },
 });
