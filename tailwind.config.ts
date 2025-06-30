@@ -60,7 +60,17 @@ export default {
           "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
-        },
+        }, // DigQuest-specific colors
+        "earth-brown": "hsl(var(--earth-brown))",
+        "forest-green": "hsl(var(--forest-green))",
+        "metallic-gold": "hsl(var(--metallic-gold))",
+        "sand-beige": "hsl(var(--sand-beige))",
+        "rust-orange": "hsl(var(--rust-orange))",
+        "copper-bronze": "hsl(var(--copper-bronze))",
+        "digquest-brown": "#8B5A2B",
+        "digquest-dark": "#6B4423",
+        "digquest-gold": "#D4AF37",
+        "digquest-light": "#F5E6D3",
       },
       keyframes: {
         "accordion-down": {
