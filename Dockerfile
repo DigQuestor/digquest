@@ -9,7 +9,7 @@ RUN npm ci
 # Copy source code
 COPY . .
 # Build the application
-RUN cp index.html ./entry.html && npx vite build --config vite.config.minimal.ts --outDir dist/client && npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+RUN cp index.html ./entry.html && sed -i 's|./src/main.tsx|./client/src/main.tsx|g' entry.html && npx vite build --config vite.config.minimal.ts --outDir dist/client && npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
 # Clean up dev dependencies after build
 RUN npm ci --only=production && npm cache clean --force
 # Expose port
