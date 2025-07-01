@@ -80,6 +80,8 @@ if (process.env.NODE_ENV === "production") {
     }
   });
 }
+  });
+}
 async function startServer() {
   const server = await registerRoutes(app);
   const port = Number(process.env.PORT) || 3000;
