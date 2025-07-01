@@ -24,7 +24,6 @@ services:
         sync: false
       - key: SESSION_SECRET
         generateValue: true
-
 databases:
   - name: digquest-db
     databaseName: digquest
