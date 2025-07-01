@@ -3,11 +3,9 @@ import session from "express-session";
 import { registerRoutes } from "./routes";
 import path from "path";
 import fs from "fs";
-
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
 // Session configuration
 app.use(session({
   secret: process.env.SESSION_SECRET || 'digquest-development-secret',
@@ -24,12 +22,10 @@ app.use(session({
   },
   rolling: true
 }));
-
 app.use((req, res, next) => {
   const start = Date.now();
   const reqPath = req.path;
   let capturedJsonResponse: Record<string, any> | undefined = undefined;
-
   const originalSend = res.send;
   res.send = function(body) {
     if (res.statusCode < 400) {
@@ -41,7 +37,6 @@ app.use((req, res, next) => {
     }
     return originalSend.call(this, body);
   };
-
   const originalJson = res.json;
   res.json = function(body) {
     if (res.statusCode < 400) {
@@ -49,30 +44,26 @@ app.use((req, res, next) => {
     }
     return originalJson.call(this, body);
   };
-
   res.on('finish', () => {
     const duration = Date.now() - start;
-    if (reqPath.startsWith('/api')) {
-      let logInfo = `${req.method} ${reqPath} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        const responseStr = JSON.stringify(capturedJsonResponse);
-        logInfo += ` :: ${responseStr.slice(0, 100)}${responseStr.length > 100 ? '…' : ''}`;
-      }
-      console.log(`${new Date().toLocaleTimeString("en-US", {
-        hour: "numeric",
+    if (req.path.startsWith('/api/')) {
+      const logInfo = `${req.method} ${reqPath} ${res.statusCode} ${duration}ms`;
+      console.log(`${new Date().toLocaleString("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
         hour12: true,
       })} [express] ${logInfo}`);
     }
   });
-
   next();
 });
-
 // Production static file serving
 if (process.env.NODE_ENV === "production") {
-  const clientPath = path.resolve(process.cwd(), 'server/public')
+  const clientPath = path.resolve(process.cwd(), 'server/public');
   app.use(express.static(clientPath));
   
   // Catch-all handler for client-side routing
@@ -89,17 +80,14 @@ if (process.env.NODE_ENV === "production") {
     }
   });
 }
-
 async function startServer() {
   const server = await registerRoutes(app);
   const port = Number(process.env.PORT) || 3000;
-
   server.listen(port, "0.0.0.0", () => {
-    console.log(`\n Server running on http://0.0.0.0:${port}`);
+    console.log('Server running on http://0.0.0.0:' + port);
     if (process.env.NODE_ENV === "production") {
-      console.log(` Serving client files from: ${path.resolve(process.cwd(), 'server/public')
+      console.log('Serving client files from: ' + path.resolve(process.cwd(), 'server/public'));
     }
   });
 }
-
 startServer().catch(console.error);
