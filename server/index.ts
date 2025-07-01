@@ -6,7 +6,6 @@ import fs from "fs";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// Session configuration
 app.use(session({
   secret: process.env.SESSION_SECRET || 'digquest-development-secret',
   resave: false,
@@ -47,8 +46,8 @@ app.use((req, res, next) => {
   res.on('finish', () => {
     const duration = Date.now() - start;
     if (req.path.startsWith('/api/')) {
-      const logInfo = `${req.method} ${reqPath} ${res.statusCode} ${duration}ms`;
-      console.log(`${new Date().toLocaleString("en-US", {
+      const logInfo = req.method + ' ' + reqPath + ' ' + res.statusCode + ' ' + duration + 'ms';
+      console.log(new Date().toLocaleString("en-US", {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
@@ -56,17 +55,15 @@ app.use((req, res, next) => {
         minute: "2-digit",
         second: "2-digit",
         hour12: true,
-      })} [express] ${logInfo}`);
+      }) + ' [express] ' + logInfo);
     }
   });
   next();
 });
-// Production static file serving
 if (process.env.NODE_ENV === "production") {
   const clientPath = path.resolve(process.cwd(), 'server/public');
   app.use(express.static(clientPath));
   
-  // Catch-all handler for client-side routing
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api')) {
       return next();
@@ -80,8 +77,6 @@ if (process.env.NODE_ENV === "production") {
     }
   });
 }
-  });
-}
 async function startServer() {
   const server = await registerRoutes(app);
   const port = Number(process.env.PORT) || 3000;
@@ -89,8 +84,6 @@ async function startServer() {
     console.log('Server running on http://0.0.0.0:' + port);
     if (process.env.NODE_ENV === "production") {
       console.log('Serving client files from: ' + path.resolve(process.cwd(), 'server/public'));
-    }
-  });
     }
   });
 }
