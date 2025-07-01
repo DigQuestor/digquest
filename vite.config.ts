@@ -2,10 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 export default defineConfig({
-  plugins: [
-    react(),
-    // Remove Replit-specific plugins in production
-  ],
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "client", "src"),
@@ -15,7 +12,7 @@ export default defineConfig({
   },
   root: path.resolve(__dirname, "client"),
   build: {
-    outDir: path.resolve(__dirname, "dist/public"),
+    outDir: path.resolve(__dirname, "server", "public"),
     emptyOutDir: true,
     rollupOptions: {
       input: path.resolve(__dirname, "client/index.html"),
