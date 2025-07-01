@@ -2,21 +2,23 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 export default defineConfig({
-  plugins: [react()],
-  root: ".",
+  plugins: [
+    react(),
+    // Remove Replit-specific plugins in production
+  ],
   resolve: {
     alias: {
-      "@": path.resolve("./client/src"),
-      "@shared": path.resolve("./shared"),
-      "@assets": path.resolve("./attached_assets"),
+      "@": path.resolve(__dirname, "client", "src"),
+      "@shared": path.resolve(__dirname, "shared"),
+      "@assets": path.resolve(__dirname, "attached_assets"),
     },
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
   },
+  root: path.resolve(__dirname, "client"),
   build: {
-    outDir: "dist/client",
+    outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true,
     rollupOptions: {
-      input: "./index.html",
+      input: path.resolve(__dirname, "client/index.html"),
     },
   },
 });
