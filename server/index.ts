@@ -95,9 +95,9 @@ async function startServer() {
   const port = Number(process.env.PORT) || 3000;
 
   server.listen(port, "0.0.0.0", () => {
-    console.log(`\n🚀 Server running on http://0.0.0.0:${port}`);
+    console.log(`\n Server running on http://0.0.0.0:${port}`);
     if (process.env.NODE_ENV === "production") {
-      console.log(`📁 Serving client files from: ${path.resolve(process.cwd(), 'server/public')
+      console.log(` Serving client files from: ${path.resolve(process.cwd(), 'server/public')
     }
   });
 }
