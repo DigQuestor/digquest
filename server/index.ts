@@ -91,5 +91,7 @@ async function startServer() {
       console.log('Serving client files from: ' + path.resolve(process.cwd(), 'server/public'));
     }
   });
+    }
+  });
 }
 startServer().catch(console.error);
