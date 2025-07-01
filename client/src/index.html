@@ -6,7 +6,10 @@
     <title>DigQuest - Metal Detecting Community</title>
     <meta name="description" content="Join the ultimate metal detecting community. Share finds, connect with fellow detectorists, and discover treasure hunting locations worldwide.">
     
-    <!-- Tailwind CDN -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CDN with Enhanced Config -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -16,25 +19,86 @@
                         'digquest-brown': '#8B5A2B',
                         'digquest-dark': '#6B4423', 
                         'digquest-gold': '#D4AF37',
-                        'digquest-light': '#F5E6D3'
+                        'digquest-light': '#F5E6D3',
+                        'earth-brown': '#8B6F47',
+                        'forest-green': '#2F5233', 
+                        'metallic-gold': '#FFD700',
+                        'sand-beige': '#F5F5DC',
+                        'rust-orange': '#CD853F',
+                        'copper-bronze': '#B87333'
+                    },
+                    fontFamily: {
+                        'display': ['Cabin Sketch', 'cursive'],
+                        'sans': ['Quicksand', 'sans-serif']
+                    },
+                    backgroundImage: {
+                        'treasure-gradient': 'linear-gradient(135deg, #FFD700 0%, #B87333 100%)',
+                        'earth-gradient': 'linear-gradient(135deg, #8B6F47 0%, #2F5233 100%)',
+                        'sand-gradient': 'linear-gradient(135deg, #F5F5DC 0%, #F0E68C 100%)'
+                    },
+                    boxShadow: {
+                        'treasure': '0 8px 32px rgba(255, 215, 0, 0.3)',
+                        'glow': '0 4px 20px rgba(255, 215, 0, 0.2)'
                     }
                 }
             }
         }
     </script>
     
+    <!-- Custom Production Styles -->
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #F5F5DC;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Cabin Sketch', cursive;
+            color: #8B6F47;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .interactive-card {
+            transition: all 0.3s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-2px);
+        }
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2); }
+            50% { box-shadow: 0 8px 32px rgba(255, 215, 0, 0.4); }
+        }
+        .treasure-gradient {
+            background: linear-gradient(135deg, #FFD700 0%, #B87333 100%);
+        }
+        .earth-gradient {
+            background: linear-gradient(135deg, #8B6F47 0%, #2F5233 100%);
+        }
+        .shadow-treasure {
+            box-shadow: 0 8px 32px rgba(255, 215, 0, 0.3);
+        }
+        .shadow-glow {
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
+        }
+    </style>
+    
     <!-- Open Graph Tags -->
     <meta property="og:title" content="DigQuest - Metal Detecting Community">
     <meta property="og:description" content="Join the ultimate metal detecting community. Share finds, connect with fellow detectorists, and discover treasure hunting locations worldwide.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://digquest.onrender.com">
+    <meta property="og:url" content="https://digquest-final.onrender.com">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="DigQuest - Metal Detecting Community">
     <meta name="twitter:description" content="Join the ultimate metal detecting community. Share finds, connect with fellow detectorists, and discover treasure hunting locations worldwide.">
 </head>
-<body class="bg-digquest-light">
+<body class="bg-sand-beige">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
 </body>
