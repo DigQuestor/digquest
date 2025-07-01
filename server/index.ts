@@ -72,7 +72,7 @@ app.use((req, res, next) => {
 
 // Production static file serving
 if (process.env.NODE_ENV === "production") {
-  const clientPath = path.resolve(process.cwd(), 'server/public');
+  const clientPath = path.resolve(process.cwd(), 'server/public')
   app.use(express.static(clientPath));
   
   // Catch-all handler for client-side routing
@@ -97,7 +97,7 @@ async function startServer() {
   server.listen(port, "0.0.0.0", () => {
     console.log(`\n🚀 Server running on http://0.0.0.0:${port}`);
     if (process.env.NODE_ENV === "production") {
-      console.log(`📁 Serving client files from: ${path.resolve(process.cwd(), 'server/public')}`);
+      console.log(`📁 Serving client files from: ${path.resolve(process.cwd(), 'server/public')
     }
   });
 }
