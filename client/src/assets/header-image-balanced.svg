@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="150px" viewBox="0 0 800 150" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Metal Detecting Header Image - Balanced</title>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" id="skyGradient">
+            <stop stop-color="#7C9EB2" offset="0%"></stop>
+            <stop stop-color="#A7C6D9" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" id="goldGradient">
+            <stop stop-color="#F1C40F" offset="0%"></stop>
+            <stop stop-color="#D4AC0D" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" id="sandGradient">
+            <stop stop-color="#F3E5AB" offset="0%"></stop>
+            <stop stop-color="#E6D690" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Sky background -->
+        <rect fill="url(#skyGradient)" x="0" y="0" width="800" height="150"></rect>
+        
+        <!-- Sun -->
+        <circle cx="700" cy="40" r="30" fill="#F9D71C" opacity="0.85"></circle>
+        <circle cx="700" cy="40" r="40" fill="#F9D71C" opacity="0.3"></circle>
+        
+        <!-- Clouds -->
+        <path d="M120,30 C130,20 150,20 160,30 C175,20 200,25 210,40 C220,30 240,35 250,50 C260,40 280,40 290,50 C290,70 260,80 210,80 C160,80 120,60 120,30 Z" fill="#FFFFFF" opacity="0.7"></path>
+        <path d="M520,20 C530,10 550,10 560,20 C575,10 590,15 600,25 C610,15 625,20 635,35 C645,25 660,25 670,35 C670,55 640,65 600,65 C560,65 520,45 520,20 Z" fill="#FFFFFF" opacity="0.5"></path>
+        
+        <!-- Sandy beach/fields -->
+        <path d="M0,90 C50,80 150,85 200,95 C300,110 400,105 500,90 C600,75 700,80 800,90 L800,150 L0,150 Z" fill="url(#sandGradient)"></path>
+        
+        <!-- Detector person silhouette -->
+        <g transform="translate(400, 70)">
+            <!-- Body -->
+            <rect x="10" y="20" width="10" height="30" fill="#333"></rect>
+            <!-- Head -->
+            <circle cx="15" cy="15" r="10" fill="#333"></circle>
+            <!-- Arm -->
+            <path d="M20,25 C30,20 40,15 50,25 C60,35 70,25 70,25" stroke="#333" stroke-width="5" stroke-linecap="round"></path>
+            <!-- Detector -->
+            <rect x="65" y="25" width="5" height="40" fill="#555" transform="rotate(-30 65 25)"></rect>
+            <circle cx="75" cy="60" r="10" fill="#555"></circle>
+        </g>
+        
+        <!-- Treasure dots -->
+        <circle cx="160" cy="120" r="4" fill="url(#goldGradient)"></circle>
+        <circle cx="320" cy="130" r="3" fill="url(#goldGradient)"></circle>
+        <circle cx="420" cy="125" r="5" fill="url(#goldGradient)"></circle>
+        <circle cx="580" cy="135" r="4" fill="url(#goldGradient)"></circle>
+        <circle cx="670" cy="127" r="3" fill="url(#goldGradient)"></circle>
+        
+        <!-- Beach grasses & elements -->
+        <g transform="translate(100, 110)">
+            <path d="M0,0 C2,-8 4,-15 5,-20" stroke="#B5A679" stroke-width="1" stroke-linecap="round"></path>
+            <path d="M3,0 C6,-7 8,-12 9,-18" stroke="#B5A679" stroke-width="1" stroke-linecap="round"></path>
+            <path d="M7,0 C9,-6 10,-10 12,-15" stroke="#B5A679" stroke-width="1" stroke-linecap="round"></path>
+        </g>
+        <g transform="translate(200, 105)">
+            <path d="M0,0 C2,-8 4,-15 5,-20" stroke="#B5A679" stroke-width="1" stroke-linecap="round"></path>
+            <path d="M3,0 C6,-7 8,-12 9,-18" stroke="#B5A679" stroke-width="1" stroke-linecap="round"></path>
+            <path d="M7,0 C9,-6 10,-10 12,-15" stroke="#B5A679" stroke-width="1" stroke-linecap="round"></path>
+        </g>
+        <g transform="translate(650, 115)">
+            <path d="M0,0 C2,-8 4,-15 5,-20" stroke="#B5A679" stroke-width="1" stroke-linecap="round"></path>
+            <path d="M3,0 C6,-7 8,-12 9,-18" stroke="#B5A679" stroke-width="1" stroke-linecap="round"></path>
+            <path d="M7,0 C9,-6 10,-10 12,-15" stroke="#B5A679" stroke-width="1" stroke-linecap="round"></path>
+        </g>
+        
+        <!-- Roman Coin -->
+        <g transform="translate(250, 45)">
+            <circle cx="20" cy="20" r="15" fill="url(#goldGradient)"></circle>
+            <circle cx="20" cy="20" r="12" fill="none" stroke="#D4AC0D" stroke-width="1"></circle>
+            <path d="M15,15 C15,15 17,12 20,12 C23,12 25,15 25,15" stroke="#D4AC0D" stroke-width="1" fill="none"></path>
+            <path d="M15,25 C15,25 17,28 20,28 C23,28 25,25 25,25" stroke="#D4AC0D" stroke-width="1" fill="none"></path>
+        </g>
+        
+        <!-- Medieval pendant -->
+        <g transform="translate(500, 50)">
+            <path d="M20,15 L30,15 L25,30 Z" fill="#C0C0C0"></path>
+            <circle cx="25" cy="10" r="3" fill="none" stroke="#C0C0C0" stroke-width="2"></circle>
+        </g>
+    </g>
+</svg>
