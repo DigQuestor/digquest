@@ -1,0 +1,555 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&family=Quicksand:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 45 25% 95%;
+  --foreground: 33 45% 15%;
+  --muted: 45 20% 90%;
+  --muted-foreground: 33 30% 40%;
+  --popover: 45 25% 95%;
+  --popover-foreground: 33 45% 15%;
+  --card: 45 25% 95%;
+  --card-foreground: 33 45% 15%;
+  --border: 45 15% 85%;
+  --input: 45 15% 85%;
+  --primary: 142 69% 23%;
+  --primary-foreground: 45 25% 95%;
+  --secondary: 43 84% 55%;
+  --secondary-foreground: 33 45% 15%;
+  --accent: 25 60% 45%;
+  --accent-foreground: 45 25% 95%;
+  --destructive: 18 90% 58%;
+  --destructive-foreground: 45 25% 95%;
+  --ring: 142 69% 23%;
+  --radius: 0.5rem;
+  
+  /* Enhanced colors for the metal detecting site */
+  --earth-brown: 33 45% 28%;
+  --forest-green: 142 69% 23%;
+  --metallic-gold: 43 84% 55%;
+  --sand-beige: 45 25% 95%;
+  --rust-orange: 18 90% 58%;
+  --copper-bronze: 25 60% 45%;
+  --success: 122 39% 49%;
+  
+  /* Gradients */
+  --treasure-gradient: linear-gradient(135deg, hsl(var(--metallic-gold)) 0%, hsl(var(--copper-bronze)) 100%);
+  --earth-gradient: linear-gradient(135deg, hsl(var(--earth-brown)) 0%, hsl(var(--forest-green)) 100%);
+  --sand-gradient: linear-gradient(135deg, hsl(var(--sand-beige)) 0%, hsl(45 30% 92%) 100%);
+  
+  /* Chart colors */
+  --chart-1: var(--earth-brown);
+  --chart-2: var(--forest-green);
+  --chart-3: var(--metallic-gold);
+  --chart-4: var(--rust-orange);
+  --chart-5: var(--success);
+  
+  /* Sidebar colors */
+  --sidebar-background: var(--earth-brown);
+  --sidebar-foreground: var(--sand-beige);
+  --sidebar-primary: var(--metallic-gold);
+  --sidebar-primary-foreground: var(--forest-green);
+  --sidebar-accent: var(--sand-beige);
+  --sidebar-accent-foreground: var(--forest-green);
+  --sidebar-border: 0 0% 20%;
+  --sidebar-ring: var(--metallic-gold);
+}
+
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --primary: 207 90% 54%;
+  --primary-foreground: 211 100% 99%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 240 4.9% 83.9%;
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    @apply font-sans antialiased;
+    font-family: 'Quicksand', sans-serif;
+    background-color: hsl(var(--sand-beige));
+    color: hsl(var(--foreground));
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cabin Sketch', cursive;
+    color: hsl(var(--earth-brown));
+  }
+}
+
+@layer utilities {
+  /* Custom color utilities for the DigQuest theme */
+  .bg-forest-green {
+    background-color: hsl(var(--forest-green));
+  }
+  
+  .bg-sand-beige {
+    background-color: hsl(var(--sand-beige));
+  }
+  
+  .bg-earth-brown {
+    background-color: hsl(var(--earth-brown));
+  }
+  
+  .text-forest-green {
+    color: hsl(var(--forest-green));
+  }
+  
+  .text-sand-beige {
+    color: hsl(var(--sand-beige));
+  }
+  
+  .text-earth-brown {
+    color: hsl(var(--earth-brown));
+  }
+  
+  .text-metallic-gold {
+    color: hsl(var(--metallic-gold));
+  }
+  
+  .border-metallic-gold {
+    border-color: hsl(var(--metallic-gold));
+  }
+  
+  .treasure-gradient {
+    background: var(--treasure-gradient);
+  }
+  
+  .earth-gradient {
+    background: var(--earth-gradient);
+  }
+  
+  .bg-sand-gradient {
+    background: var(--sand-gradient);
+  }
+}
+
+@layer components {
+  .treasure-card {
+    @apply transition-all duration-300;
+  }
+  
+  .treasure-card:hover {
+    @apply transform -translate-y-1 shadow-lg;
+    box-shadow: 0 10px 15px rgba(139, 90, 43, 0.2);
+  }
+  
+  /* Navigation styles moved inline */
+  
+  .custom-marker {
+    @apply transition-all duration-300;
+  }
+  
+  .custom-marker:hover {
+    @apply transform scale-110;
+  }
+  
+  .map-container {
+    @apply h-[500px] bg-gray-200 relative;
+  }
+}
+
+@layer utilities {
+/* Enhanced design utilities */
+.treasure-gradient {
+  background: var(--treasure-gradient);
+}
+
+.earth-gradient {
+  background: var(--earth-gradient);
+}
+
+.sand-gradient {
+  background: var(--sand-gradient);
+}
+
+/* Glass morphism effect */
+.glass-effect {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Enhanced shadows */
+.shadow-glow {
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.shadow-treasure {
+  box-shadow: 0 10px 25px -3px rgba(218, 165, 32, 0.3), 0 4px 6px -2px rgba(218, 165, 32, 0.1);
+}
+
+/* Smooth animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(218, 165, 32, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(218, 165, 32, 0.8), 0 0 30px rgba(218, 165, 32, 0.6); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Interactive cards with 3D effects */
+.interactive-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: perspective(1000px) rotateX(0deg);
+}
+
+.interactive-card:hover {
+  transform: perspective(1000px) rotateX(1deg) translateY(-5px);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+}
+
+/* Metal detector themed elements */
+.metal-detector-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.metal-detector-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  border: 2px solid hsl(var(--metallic-gold));
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+/* Responsive optimizations */
+@media (max-width: 768px) {
+  .glass-effect {
+    backdrop-filter: blur(5px);
+  }
+  
+  .interactive-card:hover {
+    transform: none;
+  }
+  
+  /* Mobile-specific optimizations */
+  body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  /* Prevent horizontal scrolling */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
+  /* Container improvements */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    max-width: 100%;
+  }
+  
+  /* Card spacing optimization */
+  .mobile-card {
+    margin-bottom: 1rem;
+    padding: 1rem;
+  }
+  
+  /* Text size adjustments */
+  h1 {
+    font-size: 1.875rem;
+    line-height: 1.2;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    line-height: 1.3;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+  
+  /* Button improvements */
+  .mobile-button {
+    min-height: 44px;
+    font-size: 16px;
+    padding: 0.75rem 1rem;
+  }
+  
+  /* Form improvements */
+  input, textarea, select {
+    font-size: 16px;
+    min-height: 44px;
+  }
+  
+  /* Grid improvements */
+  .mobile-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  /* Image responsiveness */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Map container mobile optimization */
+  .map-container {
+    height: 300px;
+    margin: 0 -1rem;
+    border-radius: 0;
+  }
+  
+  /* Card content spacing */
+  .card-content-mobile {
+    padding: 1rem;
+  }
+  
+  /* Navigation improvements */
+  .mobile-nav {
+    padding: 0.5rem 1rem;
+  }
+  
+  /* Sticky elements optimization */
+  .mobile-sticky {
+    position: static;
+  }
+  
+  /* Forum post mobile improvements */
+  .mobile-forum-post {
+    max-width: 100%;
+    overflow: hidden;
+  }
+  
+  .mobile-forum-post h4 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-width: 100%;
+    line-height: 1.3;
+  }
+  
+  .mobile-forum-post p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    line-height: 1.4;
+  }
+  
+  /* Navigation scrolling improvements */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Ensure smooth horizontal scrolling for navigation */
+  nav .flex {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Modal improvements */
+  .mobile-modal {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+  
+  /* Tab improvements */
+  .mobile-tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .mobile-tabs::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.25rem;
+  }
+  
+  .mobile-card {
+    padding: 0.75rem;
+  }
+  
+  /* Reduce gaps on very small screens */
+  .mobile-grid {
+    gap: 0.75rem;
+  }
+}
+
+/* Custom text color utility classes */
+.text-earth-brown {
+  color: hsl(var(--earth-brown));
+}
+
+.hover\:text-earth-brown:hover {
+  color: hsl(var(--earth-brown));
+}
+
+.text-forest-green {
+  color: hsl(var(--forest-green));
+}
+
+.hover\:text-forest-green:hover {
+  color: hsl(var(--forest-green));
+}
+
+.text-metallic-gold {
+  color: hsl(var(--metallic-gold));
+}
+
+.hover\:text-metallic-gold:hover {
+  color: hsl(var(--metallic-gold));
+}
+
+.text-sand-beige {
+  color: hsl(var(--sand-beige));
+}
+
+.hover\:text-sand-beige:hover {
+  color: hsl(var(--sand-beige));
+}
+
+.text-rust-orange {
+  color: hsl(var(--rust-orange));
+}
+
+.hover\:text-rust-orange:hover {
+  color: hsl(var(--rust-orange));
+}
+
+/* Custom background color utility classes */
+.bg-earth-brown {
+  background-color: hsl(var(--earth-brown));
+}
+
+.bg-forest-green {
+  background-color: hsl(var(--forest-green));
+}
+
+.bg-metallic-gold {
+  background-color: hsl(var(--metallic-gold));
+}
+
+.bg-sand-beige {
+  background-color: hsl(var(--sand-beige));
+}
+
+.bg-rust-orange {
+  background-color: hsl(var(--rust-orange));
+}
+
+.bg-success {
+  background-color: hsl(var(--success));
+}
+
+/* Custom border color utility classes */
+.border-earth-brown {
+  border-color: hsl(var(--earth-brown));
+}
+
+.border-forest-green {
+  border-color: hsl(var(--forest-green));
+}
+
+.border-metallic-gold {
+  border-color: hsl(var(--metallic-gold));
+}
+
+.border-sand-beige {
+  border-color: hsl(var(--sand-beige));
+}
+
+.border-rust-orange {
+  border-color: hsl(var(--rust-orange));
+}
+
+/* Navigation link fixes - ensure all nav links are clickable */
+nav a {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10;
+  text-decoration: none;
+  display: block;
+}
+
+nav a:hover {
+  text-decoration: none;
+}
+
+/* Ensure wouter Link components work properly */
+a[href] {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+}
