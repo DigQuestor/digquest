@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="150px" viewBox="0 0 800 150" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Metal Detecting Header Image</title>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" id="gradientBg">
+            <stop stop-color="#8B4513" offset="0%"></stop>
+            <stop stop-color="#6B4226" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" id="goldGradient">
+            <stop stop-color="#F1C40F" offset="0%"></stop>
+            <stop stop-color="#D4AC0D" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Background landscape -->
+        <rect fill="url(#gradientBg)" x="0" y="0" width="800" height="150"></rect>
+        
+        <!-- Hills -->
+        <path d="M0,90 C100,60 200,100 300,80 C400,60 500,100 600,70 C700,90 800,60 800,90 L800,150 L0,150 Z" fill="#2E7D32" opacity="0.8"></path>
+        <path d="M0,110 C80,90 160,120 240,100 C320,80 400,110 480,90 C560,110 640,80 720,100 C760,110 800,100 800,110 L800,150 L0,150 Z" fill="#1B5E20" opacity="0.6"></path>
+        
+        <!-- Detector person silhouette -->
+        <g transform="translate(500, 80)">
+            <!-- Body -->
+            <rect x="10" y="20" width="10" height="30" fill="#333"></rect>
+            <!-- Head -->
+            <circle cx="15" cy="15" r="10" fill="#333"></circle>
+            <!-- Arm -->
+            <path d="M20,25 C30,20 40,15 50,25 C60,35 70,25 70,25" stroke="#333" stroke-width="5" stroke-linecap="round"></path>
+            <!-- Detector -->
+            <rect x="65" y="25" width="5" height="40" fill="#555" transform="rotate(-30 65 25)"></rect>
+            <circle cx="75" cy="60" r="10" fill="#555"></circle>
+        </g>
+        
+        <!-- Treasure dots -->
+        <circle cx="160" cy="120" r="4" fill="url(#goldGradient)"></circle>
+        <circle cx="320" cy="130" r="3" fill="url(#goldGradient)"></circle>
+        <circle cx="420" cy="125" r="5" fill="url(#goldGradient)"></circle>
+        <circle cx="580" cy="135" r="4" fill="url(#goldGradient)"></circle>
+        <circle cx="670" cy="127" r="3" fill="url(#goldGradient)"></circle>
+        
+        <!-- Trees -->
+        <g transform="translate(100, 75)">
+            <rect x="8" y="15" width="4" height="10" fill="#5D4037"></rect>
+            <polygon points="0,15 20,15 10,0" fill="#2E7D32"></polygon>
+            <polygon points="2,10 18,10 10,-5" fill="#2E7D32"></polygon>
+        </g>
+        <g transform="translate(220, 65)">
+            <rect x="6" y="12" width="3" height="8" fill="#5D4037"></rect>
+            <polygon points="0,12 15,12 7.5,0" fill="#2E7D32"></polygon>
+            <polygon points="2,7 13,7 7.5,-3" fill="#2E7D32"></polygon>
+        </g>
+        <g transform="translate(380, 70)">
+            <rect x="7" y="13" width="4" height="10" fill="#5D4037"></rect>
+            <polygon points="0,13 18,13 9,-2" fill="#2E7D32"></polygon>
+            <polygon points="2,8 16,8 9,-5" fill="#2E7D32"></polygon>
+        </g>
+        <g transform="translate(680, 60)">
+            <rect x="9" y="18" width="5" height="12" fill="#5D4037"></rect>
+            <polygon points="0,18 23,18 11.5,0" fill="#2E7D32"></polygon>
+            <polygon points="3,12 20,12 11.5,-6" fill="#2E7D32"></polygon>
+        </g>
+        
+        <!-- Roman Coin -->
+        <g transform="translate(300, 40)">
+            <circle cx="20" cy="20" r="15" fill="url(#goldGradient)"></circle>
+            <circle cx="20" cy="20" r="12" fill="none" stroke="#D4AC0D" stroke-width="1"></circle>
+            <path d="M15,15 C15,15 17,12 20,12 C23,12 25,15 25,15" stroke="#D4AC0D" stroke-width="1" fill="none"></path>
+            <path d="M15,25 C15,25 17,28 20,28 C23,28 25,25 25,25" stroke="#D4AC0D" stroke-width="1" fill="none"></path>
+        </g>
+    </g>
+</svg>
