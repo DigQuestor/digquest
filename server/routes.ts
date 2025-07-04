@@ -2597,18 +2597,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { token } = req.query;
       
+      console.log("Email verification attempt with token:", token ? String(token).substring(0, 10) + "..." : "null");
+      
       if (!token || typeof token !== 'string') {
+        console.log("Invalid token provided");
         return res.status(400).json({ message: "Verification token is required" });
+      }
+      
+      // First, check if user exists with this token
+      const userWithToken = await storage.getUserByVerificationToken(token);
+      console.log("User found with token:", userWithToken ? `${userWithToken.username} (${userWithToken.email})` : "none");
+      
+      if (userWithToken) {
+        console.log("Token expires:", userWithToken.emailVerificationExpires);
+        console.log("Current time:", new Date());
+        console.log("Token expired:", userWithToken.emailVerificationExpires && userWithToken.emailVerificationExpires < new Date());
       }
       
       const user = await storage.verifyEmail(token);
       
       if (!user) {
+        console.log("verifyEmail returned null - token invalid or expired");
         return res.status(400).json({ 
           message: "Invalid or expired verification token. Please request a new verification email." 
         });
       }
       
+      console.log("Email verification successful for user:", user.username);
       res.json({ 
         message: "Email verified successfully! You can now fully access DigQuest.",
         user: { 
@@ -2619,7 +2634,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       });
     } catch (error: any) {
+      console.error("Email verification error:", error);
       res.status(500).json({ message: "Server error during email verification" });
+    }
+  });
+
+  // Debug endpoint to check verification tokens (development only)
+  app.get("/api/debug/users", async (req, res) => {
+    try {
+      const allUsers = await storage.getAllUsers();
+      const userInfo = allUsers.map(user => ({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        isEmailVerified: user.isEmailVerified,
+        hasToken: !!user.emailVerificationToken,
+        tokenExpires: user.emailVerificationExpires
+      }));
+      res.json({ users: userInfo });
+    } catch (error: any) {
+      res.status(500).json({ message: "Error fetching users" });
     }
   });
 
