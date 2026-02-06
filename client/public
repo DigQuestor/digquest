@@ -1,5 +1,1 @@
-project-root/
-├─ client/ or src/
-├─ package.json
-├─ vite.config.ts
-└─ public/
+
