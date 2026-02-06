@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /admin/
-Allow: /
-Sitemap: https://digquest-final.onrender.com/sitemap.xml
