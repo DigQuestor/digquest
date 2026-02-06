@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://digquest.org/sitemap.xml
