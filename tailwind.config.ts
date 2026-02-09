@@ -1,91 +1,57 @@
-import type { Config } from "tailwindcss";
+import type { Config } from 'tailwindcss';
 
-export default {
-  darkMode: ["class"],
+const config: Config = {
+  // These are all the paths Tailwind should scan for class names
   content: [
-    "./client/index.html",
-    "./client/src/**/*.{js,jsx,ts,tsx,css}"
+    './client/src/**/*.{html,js,ts,jsx,tsx}', // your main source files
+    './client/index.html',                    // your root HTML file
   ],
   theme: {
     extend: {
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
       colors: {
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        chart: {
-          "1": "hsl(var(--chart-1))",
-          "2": "hsl(var(--chart-2))",
-          "3": "hsl(var(--chart-3))",
-          "4": "hsl(var(--chart-4))",
-          "5": "hsl(var(--chart-5))",
-        },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
-        },
-        "earth-brown": "hsl(var(--earth-brown))",
-        "forest-green": "hsl(var(--forest-green))",
-        "metallic-gold": "hsl(var(--metallic-gold))",
-        "sand-beige": "hsl(var(--sand-beige))",
-        "rust-orange": "hsl(var(--rust-orange))",
-        "copper-bronze": "hsl(var(--copper-bronze))",
-        "digquest-brown": "#8B5A2B",
-        "digquest-dark": "#6B4423",
-        "digquest-gold": "#D4AF37",
-        "digquest-light": "#F5E6D3",
+        background: 'hsl(45,25%,95%)',
+        foreground: 'hsl(33,45%,15%)',
+        muted: 'hsl(45,20%,90%)',
+        'muted-foreground': 'hsl(33,30%,40%)',
+        popover: 'hsl(45,25%,95%)',
+        'popover-foreground': 'hsl(33,45%,15%)',
+        card: 'hsl(45,25%,95%)',
+        'card-foreground': 'hsl(33,45%,15%)',
+        border: 'hsl(45,15%,85%)',
+        input: 'hsl(45,15%,85%)',
+        primary: 'hsl(142,69%,23%)',
+        'primary-foreground': 'hsl(45,25%,95%)',
+        secondary: 'hsl(43,84%,55%)',
+        'secondary-foreground': 'hsl(33,45%,15%)',
+        accent: 'hsl(25,60%,45%)',
+        'accent-foreground': 'hsl(45,25%,95%)',
+        destructive: 'hsl(18,90%,58%)',
+        'destructive-foreground': 'hsl(45,25%,95%)',
+        ring: 'hsl(142,69%,23%)',
+        'earth-brown': 'hsl(33,45%,28%)',
+        'forest-green': 'hsl(142,69%,23%)',
+        'metallic-gold': 'hsl(43,84%,55%)',
+        'sand-beige': 'hsl(45,25%,95%)',
+        'rust-orange': 'hsl(18,90%,58%)',
+        'copper-bronze': 'hsl(25,60%,45%)',
+        success: 'hsl(122,39%,49%)',
       },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
+      borderRadius: {
+        DEFAULT: '0.5rem',
       },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+      // Add any custom gradients or keyframes if needed
+      backgroundImage: {
+        'treasure-gradient': 'linear-gradient(135deg, hsl(43,84%,55%) 0%, hsl(25,60%,45%) 100%)',
+        'earth-gradient': 'linear-gradient(135deg, hsl(33,45%,28%) 0%, hsl(142,69%,23%) 100%)',
+        'sand-gradient': 'linear-gradient(135deg, hsl(45,25%,95%) 0%, hsl(45,30%,92%) 100%)',
+      },
+      fontFamily: {
+        sans: ['Quicksand', 'sans-serif'],
+        cursive: ['Cabin Sketch', 'cursive'],
       },
     },
   },
   plugins: [],
-} satisfies Config;
+};
+
+export default config;
