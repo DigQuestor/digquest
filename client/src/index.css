@@ -1,12 +1,12 @@
-/* Google Fonts */
+/* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&family=Quicksand:wght@400;500;600;700&display=swap');
 
-/* Tailwind directives */
+/* Tailwind base, components, and utilities */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Root variables */
+/* Custom CSS Variables for DigQuest theme */
 :root {
   --background: 45 25% 95%;
   --foreground: 33 45% 15%;
@@ -29,7 +29,7 @@
   --ring: 142 69% 23%;
   --radius: 0.5rem;
 
-  /* DigQuest custom colors */
+  /* Enhanced colors */
   --earth-brown: 33 45% 28%;
   --forest-green: 142 69% 23%;
   --metallic-gold: 43 84% 55%;
@@ -67,39 +67,41 @@
   --ring: 240 4.9% 83.9%;
 }
 
-/* Base layer */
+/* Base Layer */
 @layer base {
-  *, *::before, *::after {
-    border-color: hsl(var(--border));
-  }
-
   body {
-    @apply font-sans antialiased;
+    @apply font-sans antialiased bg-[hsl(var(--background))] text-[hsl(var(--foreground))];
     font-family: 'Quicksand', sans-serif;
-    background-color: hsl(var(--sand-beige));
-    color: hsl(var(--foreground));
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Cabin Sketch', cursive;
     color: hsl(var(--earth-brown));
   }
+
+  * {
+    border-color: hsl(var(--border));
+  }
 }
 
-/* Components layer */
+/* Components Layer */
 @layer components {
   .treasure-card {
     @apply transition-all duration-300;
   }
+
   .treasure-card:hover {
     @apply transform -translate-y-1 shadow-lg;
   }
 
-  .custom-marker {
-    @apply transition-all duration-300;
+  .interactive-card {
+    @apply transition-all;
+    transform: perspective(1000px) rotateX(0deg);
   }
-  .custom-marker:hover {
-    @apply transform scale-110;
+
+  .interactive-card:hover {
+    transform: perspective(1000px) rotateX(1deg) translateY(-5px);
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.15);
   }
 
   .map-container {
@@ -107,50 +109,48 @@
   }
 }
 
-/* Utilities layer */
+/* Utilities Layer */
 @layer utilities {
-  /* Background utilities */
-  .bg-forest-green { background-color: hsl(var(--forest-green)); }
-  .bg-sand-beige { background-color: hsl(var(--sand-beige)); }
+  /* Custom colors */
   .bg-earth-brown { background-color: hsl(var(--earth-brown)); }
+  .bg-forest-green { background-color: hsl(var(--forest-green)); }
+  .bg-metallic-gold { background-color: hsl(var(--metallic-gold)); }
+  .bg-sand-beige { background-color: hsl(var(--sand-beige)); }
+  .bg-rust-orange { background-color: hsl(var(--rust-orange)); }
 
-  /* Text color utilities */
-  .text-forest-green { color: hsl(var(--forest-green)); }
-  .text-sand-beige { color: hsl(var(--sand-beige)); }
   .text-earth-brown { color: hsl(var(--earth-brown)); }
+  .text-forest-green { color: hsl(var(--forest-green)); }
   .text-metallic-gold { color: hsl(var(--metallic-gold)); }
+  .text-sand-beige { color: hsl(var(--sand-beige)); }
+  .text-rust-orange { color: hsl(var(--rust-orange)); }
+
+  .border-earth-brown { border-color: hsl(var(--earth-brown)); }
+  .border-forest-green { border-color: hsl(var(--forest-green)); }
+  .border-metallic-gold { border-color: hsl(var(--metallic-gold)); }
+  .border-sand-beige { border-color: hsl(var(--sand-beige)); }
+  .border-rust-orange { border-color: hsl(var(--rust-orange)); }
 
   /* Gradients */
   .treasure-gradient { background: var(--treasure-gradient); }
   .earth-gradient { background: var(--earth-gradient); }
   .sand-gradient { background: var(--sand-gradient); }
 
-  /* Glass effect */
-  .glass-effect {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-
   /* Animations */
-  @keyframes float { 0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)} }
-  @keyframes shimmer { 0%{background-position:-200% 0}100%{background-position:200% 0} }
-  @keyframes pulse-glow { 0%,100%{box-shadow:0 0 5px rgba(218,165,32,0.5)}50%{box-shadow:0 0 20px rgba(218,165,32,0.8),0 0 30px rgba(218,165,32,0.6)} }
-
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
   .animate-float { animation: float 3s ease-in-out infinite; }
-  .animate-shimmer { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); background-size:200% 100%; animation: shimmer 2s infinite; }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .animate-shimmer { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); background-size: 200% 100%; animation: shimmer 2s infinite; }
+
+  @keyframes pulse-glow {
+    0%,100% { box-shadow: 0 0 5px rgba(218,165,32,0.5); }
+    50% { box-shadow: 0 0 20px rgba(218,165,32,0.8), 0 0 30px rgba(218,165,32,0.6); }
+  }
   .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .map-container { height: 300px; margin: 0 -1rem; border-radius: 0; }
-  body { font-size:16px; line-height:1.5; }
-  .container { padding:0 1rem; max-width:100%; }
-}
-
-@media (max-width: 480px) {
-  .container { padding:0 0.75rem; }
-  h1 { font-size:1.5rem; }
-  h2 { font-size:1.25rem; }
 }
