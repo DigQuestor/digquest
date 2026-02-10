@@ -16,8 +16,8 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["client/src/*"]
-    }
-  },
+  "@/*": ["client/src/*"],
+  "@shared/*": ["client/shared/*"]
+}
   "include": ["client/src", "env.d.ts"]
 }
