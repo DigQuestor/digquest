@@ -12,7 +12,7 @@ import { Loader2, Upload, X, Image } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth-simple";
-import { Category, insertPostSchema } from "../../shared/schema";
+import { Category, insertPostSchema } from "@shared/schema";
 
 // Post schema with optional image upload
 const postFormSchema = insertPostSchema.extend({

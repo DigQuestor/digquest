@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, Star, Users, CalendarDays, Plus, Award, MessageSquare, MapPin, Camera, Info, Pickaxe } from "lucide-react";
+import { ArrowRight, Star, Users, CalendarDays, Plus, Award, MessageSquare, MapPin, Camera, Info, Shovel } from "lucide-react";
 import { Post, User, Category, Event } from "@shared/schema";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ForumPost from "@/components/forum/ForumPost.tsx";
@@ -387,7 +387,7 @@ const CommunitySection = () => {
                             <Tooltip>
                               <TooltipTrigger asChild>
                                 <div className="rounded-full p-1 bg-green-500 border-2 border-white shadow-md flex items-center justify-center">
-                                  <Pickaxe className="h-2.5 w-2.5 text-white" />
+                                  <Shovel className="h-2.5 w-2.5 text-white" />
                                 </div>
                               </TooltipTrigger>
                               <TooltipContent side="top" className="p-2">
@@ -552,7 +552,7 @@ const CommunitySection = () => {
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <div className="rounded-full p-1.5 bg-green-500 border-2 border-white shadow-md flex items-center justify-center">
-                                <Pickaxe className="h-3 w-3 text-white" />
+                                <Shovel className="h-3 w-3 text-white" />
                               </div>
                             </TooltipTrigger>
                             <TooltipContent side="top" className="p-2">

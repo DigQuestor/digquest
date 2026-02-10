@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { MoreHorizontal, Edit, Trash2, Check, X } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { formatTimeAgo, getAvatarUrl } from '@/lib/utils';
-import { Category, insertPostSchema } from "../../shared/schema";
+import { Category, insertPostSchema } from "@shared/schema";
 import { userCache } from '@/hooks/use-auth-simple';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
