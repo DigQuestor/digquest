@@ -16,7 +16,8 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["client/src/*"]
+      "@/*": ["client/src/*"],
+      "@shared/*": ["client/shared/*"]  // <-- add alias for your schema/types
     }
   },
   "include": ["client/src", "env.d.ts"]
