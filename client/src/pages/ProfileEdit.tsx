@@ -149,8 +149,10 @@ export default function ProfileEdit() {
       
       // Show success message
       toast({
-        title: "Profile Updated",
-        description: "Your profile has been updated successfully and saved to the server!",
+        title: "✅ Profile Updated Successfully!",
+        description: "Your profile changes have been saved and are now visible to other users.",
+        duration: 3000,
+        className: "bg-green-600 text-white border-green-700 font-semibold text-lg"
       });
       
       // Instead of forcing a full page reload, just redirect to homepage
@@ -160,9 +162,10 @@ export default function ProfileEdit() {
       console.error("Profile update error:", error);
       
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "An unknown error occurred",
+        title: "⚠️ Profile Update Failed",
+        description: error instanceof Error ? error.message : "An unknown error occurred. Please try again.",
         variant: "destructive",
+        duration: 5000
       });
     } finally {
       setIsLoading(false);

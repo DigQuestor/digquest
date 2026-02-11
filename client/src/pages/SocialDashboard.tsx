@@ -134,15 +134,18 @@ export default function SocialDashboard() {
       setSelectedImage(null);
       setImagePreview(null);
       toast({
-        title: "Success",
-        description: "Profile updated successfully",
+        title: "✅ Profile Updated Successfully!",
+        description: "Your profile changes have been saved.",
+        duration: 3000,
+        className: "bg-green-600 text-white border-green-700 font-semibold text-lg"
       });
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to update profile",
+        title: "⚠️ Update Failed",
+        description: "Failed to update profile. Please try again.",
         variant: "destructive",
+        duration: 5000
       });
     },
   });
