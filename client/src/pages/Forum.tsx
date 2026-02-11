@@ -445,7 +445,7 @@ const Forum = () => {
       </div>
 
       <Dialog open={isNewPostOpen} onOpenChange={setIsNewPostOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" onInteractOutside={(e) => {
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto" onInteractOutside={(e) => {
           // Prevent closing when clicking on Select dropdown
           const target = e.target as HTMLElement;
           if (target.closest('[role="listbox"]') || target.closest('[data-radix-select-content]')) {
@@ -456,7 +456,9 @@ const Forum = () => {
           <DialogDescription>
             Share your thoughts, questions, or discoveries with the community.
           </DialogDescription>
-          <NewPostForm onPostCreated={() => setIsNewPostOpen(false)} />
+          <div className="pb-4">
+            <NewPostForm onPostCreated={() => setIsNewPostOpen(false)} />
+          </div>
         </DialogContent>
       </Dialog>
     </>

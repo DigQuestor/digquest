@@ -214,14 +214,14 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 space-y-4">
       <div>
         <h3 className="text-lg font-semibold text-gray-900">Create New Post</h3>
         <p className="text-sm text-gray-600">Share your thoughts with the community</p>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
             name="title"
@@ -278,7 +278,7 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
                 <FormControl>
                   <Textarea
                     placeholder="Share your thoughts, findings, or questions..."
-                    className="min-h-[120px] resize-none"
+                    className="min-h-[100px] resize-none"
                     {...field}
                     disabled={isSubmitting}
                   />
