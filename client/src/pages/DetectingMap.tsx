@@ -416,8 +416,10 @@ const DetectingMap = () => {
     
     // Show success toast
     toast({
-      title: "Location found",
-      description: `Found "${result.formatted_address}"`
+      title: "✅ Location Found!",
+      description: `Found "${result.formatted_address}"`,
+      duration: 3000,
+      className: "bg-green-600 text-white border-green-700 font-semibold"
     });
   }, [markers, toast]);
   
@@ -430,8 +432,10 @@ const DetectingMap = () => {
     geolocationRequestedRef.current = true;
     
     toast({
-      title: "Finding your location",
-      description: "Please allow location access when prompted."
+      title: "📍 Finding Your Location...",
+      description: "Please allow location access when prompted to center the map on your position.",
+      duration: 4000,
+      className: "bg-blue-600 text-white border-blue-700 font-semibold"
     });
     
     navigator.geolocation.getCurrentPosition(
@@ -476,8 +480,10 @@ const DetectingMap = () => {
           }
           
           toast({
-            title: "Location found",
-            description: "The map has been centered on your current location."
+            title: "✅ Location Found!",
+            description: "The map has been centered on your current location.",
+            duration: 3000,
+            className: "bg-green-600 text-white border-green-700 font-semibold text-lg"
           });
         }
       },
@@ -485,9 +491,10 @@ const DetectingMap = () => {
         console.log("Error getting user location:", error);
         
         toast({
-          title: "Location access denied",
-          description: "Using default UK location. Allow location access for better results.",
-          variant: "destructive"
+          title: "⚠️ Location Access Denied",
+          description: "Using default UK location. Please allow location access in your browser settings for better results.",
+          variant: "destructive",
+          duration: 5000
         });
       }
     );

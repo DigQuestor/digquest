@@ -110,16 +110,19 @@ const ARRoutes = () => {
           });
           setNearbyRoutes(sampleRoutes);
           toast({
-            title: "Location found!",
+            title: "✅ Location Found!",
             description: "Loading personalized routes for your area.",
+            duration: 3000,
+            className: "bg-green-600 text-white border-green-700 font-semibold text-lg"
           });
         },
         (error) => {
           console.error('Geolocation error:', error);
           toast({
-            title: "Location needed",
-            description: "Please enable location services for personalized route recommendations.",
-            variant: "destructive"
+            title: "📍 Location Access Required",
+            description: "Please enable location services in your browser settings for personalized route recommendations.",
+            variant: "destructive",
+            duration: 5000
           });
         }
       );
