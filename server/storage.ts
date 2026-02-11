@@ -22,7 +22,7 @@ import {
   achievements, type Achievement, type InsertAchievement,
   userAchievements, type UserAchievement, type InsertUserAchievement
 } from "@shared/schema";
-import { db } from "./db";
+import { db } from "./db.js";
 import { eq, desc, and, sql } from "drizzle-orm";
 
 // Storage interface
