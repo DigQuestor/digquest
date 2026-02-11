@@ -309,17 +309,29 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
       {/* Edit dialog */}
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
         <DialogContent className="max-w-xl max-h-[80vh] overflow-y-auto sm:max-h-[600px]">
-          <DialogTitle className="text-earth-brown font-display text-2xl">Edit Your Find</DialogTitle>
-          <DialogDescription>
-            Update the details of your metal detecting discovery.
-          </DialogDescription>
-          <div className="pb-10"> {/* Added padding to ensure save button is visible */}
-            {find && (
-              <EditFindForm 
-                find={find} 
-                onFindUpdated={handleFindUpdated} 
-              />
-            )}
+          <div className="relative">
+            <DialogTitle className="text-earth-brown font-display text-2xl">Edit Your Find</DialogTitle>
+            <DialogDescription>
+              Update the details of your metal detecting discovery.
+            </DialogDescription>
+            <button
+              type="button"
+              onClick={() => setIsEditOpen(false)}
+              className="absolute right-4 top-4 rounded-full bg-gray-200 hover:bg-gray-300 p-2 shadow focus:outline-none"
+              aria-label="Close"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-5 w-5 text-gray-700">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <div className="pb-10">
+              {find && (
+                <EditFindForm 
+                  find={find} 
+                  onFindUpdated={handleFindUpdated} 
+                />
+              )}
+            </div>
           </div>
         </DialogContent>
       </Dialog>
