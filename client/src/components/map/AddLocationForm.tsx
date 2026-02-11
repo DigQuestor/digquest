@@ -177,9 +177,10 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
     // Validate coordinates
     if (!data.latitude || !data.longitude) {
       toast({
-        title: "Missing Coordinates",
+        title: "⚠️ Missing Coordinates",
         description: "Please provide both latitude and longitude coordinates.",
         variant: "destructive",
+        duration: 4000,
       });
       return;
     }
@@ -187,18 +188,20 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
     // Additional validation for required fields
     if (!data.name) {
       toast({
-        title: "Missing Information",
+        title: "⚠️ Missing Information",
         description: "Please provide a name for this detecting spot.",
         variant: "destructive",
+        duration: 4000,
       });
       return;
     }
 
     if (!data.type) {
       toast({
-        title: "Missing Information",
+        title: "⚠️ Missing Information",
         description: "Please select a location type.",
         variant: "destructive",
+        duration: 4000,
       });
       return;
     }
@@ -228,11 +231,26 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(locationData),
+        credentials: 'include', // Important: send session cookies
       });
 
       let createdLocation;
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        
+        // Handle authentication errors specifically
+        if (response.status === 401) {
+          toast({
+            title: "⚠️ Authentication Error",
+            description: errorData.message || "Please log in to add a location.",
+            variant: "destructive",
+            duration: 4000,
+          });
+          // Trigger auth state refresh
+          window.dispatchEvent(new Event('auth-changed'));
+          return;
+        }
+        
         throw new Error(errorData.message || 'Failed to add location');
       } else {
         createdLocation = await response.json();
@@ -260,8 +278,10 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
       }
       
       toast({
-        title: "Success!",
+        title: "✅ Success!",
         description: "Your detecting spot has been added to the map!",
+        duration: 3000,
+        className: "bg-green-600 text-white border-green-700 font-semibold"
       });
       
       // Reset form and invalidate queries to refresh data
@@ -286,9 +306,10 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
     } catch (error) {
       console.error("Error submitting location:", error);
       toast({
-        title: "Error",
+        title: "❌ Error Adding Location",
         description: error instanceof Error ? error.message : "There was a problem adding your location. Please try again.",
         variant: "destructive",
+        duration: 5000,
       });
     } finally {
       setIsSubmitting(false);

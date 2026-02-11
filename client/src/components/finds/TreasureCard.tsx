@@ -178,9 +178,10 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
           if (response.ok) {
             // Show success toast
             toast({
-              title: "Find deleted",
-              description: "Your find has been successfully deleted.",
-              variant: "default",
+              title: "✅ Find Deleted Successfully",
+              description: "Your find has been permanently removed from the gallery.",
+              className: "bg-green-600 text-white border-green-700 font-semibold shadow-xl",
+              duration: 3000,
             });
             
             // Invalidate and refetch finds query to update the UI

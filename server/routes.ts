@@ -2214,14 +2214,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create a location
   app.post("/api/locations", async (req, res) => {
     try {
-      console.log("Received location creation request:", req.body);
+      console.log("POST /api/locations - Full request details:");
+      console.log("  - Body:", req.body);
+      console.log("  - Session ID:", req.sessionID);
+      console.log("  - Session userId:", req.session?.userId);
+      console.log("  - Cookies:", req.headers.cookie);
+      
+      // Check if user is authenticated via session
+      if (!req.session?.userId) {
+        console.log("❌ User not authenticated - no session userId");
+        console.log("   Session exists:", !!req.session);
+        console.log("   Session keys:", req.session ? Object.keys(req.session) : "N/A");
+        return res.status(401).json({ message: "Not authenticated. Please log in." });
+      }
+      
+      // Verify the authenticated user exists
+      const user = await storage.getUser(req.session.userId);
+      console.log("✓ Found authenticated user:", user ? user.username : "No", "for userId:", req.session.userId);
+      if (!user) {
+        console.log("❌ Authenticated user not found in database with id:", req.session.userId);
+        return res.status(401).json({ message: "User not found. Please log in again." });
+      }
       
       // Manually handle null values for optional fields before validation
       const cleanedData = {
         name: req.body.name,
         latitude: req.body.latitude,
         longitude: req.body.longitude,
-        userId: req.body.userId,
+        userId: req.session.userId, // Use authenticated session userId
         description: req.body.description || null,
         isPrivate: req.body.isPrivate !== false, // Default to private unless explicitly set to false
         terrainType: req.body.terrainType || null,
@@ -2229,18 +2249,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         bestTimeToVisit: req.body.bestTimeToVisit || null
       };
       
-      console.log("Cleaned location data:", cleanedData);
+      console.log("✓ Cleaned location data:", cleanedData);
       
       const locationData = insertLocationSchema.parse(cleanedData);
       
-      // Check if user exists
-      const user = await storage.getUser(locationData.userId);
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-      
       const location = await storage.createLocation(locationData);
-      console.log("Location created successfully:", location);
+      console.log("✓ Location created successfully:", location);
       res.status(201).json(location);
     } catch (error) {
       console.error("Error creating location:", error);

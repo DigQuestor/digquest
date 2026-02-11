@@ -25,6 +25,8 @@ const Forum = () => {
   // Fetch all posts
   const { data: posts, isLoading: isLoadingPosts, refetch: refetchPosts } = useQuery<Post[]>({
     queryKey: ['/api/posts'],
+    staleTime: 0, // Always fetch fresh data
+    refetchOnMount: true,
     // Add a custom select function to merge localStorage posts even if API returns empty
     select: (apiPosts) => {
       try {

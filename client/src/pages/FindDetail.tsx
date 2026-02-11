@@ -162,8 +162,13 @@ const FindDetail = () => {
             alt={find.title} 
             className="w-full h-full max-h-[500px] object-contain bg-gray-100 p-4"
             onError={(e) => {
+              console.error(`❌ Failed to load image in FindDetail for find ${findId}:`, find.imageUrl);
+              console.error('Find object:', find);
               // Fallback image if the actual image fails to load
               e.currentTarget.src = "https://images.unsplash.com/photo-1589656966895-2f33e7653819?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1200&h=800";
+            }}
+            onLoad={() => {
+              console.log(`✅ Successfully loaded image in FindDetail for find ${findId}:`, find.imageUrl);
             }}
           />
         </div>
