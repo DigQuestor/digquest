@@ -253,9 +253,13 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
       // Show success message and auto-login
       toast({
         title: "Account Created Successfully!",
-        description: "You can now log in to DigQuest immediately!",
+        description: "Welcome to DigQuest! You're now logged in.",
         duration: 5000,
       });
+      
+      // Auto-login after successful registration
+      console.log("Auto-logging in user:", username);
+      await login(username, password);
       
       return registerData;
     } catch (error) {
@@ -311,8 +315,11 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
         await register(data.username, data.email, data.password, data.profilePicture);
         form.reset();
         setProfilePreview(null);
-        onClose();
-        setIsLoading(false);
+        // Give a moment for login to complete before closing
+        setTimeout(() => {
+          onClose();
+          setIsLoading(false);
+        }, 500);
         return;
       } catch (registerErr: any) {
         setIsLoading(false);
@@ -394,8 +401,11 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
         await register(data.username, data.email, data.password, data.profilePicture);
         form.reset();
         setProfilePreview(null);
-        onClose();
-        setIsLoading(false);
+        // Give a moment for login to complete before closing
+        setTimeout(() => {
+          onClose();
+          setIsLoading(false);
+        }, 500);
       } catch (registerErr) {
         setIsLoading(false);
         if (registerErr instanceof Error) {
@@ -762,7 +772,10 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
                           .then(() => {
                             console.log("Account created successfully after payment");
                             form.reset();
-                            onClose();
+                            // Give a moment for login to complete before closing
+                            setTimeout(() => {
+                              onClose();
+                            }, 500);
                           })
                           .catch((err) => {
                             console.error("Error creating account after payment:", err);
