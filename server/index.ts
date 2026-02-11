@@ -32,28 +32,11 @@ app.use(session({
 await registerRoutes(app);
 
 // Serve static files from dist/public
+// Serve static files from dist/public
 const staticPath = path.resolve(__dirname, "../dist/public");
 app.use(express.static(staticPath));
 
-// Verify files exist at startup
-const filesToCheck = ["sitemap.xml", "robots.txt"];
-filesToCheck.forEach((file) => {
-  const fullPath = path.join(staticPath, file);
-  if (fs.existsSync(fullPath)) {
-    console.log(`✅ Found ${file} at ${fullPath}`);
-  } else {
-    console.warn(`⚠️ Missing ${file}! Expected at ${fullPath}`);
-  }
-});
-
-// Explicit routes for sitemap and robots
-app.get("/sitemap.xml", (_req, res) => {
-  res.sendFile(path.resolve(staticPath, "sitemap.xml"));
-});
-
-app.get("/robots.txt", (_req, res) => {
-  res.sendFile(path.resolve(staticPath, "robots.txt"));
-});
+// Note: sitemap.xml and robots.txt are handled dynamically in routes.ts
 
 // SPA fallback (React frontend)
 app.use("*", (_req, res) => {
