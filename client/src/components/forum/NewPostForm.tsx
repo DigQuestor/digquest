@@ -161,8 +161,21 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
       const response = await apiRequest("POST", "/api/posts", postData);
       
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Unknown error occurred' }));
-        throw new Error(errorData.error || `HTTP ${response.status}: Failed to create post`);
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error occurred' }));
+        
+        // Handle authentication errors specifically
+        if (response.status === 401) {
+          toast({
+            title: "Authentication Error",
+            description: errorData.message || "Please log in to create a post.",
+            variant: "destructive",
+          });
+          // Trigger auth state refresh
+          window.dispatchEvent(new Event('auth-changed'));
+          return;
+        }
+        
+        throw new Error(errorData.message || errorData.error || `HTTP ${response.status}: Failed to create post`);
       }
       
       const newPost = await response.json();
