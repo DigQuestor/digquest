@@ -459,7 +459,12 @@ const Forum = () => {
             Share your thoughts, questions, or discoveries with the community.
           </DialogDescription>
           <div className="pb-4">
-            <NewPostForm onPostCreated={() => setIsNewPostOpen(false)} />
+            <NewPostForm onPostCreated={() => {
+              setIsNewPostOpen(false);
+              // Force immediate refetch of posts after creation
+              refetchPosts();
+              console.log("Post created - refetching forum posts");
+            }} />
           </div>
         </DialogContent>
       </Dialog>

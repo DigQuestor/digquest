@@ -1399,12 +1399,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       const post = await storage.createPost(validatedData);
-      console.log("✓ Post created successfully with id:", post.id);
+      console.log("✅ Post created successfully!");
+      console.log("   - Post ID:", post.id);
+      console.log("   - Title:", post.title);
+      console.log("   - Category ID:", post.categoryId);
+      console.log("   - User ID:", post.userId);
+      console.log("   - Created at:", post.created_at);
+      console.log("   - Full post object:", JSON.stringify(post, null, 2));
       
       // Increment the category count now that a post has been added to it
       await storage.incrementCategoryCount(validatedData.categoryId);
-      console.log("Incremented count for category:", validatedData.categoryId);
+      console.log("✓ Incremented count for category:", validatedData.categoryId);
       
+      console.log("Sending post response to client...");
       res.status(201).json(post);
     } catch (error) {
       console.error("Error creating post:", error);

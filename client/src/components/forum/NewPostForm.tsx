@@ -183,10 +183,19 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
       }
       
       const newPost = await response.json();
+      
+      console.log("✅ Post created successfully!");
+      console.log("   - Post ID:", newPost.id);
+      console.log("   - Title:", newPost.title);
+      console.log("   - Category ID:", newPost.categoryId);
+      console.log("   - User ID:", newPost.userId);
+      console.log("   - Full post object:", JSON.stringify(newPost, null, 2));
 
       toast({
-        title: "Success!",
-        description: "Your post has been created successfully.",
+        title: "✅ Post Created Successfully!",
+        description: "Your post is now visible in the forum.",
+        className: "bg-green-600 text-white border-green-700 font-semibold shadow-xl",
+        duration: 3000,
       });
 
       // Reset form and image state
@@ -202,6 +211,13 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
       // Invalidate queries to refresh data
       await queryClient.invalidateQueries({ queryKey: ['/api/posts'] });
       await queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
+      
+      // Add a small delay to ensure the data is fully saved
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Force refetch to get the latest posts
+      await queryClient.refetchQueries({ queryKey: ['/api/posts'] });
+      console.log("✅ Refetched posts after creating new post");
 
       // Call the callback if provided
       if (onPostCreated) {
