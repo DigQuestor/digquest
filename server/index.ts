@@ -2,6 +2,8 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import session from "express-session";
+import { registerRoutes } from "./routes.js";
 
 const app = express();
 
@@ -10,7 +12,27 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Serve static files from dist/public
-const staticPath = path.resolve(__dirname, "public");
+// Middleware setup
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Session middleware
+app.use(session({
+  secret: process.env.SESSION_SECRET || "your-secret-key",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+  }
+}));
+
+// Register API routes
+await registerRoutes(app);
+
+// Serve static files from dist/public
+const staticPath = path.resolve(__dirname, "../dist/public");
 app.use(express.static(staticPath));
 
 // Verify files exist at startup
@@ -35,7 +57,7 @@ app.get("/robots.txt", (_req, res) => {
 
 // SPA fallback (React frontend)
 app.use("*", (_req, res) => {
-  res.sendFile(path.resolve(__dirname, "../index.html"));
+  res.sendFile(path.resolve(staticPath, "index.html"));
 });
 
 // Start server
