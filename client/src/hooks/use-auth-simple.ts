@@ -399,6 +399,7 @@ export function useAuth() {
               headers: {
                 'Content-Type': 'application/json',
               },
+              credentials: 'include', // Include cookies for session
               body: JSON.stringify({ username, password }),
             });
             

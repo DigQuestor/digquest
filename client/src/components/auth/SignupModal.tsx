@@ -233,6 +233,7 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Include cookies for session
         body: JSON.stringify(userData),
       });
       
@@ -250,16 +251,21 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
       
       const registerData = await registerResponse.json();
       
-      // Show success message and auto-login
+      // Auto-login after successful registration
+      console.log("Auto-logging in user:", username);
+      await login(username, password);
+      
+      // Show success message
       toast({
         title: "Account Created Successfully!",
         description: "Welcome to DigQuest! You're now logged in.",
         duration: 5000,
       });
       
-      // Auto-login after successful registration
-      console.log("Auto-logging in user:", username);
-      await login(username, password);
+      // Force a page reload to ensure session is properly recognized
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
       
       return registerData;
     } catch (error) {
@@ -315,11 +321,8 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
         await register(data.username, data.email, data.password, data.profilePicture);
         form.reset();
         setProfilePreview(null);
-        // Give a moment for login to complete before closing
-        setTimeout(() => {
-          onClose();
-          setIsLoading(false);
-        }, 500);
+        setIsLoading(false);
+        // Don't close modal - register function will redirect
         return;
       } catch (registerErr: any) {
         setIsLoading(false);
@@ -401,11 +404,8 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
         await register(data.username, data.email, data.password, data.profilePicture);
         form.reset();
         setProfilePreview(null);
-        // Give a moment for login to complete before closing
-        setTimeout(() => {
-          onClose();
-          setIsLoading(false);
-        }, 500);
+        setIsLoading(false);
+        // Don't close modal - register function will redirect
       } catch (registerErr) {
         setIsLoading(false);
         if (registerErr instanceof Error) {
@@ -772,10 +772,7 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
                           .then(() => {
                             console.log("Account created successfully after payment");
                             form.reset();
-                            // Give a moment for login to complete before closing
-                            setTimeout(() => {
-                              onClose();
-                            }, 500);
+                            // Don't close modal - register function will redirect
                           })
                           .catch((err) => {
                             console.error("Error creating account after payment:", err);
