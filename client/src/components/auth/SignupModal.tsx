@@ -257,11 +257,12 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
       
       console.log("Login completed, waiting for session to establish...");
       
-      // Show success message
+      // Show success message with prominent styling
       toast({
-        title: "Account Created Successfully!",
+        title: "🎉 Account Created Successfully!",
         description: "Welcome to DigQuest! Redirecting...",
-        duration: 3000,
+        duration: 1000,
+        className: "bg-green-600 text-white border-green-700 font-semibold text-lg",
       });
       
       // Wait longer for session to establish before redirect

@@ -64,11 +64,12 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
       
       console.log("User logged in successfully:", user);
       
-      // Show success message - handle both login and registration
+      // Show success message with prominent styling
       toast({
-        title: "Success!",
-        description: `Welcome, ${user.username}! Redirecting...`,
-        duration: 3000,
+        title: "✅ Welcome Back!",
+        description: `Hello, ${user.username}! Redirecting...`,
+        duration: 1000,
+        className: "bg-green-600 text-white border-green-700 font-semibold text-lg",
       });
       
       // Close modal and reset form
