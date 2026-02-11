@@ -165,10 +165,7 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
   
   const register = async (username: string, email: string, password: string, profilePicture?: File) => {
     try {
-      // Make sure this username isn't "digquestor" in any case variant
-      if (username.toLowerCase() === "digquestor") {
-        throw new Error("'DigQuestor' is a reserved username. Please choose a different username.");
-      }
+      // (Removed reserved username check for 'DigQuestor')
       
       // Make sure the site is marked as visited to allow auto-login on future visits, but not this first time
       localStorage.setItem('site_visited', 'true');
