@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/use-auth-simple";
 import { apiRequest } from "@/lib/queryClient";
 import type { User, UserConnection, Activity, Group, Message } from "@shared/schema";
 
@@ -26,6 +27,7 @@ interface SocialStats {
 export default function SocialDashboard() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user: currentUser, isLoading: userLoading } = useAuth();
   
   // All state hooks at the top
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -57,34 +59,6 @@ export default function SocialDashboard() {
   const [editingGroup, setEditingGroup] = useState<Group | null>(null);
   const [isViewGroupOpen, setIsViewGroupOpen] = useState(false);
   const [viewingGroup, setViewingGroup] = useState<Group | null>(null);
-
-  // All query hooks at the top level
-  const { data: currentUser, isLoading: userLoading, error: userError } = useQuery<User>({
-    queryKey: ['/api/auth/user'],
-    retry: 1,
-    retryDelay: 500,
-    queryFn: async () => {
-      console.log("SocialDashboard: Fetching current user...");
-      const res = await fetch('/api/auth/user', {
-        credentials: 'include',
-      });
-      
-      if (res.status === 401) {
-        console.log("SocialDashboard: User not authenticated (401)");
-        return null;
-      }
-      
-      if (!res.ok) {
-        const errorText = await res.text();
-        console.error("SocialDashboard: Auth error:", res.status, errorText);
-        throw new Error(`${res.status}: ${errorText}`);
-      }
-      
-      const userData = await res.json();
-      console.log("SocialDashboard: User authenticated:", userData.username);
-      return userData;
-    },
-  });
 
   const { data: socialStats } = useQuery<SocialStats>({
     queryKey: ['/api/social/stats'],
