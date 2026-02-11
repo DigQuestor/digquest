@@ -518,7 +518,13 @@ const CommunitySection = () => {
       </div>
 
       <Dialog open={isNewPostOpen} onOpenChange={setIsNewPostOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl" onInteractOutside={(e) => {
+          // Prevent closing when clicking on Select dropdown
+          const target = e.target as HTMLElement;
+          if (target.closest('[role="listbox"]') || target.closest('[data-radix-select-content]')) {
+            e.preventDefault();
+          }
+        }}>
           <DialogTitle>Create New Post</DialogTitle>
           <DialogDescription>
             Share your thoughts, questions, or discoveries with the community.

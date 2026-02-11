@@ -320,7 +320,7 @@ const EditFindForm = ({ find, onFindUpdated }: EditFindFormProps) => {
                       <SelectValue placeholder="Select time period" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent position="popper" className="z-[100]">
                     {timePeriods.map((period) => (
                       <SelectItem key={period} value={period}>
                         {period}

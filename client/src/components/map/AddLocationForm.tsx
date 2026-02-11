@@ -447,7 +447,7 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
                     <SelectValue placeholder="Select location type" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
+                <SelectContent position="popper" className="z-[100]">
                   {locationTypes.map((type) => (
                     <SelectItem key={type} value={type}>
                       {type}

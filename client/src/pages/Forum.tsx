@@ -345,7 +345,7 @@ const Forum = () => {
                           <SelectValue placeholder="All Categories" />
                         </div>
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent position="popper" className="z-[100]">
                         <SelectItem value="all">All Categories</SelectItem>
                         {categories?.map(category => (
                           <SelectItem key={category.id} value={category.id.toString()}>
@@ -445,7 +445,13 @@ const Forum = () => {
       </div>
 
       <Dialog open={isNewPostOpen} onOpenChange={setIsNewPostOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" onInteractOutside={(e) => {
+          // Prevent closing when clicking on Select dropdown
+          const target = e.target as HTMLElement;
+          if (target.closest('[role="listbox"]') || target.closest('[data-radix-select-content]')) {
+            e.preventDefault();
+          }
+        }}>
           <DialogTitle>Create New Post</DialogTitle>
           <DialogDescription>
             Share your thoughts, questions, or discoveries with the community.

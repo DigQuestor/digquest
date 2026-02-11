@@ -256,7 +256,7 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent position="popper" className="z-[100]">
                     {categories?.map((category) => (
                       <SelectItem key={category.id} value={category.id.toString()}>
                         {category.name}

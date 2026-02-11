@@ -108,7 +108,7 @@ const FindsGallery = () => {
                       <SelectValue placeholder="All Periods" />
                     </div>
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper" className="z-[100]">
                     {timePeriods.map(period => (
                       <SelectItem key={period} value={period}>
                         {period}
