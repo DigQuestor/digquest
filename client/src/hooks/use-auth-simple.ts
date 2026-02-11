@@ -326,6 +326,54 @@ export function useAuth() {
     initializeAuth();
   }, []);
   
+  // Listen for auth changes from other instances of the hook
+  useEffect(() => {
+    const handleAuthChange = async () => {
+      console.log("Auth change detected, refreshing user state...");
+      
+      // Check for active server session
+      try {
+        const sessionResponse = await fetch('/api/auth/user', {
+          credentials: 'include'
+        });
+        
+        if (sessionResponse.ok) {
+          const serverUser = await sessionResponse.json();
+          console.log("Refreshed user from server session:", serverUser.username);
+          
+          if (typeof serverUser.created_at === 'string') {
+            serverUser.created_at = new Date(serverUser.created_at);
+          }
+          
+          setUser(serverUser);
+          return;
+        }
+      } catch (error) {
+        console.error("Error refreshing user from server:", error);
+      }
+      
+      // Fallback to localStorage
+      const storedUser = localStorage.getItem(USER_STORAGE_KEY);
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        if (typeof parsedUser.created_at === 'string') {
+          parsedUser.created_at = new Date(parsedUser.created_at);
+        }
+        console.log("Refreshed user from localStorage:", parsedUser.username);
+        setUser(parsedUser);
+      } else {
+        setUser(null);
+      }
+    };
+    
+    // Listen for custom auth change events
+    window.addEventListener('auth-changed', handleAuthChange);
+    
+    return () => {
+      window.removeEventListener('auth-changed', handleAuthChange);
+    };
+  }, []);
+  
   // Function to handle login
   const login = async (username: string, password: string) => {
     try {
@@ -375,6 +423,10 @@ export function useAuth() {
           userCache.addUser(userData);
           
           setUser(userData);
+          
+          // Notify other hook instances of auth change
+          window.dispatchEvent(new Event('auth-changed'));
+          
           console.log("DigQuestor logged in successfully with server session");
           return userData;
           
@@ -430,6 +482,9 @@ export function useAuth() {
             
             // Update state
             setUser(userData);
+            
+            // Notify other hook instances of auth change
+            window.dispatchEvent(new Event('auth-changed'));
             
             console.log("User logged in successfully:", username);
             return userData;
@@ -492,6 +547,9 @@ export function useAuth() {
       
       // Update state first
       setUser(null);
+      
+      // Notify other hook instances of auth change
+      window.dispatchEvent(new Event('auth-changed'));
       
       console.log("User logged out successfully");
       
