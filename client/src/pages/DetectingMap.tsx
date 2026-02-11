@@ -1167,7 +1167,16 @@ const DetectingMap = () => {
       
       {/* Add location dialog */}
       <Dialog open={isAddLocationOpen} onOpenChange={setIsAddLocationOpen}>
-        <DialogContent className="sm:max-w-md max-h-[80vh] overflow-y-auto">
+        <DialogContent 
+          className="sm:max-w-md max-h-[80vh] overflow-y-auto"
+          onInteractOutside={(e) => {
+            // Prevent dialog from closing when clicking on Select dropdowns
+            const target = e.target as HTMLElement;
+            if (target.closest('[role="listbox"]') || target.closest('[data-radix-popper-content-wrapper]')) {
+              e.preventDefault();
+            }
+          }}
+        >
           <DialogTitle>Add New Detecting Location</DialogTitle>
           <DialogDescription>
             Share a detecting location with the community. Provide details to help others find great spots.
