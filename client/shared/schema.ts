@@ -1,3 +1,26 @@
+export default {
+	users,
+	categories,
+	posts,
+	comments,
+	postLikes,
+	findLikes,
+	finds,
+	findComments,
+	locations,
+	events,
+	stories,
+	routes,
+	userPreferences,
+	imageStorage,
+	groups,
+	groupMemberships,
+	userConnections,
+	activities,
+	messages,
+	achievements,
+	userAchievements
+};
 import { z } from "zod";
 
 // Zod schema for creating a post (used by client forms)
