@@ -28,7 +28,7 @@ export const insertPostSchema = z.object({
 	title: z.string().min(5, "Title must be at least 5 characters").max(100, "Title cannot exceed 100 characters"),
 	content: z.string().min(10, "Content must be at least 10 characters"),
 	categoryId: z.number().min(1, "Please select a category"),
-	imageUrl: z.string().optional(),
+	imageUrl: z.string().optional().nullable(),
 });
 
 export type PostFormValues = z.infer<typeof insertPostSchema>;

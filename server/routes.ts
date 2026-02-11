@@ -1381,8 +1381,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Use the authenticated user's ID from session, not from request body
       const postData = {
-        ...req.body,
+        title: req.body.title,
+        content: req.body.content,
+        categoryId: req.body.categoryId,
         userId: req.session.userId, // Use session userId for security
+        imageUrl: req.body.imageUrl || null, // Ensure imageUrl is null if empty/undefined
       };
       
       const validatedData = insertPostSchema.parse(postData);

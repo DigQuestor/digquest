@@ -156,9 +156,8 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
       const postData = {
         title: values.title,
         content: values.content,
-        userId: user.id,
         categoryId: values.categoryId,
-        imageUrl,
+        ...(imageUrl && { imageUrl }), // Only include imageUrl if it has a value
       };
 
       console.log("Submitting post data:", postData);
