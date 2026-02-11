@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/hooks/use-auth-simple";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const loginSchema = z.object({
@@ -142,12 +142,15 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
-      <DialogContent className="sm:max-w-md" onInteractOutside={(e) => e.preventDefault()}>
-        <DialogClose asChild>
-          <Button variant="outline" size="sm" className="absolute right-4 top-4">
-            Close
-          </Button>
-        </DialogClose>
+      <DialogContent className="sm:max-w-md" onInteractOutside={(e) => e.preventDefault()} onEscapeKeyDown={(e) => { e.preventDefault(); onClose(); }}>
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+          type="button"
+        >
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </button>
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-display text-earth-brown">
             {showPasswordReset ? "Reset Password" : "Sign In"}
