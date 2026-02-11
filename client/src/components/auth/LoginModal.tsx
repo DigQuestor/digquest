@@ -142,7 +142,12 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md" onPointerDownOutside={(e) => e.preventDefault()}>
+        <div className="flex justify-end mb-2">
+          <Button variant="outline" size="sm" onClick={onClose}>
+            Close
+          </Button>
+        </div>
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-display text-earth-brown">
             {showPasswordReset ? "Reset Password" : "Sign In"}
