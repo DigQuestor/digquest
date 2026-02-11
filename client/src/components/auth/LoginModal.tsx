@@ -141,7 +141,7 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
+    <Dialog open={isOpen}>
       <DialogContent className="sm:max-w-md bg-white border border-gray-300">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-display text-earth-brown">

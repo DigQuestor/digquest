@@ -434,7 +434,7 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
+    <Dialog open={isOpen}>
       <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto bg-white border border-gray-300">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-display text-earth-brown">
