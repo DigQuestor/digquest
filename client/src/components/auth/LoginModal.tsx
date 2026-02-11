@@ -62,22 +62,22 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
       // Call the login function from useAuth (now async)
       const user = await login(data.username, data.password);
       
+      console.log("User logged in successfully:", user);
+      
       // Show success message - handle both login and registration
       toast({
         title: "Success!",
-        description: `Welcome, ${user.username}!`,
+        description: `Welcome, ${user.username}! Redirecting...`,
+        duration: 3000,
       });
       
-      console.log("User logged in successfully:", user);
+      // Close modal and reset form
+      form.reset();
+      onClose();
       
-      // Add a small delay to allow state to update properly
+      // Wait for session to establish before redirect
       setTimeout(() => {
-        // Log what state we have after login
-        console.log("User after login delay:", user);
-        
-        // Close modal and reset form
-        form.reset();
-        onClose();
+        console.log("Redirecting after login...");
         
         // Navigate to homepage or reload page to show authenticated state
         if (window.location.pathname === '/') {
@@ -86,7 +86,7 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
           // Redirect to homepage after successful login
           window.location.href = '/';
         }
-      }, 500);
+      }, 1500);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);

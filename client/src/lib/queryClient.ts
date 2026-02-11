@@ -55,3 +55,8 @@ export const queryClient = new QueryClient({
     },
   },
 });
+
+// Helper to invalidate auth queries after login
+export const refreshAuthState = () => {
+  queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+};

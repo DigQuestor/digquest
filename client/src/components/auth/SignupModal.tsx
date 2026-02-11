@@ -255,17 +255,20 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
       console.log("Auto-logging in user:", username);
       await login(username, password);
       
+      console.log("Login completed, waiting for session to establish...");
+      
       // Show success message
       toast({
         title: "Account Created Successfully!",
-        description: "Welcome to DigQuest! You're now logged in.",
-        duration: 5000,
+        description: "Welcome to DigQuest! Redirecting...",
+        duration: 3000,
       });
       
-      // Force a page reload to ensure session is properly recognized
+      // Wait longer for session to establish before redirect
       setTimeout(() => {
+        console.log("Redirecting to home page...");
         window.location.href = '/';
-      }, 1000);
+      }, 2000);
       
       return registerData;
     } catch (error) {

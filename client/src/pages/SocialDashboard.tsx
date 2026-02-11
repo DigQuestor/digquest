@@ -61,7 +61,29 @@ export default function SocialDashboard() {
   // All query hooks at the top level
   const { data: currentUser, isLoading: userLoading, error: userError } = useQuery<User>({
     queryKey: ['/api/auth/user'],
-    retry: false,
+    retry: 1,
+    retryDelay: 500,
+    queryFn: async () => {
+      console.log("SocialDashboard: Fetching current user...");
+      const res = await fetch('/api/auth/user', {
+        credentials: 'include',
+      });
+      
+      if (res.status === 401) {
+        console.log("SocialDashboard: User not authenticated (401)");
+        return null;
+      }
+      
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error("SocialDashboard: Auth error:", res.status, errorText);
+        throw new Error(`${res.status}: ${errorText}`);
+      }
+      
+      const userData = await res.json();
+      console.log("SocialDashboard: User authenticated:", userData.username);
+      return userData;
+    },
   });
 
   const { data: socialStats } = useQuery<SocialStats>({
