@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Upload, X, Image } from "lucide-react";
+import { Loader2, Upload, X, Image, AlertCircle } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth-simple";
@@ -60,18 +60,20 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
     if (file) {
       if (file.size > 5 * 1024 * 1024) { // 5MB limit
         toast({
-          title: "File too large",
+          title: "⚠️ File Too Large",
           description: "Please select an image smaller than 5MB",
           variant: "destructive",
+          duration: 4000,
         });
         return;
       }
       
       if (!file.type.startsWith('image/')) {
         toast({
-          title: "Invalid file type",
+          title: "⚠️ Invalid File Type",
           description: "Please select an image file",
           variant: "destructive",
+          duration: 4000,
         });
         return;
       }
@@ -115,9 +117,10 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
   const onSubmit = async (values: PostFormValues) => {
     if (!user) {
       toast({
-        title: "Authentication required",
+        title: "⚠️ Authentication Required",
         description: "Please log in to create a post.",
         variant: "destructive",
+        duration: 4000,
       });
       return;
     }
@@ -139,9 +142,10 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
           imageUrl = await uploadImage(selectedImage);
         } catch (error) {
           toast({
-            title: "Image upload failed",
+            title: "⚠️ Image Upload Failed",
             description: "Could not upload image. Post will be created without image.",
             variant: "destructive",
+            duration: 4000,
           });
           console.error("Image upload error:", error);
         } finally {
@@ -166,9 +170,10 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
         // Handle authentication errors specifically
         if (response.status === 401) {
           toast({
-            title: "Authentication Error",
+            title: "⚠️ Authentication Error",
             description: errorData.message || "Please log in to create a post.",
             variant: "destructive",
+            duration: 4000,
           });
           // Trigger auth state refresh
           window.dispatchEvent(new Event('auth-changed'));
@@ -207,9 +212,10 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
     } catch (error) {
       console.error("Error creating post:", error);
       toast({
-        title: "Error",
+        title: "❌ Error Creating Post",
         description: error instanceof Error ? error.message : "Failed to create post. Please try again.",
         variant: "destructive",
+        duration: 5000,
       });
     } finally {
       setIsSubmitting(false);

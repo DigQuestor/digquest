@@ -65,17 +65,17 @@ const HeroSection = () => {
           <div className="flex flex-row justify-center">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl">
               <Link href="/forum" className="block">
-                <div className="bg-white/90 border border-earth-brown rounded-xl shadow-lg p-6 flex flex-col items-center hover:shadow-xl transition-all duration-200 h-full">
-                  <span className="text-forest-green text-2xl font-bold mb-2">Visit Forum</span>
-                  <span className="text-earth-brown text-base mb-2 text-center">Join discussions, ask questions, and connect with the community.</span>
-                  <Button className="treasure-gradient text-white font-semibold px-5 py-2 rounded-lg mt-auto">Go to Forum</Button>
+                <div className="bg-white/90 border border-earth-brown rounded-xl shadow-lg p-5 flex flex-col items-center hover:shadow-xl transition-all duration-200 h-full">
+                  <span className="text-forest-green text-xl font-bold mb-2">Visit Forum</span>
+                  <span className="text-earth-brown text-sm mb-3 text-center">Join discussions, ask questions, and connect with the community.</span>
+                  <Button className="treasure-gradient text-white font-semibold px-4 py-2 rounded-lg mt-auto text-sm">Go to Forum</Button>
                 </div>
               </Link>
               <Link href="/finds" className="block">
-                <div className="bg-white/90 border border-forest-green rounded-xl shadow-lg p-6 flex flex-col items-center hover:shadow-xl transition-all duration-200 h-full">
-                  <span className="text-forest-green text-2xl font-bold mb-2">Browse Finds</span>
-                  <span className="text-earth-brown text-base mb-2 text-center">Explore recent treasures and share your own discoveries.</span>
-                  <Button className="earth-gradient text-white font-semibold px-5 py-2 rounded-lg mt-auto">Go to Finds</Button>
+                <div className="bg-white/90 border border-forest-green rounded-xl shadow-lg p-5 flex flex-col items-center hover:shadow-xl transition-all duration-200 h-full">
+                  <span className="text-forest-green text-xl font-bold mb-2">Browse Finds</span>
+                  <span className="text-earth-brown text-sm mb-3 text-center">Explore recent treasures and share your own discoveries.</span>
+                  <Button className="earth-gradient text-white font-semibold px-4 py-2 rounded-lg mt-auto text-sm">Go to Finds</Button>
                 </div>
               </Link>
             </div>
