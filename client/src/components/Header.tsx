@@ -36,6 +36,7 @@ const Header = () => {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [location] = useLocation();
   const [displayName, setDisplayName] = useState<string>("");
+  const [modalKey, setModalKey] = useState(0);
   
   // Using our mock auth from use-auth-simple
   const { user, logout } = useAuth();
@@ -61,6 +62,12 @@ const Header = () => {
       setDisplayName("");
     }
   }, [user]);
+
+  // Increment modalKey on logout to force remount
+  const handleLogout = async () => {
+    await logout();
+    setModalKey((k) => k + 1);
+  };
 
   // Search functionality removed as it was not functional
 
@@ -141,6 +148,19 @@ const Header = () => {
                 >
                   <UserPlus className="h-4 w-4 mr-2" /> Sign Up
                 </Button>
+                <Button 
+                  className="bg-white hover:bg-gray-100 text-forest-green font-semibold transition duration-300 flex items-center shadow-md"
+                  onClick={() => { setIsLoginModalOpen(true); setModalKey((k) => k + 1); }}
+                >
+                  <LogIn className="h-4 w-4 mr-2" /> Login
+                </Button>
+                <Button 
+                  className="bg-metallic-gold hover:bg-yellow-600 text-forest-green font-semibold transition duration-300 flex items-center shadow-md"
+                  onClick={() => { setIsSignupModalOpen(true); setModalKey((k) => k + 1); }}
+                >
+                  <UserPlus className="h-4 w-4 mr-2" /> Sign Up
+                </Button>
+                                  <DropdownMenuItem className="flex items-center text-red-600" onClick={handleLogout}>
               </>
             )}
           </div>
@@ -150,8 +170,21 @@ const Header = () => {
 
 
       <LoginModal 
+      <LoginModal 
+        key={`login-${modalKey}`}
         isOpen={isLoginModalOpen} 
         onClose={() => setIsLoginModalOpen(false)} 
+      />
+      
+      <SignupModal 
+        key={`signup-${modalKey}`}
+        isOpen={isSignupModalOpen} 
+        onClose={() => setIsSignupModalOpen(false)}
+        onOpenLogin={() => {
+          setIsSignupModalOpen(false);
+          setIsLoginModalOpen(true);
+          setModalKey((k) => k + 1);
+        }}
       />
       
       <SignupModal 

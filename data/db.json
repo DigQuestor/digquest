@@ -1,0 +1,96 @@
+{
+  "users": {
+    "1": {
+      "id": 1,
+      "username": "DigQuestor",
+      "email": "admin@digquest.com",
+      "password": "$2b$10$1LGuacLus5jhZ1VpvmY7h.YhQlshdsL8YIfAfuLaCu7yw/7A1HeLy",
+      "emailVerificationToken": null,
+      "emailVerificationExpires": null,
+      "avatarUrl": "https://api.dicebear.com/7.x/personas/svg?seed=DigQuestor",
+      "bio": "Platform Administrator",
+      "isEmailVerified": true,
+      "created_at": "2025-01-01T00:00:00.000Z"
+    }
+  },
+  "categories": {
+    "1": {
+      "id": 1,
+      "name": "General Discussion",
+      "description": "General detecting topics",
+      "slug": "general-discussion",
+      "icon": "MessageCircle",
+      "count": 1
+    },
+    "2": {
+      "id": 2,
+      "name": "Finds Gallery",
+      "description": "Share your amazing finds",
+      "slug": "finds-gallery",
+      "icon": "Image",
+      "count": 0
+    },
+    "3": {
+      "id": 3,
+      "name": "Equipment Reviews",
+      "description": "Detector and equipment discussions",
+      "slug": "equipment-reviews",
+      "icon": "Settings",
+      "count": 0
+    },
+    "4": {
+      "id": 4,
+      "name": "Location Tips",
+      "description": "Share detecting locations and tips",
+      "slug": "location-tips",
+      "icon": "MapPin",
+      "count": 0
+    },
+    "5": {
+      "id": 5,
+      "name": "Beginners Corner",
+      "description": "Help and advice for newcomers",
+      "slug": "beginners-corner",
+      "icon": "HelpCircle",
+      "count": 0
+    },
+    "6": {
+      "id": 6,
+      "name": "Events & Meetups",
+      "description": "Community events and gatherings",
+      "slug": "events-meetups",
+      "icon": "Calendar",
+      "count": 0
+    }
+  },
+  "posts": {
+    "1": {
+      "id": 1,
+      "title": "Welcome to DigQuest!",
+      "content": "Welcome to the DigQuest community platform for metal detecting enthusiasts!",
+      "userId": 1,
+      "categoryId": 1,
+      "imageUrl": null,
+      "views": 0,
+      "comments": 0,
+      "likes": 0,
+      "created_at": "2025-01-01T00:00:00.000Z"
+    }
+  },
+  "comments": {},
+  "finds": {},
+  "findComments": {},
+  "locations": {},
+  "events": {},
+  "stories": {},
+  "userId": 2,
+  "categoryId": 7,
+  "postId": 2,
+  "commentId": 1,
+  "findId": 1,
+  "findCommentId": 1,
+  "locationId": 1,
+  "eventId": 1,
+  "storyId": 1,
+  "initialized": true
+}

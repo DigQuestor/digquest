@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { Helmet } from "react-helmet";
 import { useQuery } from "@tanstack/react-query";
 import { Story, User } from "@shared/schema";
@@ -26,6 +27,7 @@ const storyFormSchema = z.object({
 type StoryFormValues = z.infer<typeof storyFormSchema>;
 
 const Wellbeing = () => {
+  const [location, navigate] = useLocation();
   const [isShareStoryOpen, setIsShareStoryOpen] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
@@ -347,7 +349,7 @@ const Wellbeing = () => {
               </ul>
               <Button 
                 className="w-full mt-4 bg-metallic-gold hover:bg-yellow-600 text-forest-green"
-                onClick={() => window.location.href = '/events'}
+                onClick={() => navigate('/events')}
               >
                 Register for Events
               </Button>

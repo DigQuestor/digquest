@@ -61,22 +61,22 @@ const HeroSection = () => {
             </Button>
           </div>
         ) : (
-          // Logged in user view - No welcome text, just buttons
+          // Logged in user view - cleaner shortcut cards
           <div className="flex flex-row justify-center">
-            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-              <Link href="/forum" className="w-full sm:w-auto">
-                <Button 
-                  className="treasure-gradient hover:shadow-treasure text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-glow w-full interactive-card"
-                >
-                  Visit Forum
-                </Button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl">
+              <Link href="/forum" className="block">
+                <div className="bg-white/90 border border-earth-brown rounded-xl shadow-lg p-6 flex flex-col items-center hover:shadow-xl transition-all duration-200 h-full">
+                  <span className="text-forest-green text-2xl font-bold mb-2">Visit Forum</span>
+                  <span className="text-earth-brown text-base mb-2 text-center">Join discussions, ask questions, and connect with the community.</span>
+                  <Button className="treasure-gradient text-white font-semibold px-5 py-2 rounded-lg mt-auto">Go to Forum</Button>
+                </div>
               </Link>
-              <Link href="/finds" className="w-full sm:w-auto">
-                <Button 
-                  className="earth-gradient hover:shadow-treasure text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-glow w-full interactive-card"
-                >
-                  Browse Finds
-                </Button>
+              <Link href="/finds" className="block">
+                <div className="bg-white/90 border border-forest-green rounded-xl shadow-lg p-6 flex flex-col items-center hover:shadow-xl transition-all duration-200 h-full">
+                  <span className="text-forest-green text-2xl font-bold mb-2">Browse Finds</span>
+                  <span className="text-earth-brown text-base mb-2 text-center">Explore recent treasures and share your own discoveries.</span>
+                  <Button className="earth-gradient text-white font-semibold px-5 py-2 rounded-lg mt-auto">Go to Finds</Button>
+                </div>
               </Link>
             </div>
           </div>
