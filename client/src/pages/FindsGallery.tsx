@@ -180,7 +180,13 @@ const FindsGallery = () => {
       )}
       
       <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
-        <DialogContent className="max-w-xl max-h-[80vh] overflow-y-auto sm:max-h-[600px]">
+        <DialogContent className="max-w-xl max-h-[80vh] overflow-y-auto sm:max-h-[600px]" onInteractOutside={(e) => {
+          // Prevent closing when clicking on Select dropdown
+          const target = e.target as HTMLElement;
+          if (target.closest('[role="listbox"]') || target.closest('[data-radix-select-content]')) {
+            e.preventDefault();
+          }
+        }}>
           <DialogTitle className="text-earth-brown font-display text-2xl">Share Your Find</DialogTitle>
           <DialogDescription>
             Upload a photo and details of your metal detecting discovery to share with the community.

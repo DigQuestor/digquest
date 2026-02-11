@@ -153,9 +153,13 @@ const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
       // Get the newly created find data from the response
       const newFind = await response.json();
       
+      console.log("Find uploaded successfully:", newFind);
+      
       toast({
-        title: "Find Uploaded Successfully!",
+        title: "✅ Find Uploaded Successfully!",
         description: "Your treasure has been shared with the community!",
+        duration: 3000,
+        className: "bg-green-600 text-white border-green-700 font-semibold text-lg"
       });
       
       // Reset form fields but keep the dialog open
@@ -320,7 +324,7 @@ const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
                       <SelectValue placeholder="Select time period" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent position="popper" className="z-[100]">
                     {timePeriods.map((period) => (
                       <SelectItem key={period} value={period}>
                         {period}
