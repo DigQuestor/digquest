@@ -157,18 +157,15 @@ const Header = () => {
 
 
       <LoginModal 
-        key={`login-${modalKey}`}
         isOpen={isLoginModalOpen} 
         onClose={() => setIsLoginModalOpen(false)} 
       />
       <SignupModal 
-        key={`signup-${modalKey}`}
         isOpen={isSignupModalOpen} 
         onClose={() => setIsSignupModalOpen(false)}
         onOpenLogin={() => {
           setIsSignupModalOpen(false);
           setIsLoginModalOpen(true);
-          setModalKey((k) => k + 1);
         }}
       />
     </header>
