@@ -1,27 +1,28 @@
 import bcrypt from 'bcrypt';
-import {
-  users, type User, type InsertUser,
-  categories, type Category, type InsertCategory,
-  posts, type Post, type InsertPost,
-  comments, type Comment, type InsertComment,
-  postLikes, type PostLike, type InsertPostLike,
+import schema from "../client/shared/schema.js";
+const {
+  users,
+  categories,
+  posts,
+  comments,
+  postLikes,
   findLikes,
-  finds, type Find, type InsertFind,
-  findComments, type FindComment, type InsertFindComment,
-  locations, type Location, type InsertLocation,
-  events, type Event, type InsertEvent,
-  stories, type Story, type InsertStory,
-  routes, type Route, type InsertRoute,
-  userPreferences, type UserPreferences, type InsertUserPreferences,
-  imageStorage, type ImageStorage, type InsertImageStorage,
-  groups, type Group, type InsertGroup,
-  groupMemberships, type GroupMembership, type InsertGroupMembership,
-  userConnections, type UserConnection, type InsertUserConnection,
-  activities, type Activity, type InsertActivity,
-  messages, type Message, type InsertMessage,
-  achievements, type Achievement, type InsertAchievement,
-  userAchievements, type UserAchievement, type InsertUserAchievement
-} from "../client/shared/schema.js";
+  finds,
+  findComments,
+  locations,
+  events,
+  stories,
+  routes,
+  userPreferences,
+  imageStorage,
+  groups,
+  groupMemberships,
+  userConnections,
+  activities,
+  messages,
+  achievements,
+  userAchievements
+} = schema;
 import { db } from "./db/db.js";
 import { eq, desc, and, sql } from "drizzle-orm";
 
