@@ -269,6 +269,9 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
         className: "bg-green-600 text-white border-green-700 font-semibold text-lg",
       });
       
+      // Close the modal
+      onClose();
+      
       // Invalidate queries to refresh auth state across the app
       queryClient.invalidateQueries();
       
@@ -330,7 +333,6 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
         form.reset();
         setProfilePreview(null);
         setIsLoading(false);
-        // Don't close modal - register function will redirect
         return;
       } catch (registerErr: any) {
         setIsLoading(false);
@@ -413,7 +415,6 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
         form.reset();
         setProfilePreview(null);
         setIsLoading(false);
-        // Don't close modal - register function will redirect
       } catch (registerErr) {
         setIsLoading(false);
         if (registerErr instanceof Error) {
@@ -780,7 +781,7 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
                           .then(() => {
                             console.log("Account created successfully after payment");
                             form.reset();
-                            // Don't close modal - register function will redirect
+                            setProfilePreview(null);
                           })
                           .catch((err) => {
                             console.error("Error creating account after payment:", err);
