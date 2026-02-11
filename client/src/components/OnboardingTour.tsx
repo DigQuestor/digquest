@@ -362,6 +362,8 @@ const OnboardingTour = ({ isOpen, onClose, onComplete }: OnboardingTourProps) =>
     toast({
       title: "🎉 Welcome to DigQuest!",
       description: "You've earned the DigQuest Explorer achievement! Happy detecting!",
+      duration: 3000,
+      className: "bg-green-600 text-white border-green-700 font-semibold text-lg",
     });
     
     onComplete();
@@ -370,8 +372,10 @@ const OnboardingTour = ({ isOpen, onClose, onComplete }: OnboardingTourProps) =>
 
   const handleSkip = () => {
     toast({
-      title: "Tour skipped",
+      title: "✓ Tour Skipped",
       description: "You can always restart the tour from your profile settings.",
+      duration: 3000,
+      className: "bg-blue-600 text-white border-blue-700 font-semibold text-lg",
     });
     onClose();
   };
