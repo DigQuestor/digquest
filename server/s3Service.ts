@@ -44,18 +44,48 @@ export async function uploadToS3(
     const extension = path.extname(originalName) || '.jpg'; // fallback to .jpg if no extension
     const key = `${folder}/${timestamp}-${randomString}${extension}`;
 
-    const command = new PutObjectCommand({
-      Bucket: BUCKET_NAME,
-      Key: key,
-      Body: fileBuffer,
-      ContentType: mimeType,
-    });
+    // Try with public-read ACL first
+    try {
+      const command = new PutObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: key,
+        Body: fileBuffer,
+        ContentType: mimeType,
+        ACL: 'public-read',
+      });
 
-    console.log('Sending S3 command for key:', key);
-    await s3Client.send(command);
+      console.log('Sending S3 command with public-read ACL for key:', key);
+      await s3Client.send(command);
+    } catch (aclError) {
+      // If ACL fails (bucket has ACLs disabled), try without ACL
+      console.warn('⚠️ ACL upload failed, trying without ACL:', aclError.message);
+      const command = new PutObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: key,
+        Body: fileBuffer,
+        ContentType: mimeType,
+      });
+
+      console.log('Sending S3 command without ACL for key:', key);
+      await s3Client.send(command);
+    }
 
     const url = `https://${BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${key}`;
     console.log('S3 upload successful, URL:', url);
+    console.log('Testing URL accessibility...');
+    
+    // Test if the URL is accessible
+    try {
+      const testResponse = await fetch(url, { method: 'HEAD' });
+      console.log('URL test response status:', testResponse.status);
+      if (!testResponse.ok) {
+        console.warn('⚠️ Uploaded image may not be publicly accessible. Status:', testResponse.status);
+      } else {
+        console.log('✅ Image URL is publicly accessible');
+      }
+    } catch (testError) {
+      console.warn('⚠️ Could not verify image URL accessibility:', testError.message);
+    }
 
     return { key, url };
   } catch (error) {

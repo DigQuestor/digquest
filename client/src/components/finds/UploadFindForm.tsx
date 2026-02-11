@@ -153,12 +153,34 @@ const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
       // Get the newly created find data from the response
       const newFind = await response.json();
       
-      console.log("✅ Find uploaded successfully with image URL:", newFind.imageUrl);
-      console.log("Full find object:", newFind);
+      console.log("✅ Find uploaded successfully!");
+      console.log("   - Find ID:", newFind.id);
+      console.log("   - Image URL:", newFind.imageUrl);
+      console.log("   - Full find object:", JSON.stringify(newFind, null, 2));
+      
+      // Verify image URL format
+      if (newFind.imageUrl) {
+        console.log("   - Image URL format check:");
+        console.log("     * Starts with https://:", newFind.imageUrl.startsWith('https://'));
+        console.log("     * Contains bucket name:", newFind.imageUrl.includes('digquest-images'));
+        console.log("     * URL length:", newFind.imageUrl.length);
+        
+        // Try to test if the URL is accessible
+        try {
+          const testImg = new Image();
+          testImg.onload = () => console.log("✅ Image URL is accessible from browser");
+          testImg.onerror = (e) => console.error("❌ Image URL failed to load in browser:", e);
+          testImg.src = newFind.imageUrl;
+        } catch (imgError) {
+          console.error("❌ Error testing image URL:", imgError);
+        }
+      } else {
+        console.warn("⚠️ No imageUrl returned in response!");
+      }
       
       toast({
         title: "✅ Find Uploaded Successfully!",
-        description: `Your treasure has been shared! ${newFind.imageUrl ? '(Image uploaded)' : '(No image)'}`,
+        description: `Your treasure has been shared! ${newFind.imageUrl ? '(Image uploaded)' : '⚠️ No image URL'}`,
         duration: 3000,
         className: "bg-green-600 text-white border-green-700 font-semibold text-lg"
       });

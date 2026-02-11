@@ -1915,7 +1915,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log("Creating find with data:", findData);
       const find = await storage.createFind(findData);
-      console.log("Find created successfully with ID:", find.id);
+      console.log("✅ Find created successfully:");
+      console.log("   - Find ID:", find.id);
+      console.log("   - Image URL:", find.imageUrl);
+      console.log("   - Full find object:", JSON.stringify(find, null, 2));
+      
+      // Verify imageUrl is in the response
+      if (!find.imageUrl && imageUrl) {
+        console.error("❌ Image URL was uploaded but not saved to find:", imageUrl);
+      } else if (find.imageUrl) {
+        console.log("✅ Image URL correctly saved to find");
+      }
       
       res.status(201).json(find);
     } catch (error) {
