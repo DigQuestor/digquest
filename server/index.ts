@@ -16,6 +16,11 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Trust proxy - required for secure cookies behind reverse proxies like Render
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
+
 // Session middleware
 app.use(session({
   secret: process.env.SESSION_SECRET || "your-secret-key",
@@ -24,7 +29,8 @@ app.use(session({
   cookie: {
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
   }
 }));
 

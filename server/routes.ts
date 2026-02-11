@@ -1356,20 +1356,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create a post
   app.post("/api/posts", async (req, res) => {
     try {
-      console.log("POST /api/posts received data:", req.body);
-      console.log("Session userId:", req.session?.userId);
+      console.log("POST /api/posts - Full request details:");
+      console.log("  - Body:", req.body);
+      console.log("  - Session ID:", req.sessionID);
+      console.log("  - Session userId:", req.session?.userId);
+      console.log("  - Session object:", JSON.stringify(req.session));
+      console.log("  - Cookies:", req.headers.cookie);
       
       // Check if user is authenticated via session
       if (!req.session?.userId) {
-        console.log("User not authenticated - no session userId");
+        console.log("❌ User not authenticated - no session userId");
+        console.log("   Session exists:", !!req.session);
+        console.log("   Session keys:", req.session ? Object.keys(req.session) : "N/A");
         return res.status(401).json({ message: "Not authenticated. Please log in." });
       }
       
       // Verify the authenticated user exists
       const user = await storage.getUser(req.session.userId);
-      console.log("Found authenticated user:", user ? "Yes" : "No", "for userId:", req.session.userId);
+      console.log("✓ Found authenticated user:", user ? user.username : "No", "for userId:", req.session.userId);
       if (!user) {
-        console.log("Authenticated user not found in database with id:", req.session.userId);
+        console.log("❌ Authenticated user not found in database with id:", req.session.userId);
         return res.status(401).json({ message: "User not found. Please log in again." });
       }
       
@@ -1380,17 +1386,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
       
       const validatedData = insertPostSchema.parse(postData);
-      console.log("Parsed post data:", validatedData);
+      console.log("✓ Parsed post data:", validatedData);
       
       // Check if category exists
       const category = await storage.getCategory(validatedData.categoryId);
-      console.log("Found category:", category ? "Yes" : "No", "for categoryId:", validatedData.categoryId);
+      console.log("✓ Found category:", category ? category.name : "No", "for categoryId:", validatedData.categoryId);
       if (!category) {
         return res.status(404).json({ message: "Category not found" });
       }
       
       const post = await storage.createPost(validatedData);
-      console.log("Post created successfully with id:", post.id);
+      console.log("✓ Post created successfully with id:", post.id);
       
       // Increment the category count now that a post has been added to it
       await storage.incrementCategoryCount(validatedData.categoryId);
