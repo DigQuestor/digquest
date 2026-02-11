@@ -127,7 +127,7 @@ const Header = () => {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="flex items-center text-red-600" onClick={logout}>
+                    <DropdownMenuItem className="flex items-center text-red-600" onClick={handleLogout}>
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>Log Out</span>
                     </DropdownMenuItem>
@@ -135,33 +135,20 @@ const Header = () => {
                 </DropdownMenu>
               </div>
             ) : (
-              <>
-                <Button 
-                  className="bg-white hover:bg-gray-100 text-forest-green font-semibold transition duration-300 flex items-center shadow-md"
-                  onClick={() => setIsLoginModalOpen(true)}
-                >
-                  <LogIn className="h-4 w-4 mr-2" /> Login
-                </Button>
-                <Button 
-                  className="bg-metallic-gold hover:bg-yellow-600 text-forest-green font-semibold transition duration-300 flex items-center shadow-md"
-                  onClick={() => setIsSignupModalOpen(true)}
-                >
-                  <UserPlus className="h-4 w-4 mr-2" /> Sign Up
-                </Button>
-                <Button 
+              <div className="flex items-center space-x-3">
+                <Button
                   className="bg-white hover:bg-gray-100 text-forest-green font-semibold transition duration-300 flex items-center shadow-md"
                   onClick={() => { setIsLoginModalOpen(true); setModalKey((k) => k + 1); }}
                 >
                   <LogIn className="h-4 w-4 mr-2" /> Login
                 </Button>
-                <Button 
+                <Button
                   className="bg-metallic-gold hover:bg-yellow-600 text-forest-green font-semibold transition duration-300 flex items-center shadow-md"
                   onClick={() => { setIsSignupModalOpen(true); setModalKey((k) => k + 1); }}
                 >
                   <UserPlus className="h-4 w-4 mr-2" /> Sign Up
                 </Button>
-                                  <DropdownMenuItem className="flex items-center text-red-600" onClick={handleLogout}>
-              </>
+              </div>
             )}
           </div>
         </div>
@@ -170,12 +157,10 @@ const Header = () => {
 
 
       <LoginModal 
-      <LoginModal 
         key={`login-${modalKey}`}
         isOpen={isLoginModalOpen} 
         onClose={() => setIsLoginModalOpen(false)} 
       />
-      
       <SignupModal 
         key={`signup-${modalKey}`}
         isOpen={isSignupModalOpen} 
@@ -184,15 +169,6 @@ const Header = () => {
           setIsSignupModalOpen(false);
           setIsLoginModalOpen(true);
           setModalKey((k) => k + 1);
-        }}
-      />
-      
-      <SignupModal 
-        isOpen={isSignupModalOpen} 
-        onClose={() => setIsSignupModalOpen(false)}
-        onOpenLogin={() => {
-          setIsSignupModalOpen(false);
-          setIsLoginModalOpen(true);
         }}
       />
     </header>
