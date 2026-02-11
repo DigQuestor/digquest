@@ -3,9 +3,9 @@ import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import fs from "fs";
 import bcrypt from "bcrypt";
-import { storage } from "./storage";
-import { db } from "./db";
-import "./types"; // Import session type definitions
+import { storage } from "./storage.js";
+import { db } from "./db/db.js";
+import "../shared/types.js"; // Import session type definitions
 
 // Initialize Stripe with your secret key (only if key is provided)
 let stripe: Stripe | null = null;
