@@ -35,11 +35,11 @@ const CommunitySection = () => {
 
   // Listen for auth changes to refresh community members when profile is updated
   useEffect(() => {
-    const handleAuthChange = async () => {
+    const handleAuthChange = () => {
       console.log("Auth change detected in CommunitySection, refreshing users...");
       // Force refetch to get latest user data including updated avatars
-      await refetchUsers();
-      console.log("Users refetched successfully");
+      queryClient.invalidateQueries({ queryKey: ['/api/users'] });
+      console.log("Users query invalidated");
     };
     
     window.addEventListener('auth-changed', handleAuthChange);
@@ -47,7 +47,7 @@ const CommunitySection = () => {
     return () => {
       window.removeEventListener('auth-changed', handleAuthChange);
     };
-  }, [refetchUsers]);
+  }, [queryClient]);
 
   const { data: posts, isLoading: isLoadingPosts } = useQuery<Post[]>({
     queryKey: ['/api/posts'],
