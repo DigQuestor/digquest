@@ -153,11 +153,12 @@ const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
       // Get the newly created find data from the response
       const newFind = await response.json();
       
-      console.log("Find uploaded successfully:", newFind);
+      console.log("✅ Find uploaded successfully with image URL:", newFind.imageUrl);
+      console.log("Full find object:", newFind);
       
       toast({
         title: "✅ Find Uploaded Successfully!",
-        description: "Your treasure has been shared with the community!",
+        description: `Your treasure has been shared! ${newFind.imageUrl ? '(Image uploaded)' : '(No image)'}`,
         duration: 3000,
         className: "bg-green-600 text-white border-green-700 font-semibold text-lg"
       });
@@ -190,9 +191,10 @@ const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
           
           // Instead of closing, show a message encouraging multiple uploads
           toast({
-            title: "Add Another Find?",
+            title: "✨ Add Another Find?",
             description: "You can upload more treasures or close this dialog when you're done.",
             duration: 5000,
+            className: "bg-blue-600 text-white border-blue-700 font-semibold shadow-xl"
           });
         }, 500);
       }
