@@ -36,7 +36,6 @@ const Header = () => {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [location] = useLocation();
   const [displayName, setDisplayName] = useState<string>("");
-  const [modalKey, setModalKey] = useState(0);
   
   // Using our mock auth from use-auth-simple
   const { user, logout } = useAuth();
@@ -62,12 +61,6 @@ const Header = () => {
       setDisplayName("");
     }
   }, [user]);
-
-  // Increment modalKey on logout to force remount
-  const handleLogout = async () => {
-    await logout();
-    setModalKey((k) => k + 1);
-  };
 
   // Search functionality removed as it was not functional
 
@@ -127,7 +120,7 @@ const Header = () => {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="flex items-center text-red-600" onClick={handleLogout}>
+                    <DropdownMenuItem className="flex items-center text-red-600" onClick={logout}>
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>Log Out</span>
                     </DropdownMenuItem>
@@ -135,20 +128,20 @@ const Header = () => {
                 </DropdownMenu>
               </div>
             ) : (
-              <div className="flex items-center space-x-3">
-                <Button
+              <>
+                <Button 
                   className="bg-white hover:bg-gray-100 text-forest-green font-semibold transition duration-300 flex items-center shadow-md"
-                  onClick={() => { setIsLoginModalOpen(true); setModalKey((k) => k + 1); }}
+                  onClick={() => setIsLoginModalOpen(true)}
                 >
                   <LogIn className="h-4 w-4 mr-2" /> Login
                 </Button>
-                <Button
+                <Button 
                   className="bg-metallic-gold hover:bg-yellow-600 text-forest-green font-semibold transition duration-300 flex items-center shadow-md"
-                  onClick={() => { setIsSignupModalOpen(true); setModalKey((k) => k + 1); }}
+                  onClick={() => setIsSignupModalOpen(true)}
                 >
                   <UserPlus className="h-4 w-4 mr-2" /> Sign Up
                 </Button>
-              </div>
+              </>
             )}
           </div>
         </div>
@@ -160,6 +153,7 @@ const Header = () => {
         isOpen={isLoginModalOpen} 
         onClose={() => setIsLoginModalOpen(false)} 
       />
+      
       <SignupModal 
         isOpen={isSignupModalOpen} 
         onClose={() => setIsSignupModalOpen(false)}

@@ -141,8 +141,8 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   };
 
   return (
-    <Dialog key={`login-${isOpen ? 'open' : 'closed'}`} open={isOpen} onOpenChange={open => { if (!open) onClose(); }}>
-      <DialogContent className="sm:max-w-md bg-white border border-gray-300">
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-display text-earth-brown">
             {showPasswordReset ? "Reset Password" : "Sign In"}
