@@ -68,7 +68,7 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
       toast({
         title: "✅ Welcome Back!",
         description: `Hello, ${user.username}! Redirecting...`,
-        duration: 1000,
+        duration: 3000,
         className: "bg-green-600 text-white border-green-700 font-semibold text-lg",
       });
       

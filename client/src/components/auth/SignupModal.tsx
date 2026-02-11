@@ -261,7 +261,7 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
       toast({
         title: "🎉 Account Created Successfully!",
         description: "Welcome to DigQuest! Redirecting...",
-        duration: 1000,
+        duration: 3000,
         className: "bg-green-600 text-white border-green-700 font-semibold text-lg",
       });
       
