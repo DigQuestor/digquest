@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --config vite.production.config.ts && esbuild server/index.ts --platform=node --bundle --format=esm --outdir=dist --external:express --external:express-session --external:pg --external:drizzle-orm --external:bcrypt --external:multer --external:stripe --external:nodemailer --external:@sendgrid/mail --external:@neondatabase/serverless --external:@aws-sdk/client-s3 --external:@aws-sdk/s3-request-presigner --external:ws && cp -r server dist/server && cp server/public/* dist/public/",
+    "build": "vite build --config vite.production.config.ts && esbuild server/index.ts --platform=node --bundle --format=esm --outdir=dist --external:express --external:express-session --external:pg --external:drizzle-orm --external:bcrypt --external:multer --external:stripe --external:nodemailer --external:@sendgrid/mail --external:@neondatabase/serverless --external:@aws-sdk/client-s3 --external:@aws-sdk/s3-request-presigner --external:ws && cp -r server dist/server && cp server/public/* dist/public/ && cp -r server/db dist/server/db",
     "start": "node dist/index.js",
     "preview": "vite preview"
   },
