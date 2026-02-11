@@ -257,9 +257,12 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
       
       // Auto-login after successful registration
       console.log("Auto-logging in user:", username);
-      await login(username, password);
+      const loggedInUser = await login(username, password);
       
-      console.log("Login completed successfully");
+      console.log("Login completed successfully, user data:", loggedInUser);
+      
+      // Small delay to ensure auth state is fully propagated across all components
+      await new Promise(resolve => setTimeout(resolve, 150));
       
       // Show success message with prominent styling
       toast({
