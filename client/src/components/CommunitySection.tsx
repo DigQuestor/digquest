@@ -35,9 +35,11 @@ const CommunitySection = () => {
 
   // Listen for auth changes to refresh community members when profile is updated
   useEffect(() => {
-    const handleAuthChange = () => {
+    const handleAuthChange = async () => {
       console.log("Auth change detected in CommunitySection, refreshing users...");
-      queryClient.invalidateQueries({ queryKey: ['/api/users'] });
+      // Force refetch to get latest user data including updated avatars
+      await refetchUsers();
+      console.log("Users refetched successfully");
     };
     
     window.addEventListener('auth-changed', handleAuthChange);
@@ -45,7 +47,7 @@ const CommunitySection = () => {
     return () => {
       window.removeEventListener('auth-changed', handleAuthChange);
     };
-  }, [queryClient]);
+  }, [refetchUsers]);
 
   const { data: posts, isLoading: isLoadingPosts } = useQuery<Post[]>({
     queryKey: ['/api/posts'],
@@ -145,7 +147,7 @@ const CommunitySection = () => {
   }, [categories]);
 
   // Get users from the server with forced refresh
-  const { data: serverUsers = [] } = useQuery<User[]>({
+  const { data: serverUsers = [], refetch: refetchUsers } = useQuery<User[]>({
     queryKey: ['/api/users'],
     select: (data: User[]) => {
       // First sync the auth cache with server data to remove deleted users
@@ -170,7 +172,7 @@ const CommunitySection = () => {
     },
     refetchOnMount: true,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+    staleTime: 0, // No cache - always fetch fresh data
     gcTime: 1000 * 60 * 10, // Keep in cache for 10 minutes
     refetchInterval: false // Disable automatic polling
   });
