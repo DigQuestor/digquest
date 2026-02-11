@@ -10,6 +10,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/hooks/use-auth-simple";
 import { Loader2, ArrowLeft, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "wouter";
+import { useQueryClient } from "@tanstack/react-query";
 
 const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -31,6 +33,8 @@ interface LoginModalProps {
 const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   const { toast } = useToast();
   const { login } = useAuth();
+  const [, setLocation] = useLocation();
+  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
@@ -67,8 +71,8 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
       // Show success message with prominent styling
       toast({
         title: "✅ Welcome Back!",
-        description: `Hello, ${user.username}! Redirecting...`,
-        duration: 3000,
+        description: `Hello, ${user.username}!`,
+        duration: 2000,
         className: "bg-green-600 text-white border-green-700 font-semibold text-lg",
       });
       
@@ -76,18 +80,11 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
       form.reset();
       onClose();
       
-      // Wait for session to establish before redirect
-      setTimeout(() => {
-        console.log("Redirecting after login...");
-        
-        // Navigate to homepage or reload page to show authenticated state
-        if (window.location.pathname === '/') {
-          window.location.reload();
-        } else {
-          // Redirect to homepage after successful login
-          window.location.href = '/';
-        }
-      }, 1500);
+      // Invalidate queries to refresh auth state across the app
+      queryClient.invalidateQueries();
+      
+      // Navigate to home using SPA routing (no page reload)
+      setLocation('/');
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);

@@ -16,6 +16,8 @@ import { Loader2, Heart, Camera, UserCircle2, Upload, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { useLocation } from "wouter";
+import { useQueryClient } from "@tanstack/react-query";
 
 // Make sure to call loadStripe outside of a component's render to avoid recreating the Stripe object on every render
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
@@ -162,6 +164,8 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
   // Registration function with profile picture upload and auth integration
   const { toast } = useToast();
   const { login } = useAuth();
+  const [, setLocation] = useLocation();
+  const queryClient = useQueryClient();
   
   const register = async (username: string, email: string, password: string, profilePicture?: File) => {
     try {
@@ -255,21 +259,21 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }: SignupModalProps) => {
       console.log("Auto-logging in user:", username);
       await login(username, password);
       
-      console.log("Login completed, waiting for session to establish...");
+      console.log("Login completed successfully");
       
       // Show success message with prominent styling
       toast({
         title: "🎉 Account Created Successfully!",
-        description: "Welcome to DigQuest! Redirecting...",
-        duration: 3000,
+        description: "Welcome to DigQuest!",
+        duration: 2000,
         className: "bg-green-600 text-white border-green-700 font-semibold text-lg",
       });
       
-      // Wait longer for session to establish before redirect
-      setTimeout(() => {
-        console.log("Redirecting to home page...");
-        window.location.href = '/';
-      }, 2000);
+      // Invalidate queries to refresh auth state across the app
+      queryClient.invalidateQueries();
+      
+      // Navigate to home using SPA routing (no page reload)
+      setLocation('/');
       
       return registerData;
     } catch (error) {
