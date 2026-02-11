@@ -147,6 +147,9 @@ export default function ProfileEdit() {
       // Update user in our auth context (now async)
       await updateUser(userData);
       
+      // Small delay to ensure auth state is fully propagated across all components
+      await new Promise(resolve => setTimeout(resolve, 150));
+      
       // Show success message
       toast({
         title: "✅ Profile Updated Successfully!",

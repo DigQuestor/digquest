@@ -643,6 +643,9 @@ export function useAuth() {
       // Update state
       setUser(finalUserData);
       
+      // Notify other hook instances of auth change
+      window.dispatchEvent(new Event('auth-changed'));
+      
       console.log("User profile updated:", finalUserData.username);
       
       // Print what's in localStorage to debug

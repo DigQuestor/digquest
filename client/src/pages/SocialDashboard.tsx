@@ -130,6 +130,10 @@ export default function SocialDashboard() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
       queryClient.invalidateQueries({ queryKey: ['/api/users'] });
+      
+      // Notify all useAuth hook instances to refresh
+      window.dispatchEvent(new Event('auth-changed'));
+      
       setIsSettingsOpen(false);
       setSelectedImage(null);
       setImagePreview(null);
