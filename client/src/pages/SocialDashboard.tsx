@@ -65,31 +65,31 @@ export default function SocialDashboard() {
   });
 
   const { data: socialStats } = useQuery<SocialStats>({
-    queryKey: ['/api/social/stats', currentUser?.id],
+    queryKey: ['/api/social/stats'],
     enabled: !!currentUser && !userLoading,
     retry: false,
   });
 
   const { data: activities = [] } = useQuery<Activity[]>({
-    queryKey: ['/api/social/feed', currentUser?.id],
+    queryKey: ['/api/social/feed'],
     enabled: !!currentUser && !userLoading,
     retry: false,
   });
 
   const { data: groups = [] } = useQuery<Group[]>({
-    queryKey: ['/api/social/groups', currentUser?.id],
+    queryKey: ['/api/social/groups'],
     enabled: !!currentUser && !userLoading,
     retry: false,
   });
 
   const { data: messages = [] } = useQuery<Message[]>({
-    queryKey: ['/api/social/messages', currentUser?.id],
+    queryKey: ['/api/social/messages'],
     enabled: !!currentUser && !userLoading,
     retry: false,
   });
 
   const { data: connections = [] } = useQuery<UserConnection[]>({
-    queryKey: ['/api/social/connections', currentUser?.id],
+    queryKey: ['/api/social/connections'],
     enabled: !!currentUser && !userLoading,
     retry: false,
   });
