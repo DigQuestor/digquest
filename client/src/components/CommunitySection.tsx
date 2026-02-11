@@ -33,6 +33,20 @@ const CommunitySection = () => {
     }
   }, []);
 
+  // Listen for auth changes to refresh community members when profile is updated
+  useEffect(() => {
+    const handleAuthChange = () => {
+      console.log("Auth change detected in CommunitySection, refreshing users...");
+      queryClient.invalidateQueries({ queryKey: ['/api/users'] });
+    };
+    
+    window.addEventListener('auth-changed', handleAuthChange);
+    
+    return () => {
+      window.removeEventListener('auth-changed', handleAuthChange);
+    };
+  }, [queryClient]);
+
   const { data: posts, isLoading: isLoadingPosts } = useQuery<Post[]>({
     queryKey: ['/api/posts'],
     refetchOnMount: false,
