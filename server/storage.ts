@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { 
+import {
   users, type User, type InsertUser,
   categories, type Category, type InsertCategory,
   posts, type Post, type InsertPost,
@@ -21,7 +21,7 @@ import {
   messages, type Message, type InsertMessage,
   achievements, type Achievement, type InsertAchievement,
   userAchievements, type UserAchievement, type InsertUserAchievement
-} from "@shared/schema";
+} from "../client/shared/schema.js";
 import { db } from "./db/db.js";
 import { eq, desc, and, sql } from "drizzle-orm";
 
