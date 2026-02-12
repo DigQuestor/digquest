@@ -167,9 +167,11 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
   const onSubmit = async (data: LocationFormValues) => {
     if (!user) {
       toast({
-        title: "Authentication Required",
+        title: "❌ Authentication Required",
         description: "Please log in to add a location.",
         variant: "destructive",
+        className: "bg-red-600 text-white border-red-700 font-bold text-lg",
+        duration: 6000,
       });
       return;
     }
@@ -178,9 +180,10 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
     if (!data.latitude || !data.longitude) {
       toast({
         title: "⚠️ Missing Coordinates",
-        description: "Please provide both latitude and longitude coordinates.",
+        description: "You must click on the map or enter latitude and longitude coordinates manually.",
         variant: "destructive",
-        duration: 4000,
+        className: "bg-red-600 text-white border-red-700 font-bold text-lg",
+        duration: 6000,
       });
       return;
     }
@@ -188,20 +191,22 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
     // Additional validation for required fields
     if (!data.name) {
       toast({
-        title: "⚠️ Missing Information",
-        description: "Please provide a name for this detecting spot.",
+        title: "⚠️ Missing Spot Name",
+        description: "Please enter a name for this detecting spot.",
         variant: "destructive",
-        duration: 4000,
+        className: "bg-red-600 text-white border-red-700 font-bold text-lg",
+        duration: 6000,
       });
       return;
     }
 
     if (!data.type) {
       toast({
-        title: "⚠️ Missing Information",
-        description: "Please select a location type.",
+        title: "⚠️ Missing Location Type",
+        description: "Please select a location type from the dropdown.",
         variant: "destructive",
-        duration: 4000,
+        className: "bg-red-600 text-white border-red-700 font-bold text-lg",
+        duration: 6000,
       });
       return;
     }
@@ -279,9 +284,9 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
       
       toast({
         title: "✅ Success!",
-        description: "Your detecting spot has been added to the map!",
-        duration: 3000,
-        className: "bg-green-600 text-white border-green-700 font-semibold"
+        description: "Your detecting spot has been added to the map! You should see a pin marker appear.",
+        duration: 5000,
+        className: "bg-green-600 text-white border-green-700 font-bold text-lg"
       });
       
       // Reset form and invalidate queries to refresh data
@@ -364,11 +369,15 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Spot Name</FormLabel>
+              <FormLabel className="text-base font-bold">Spot Name <span className="text-red-600">*</span></FormLabel>
               <FormControl>
-                <Input placeholder="e.g. Roman Field, Beach by the Cliffs" {...field} />
+                <Input 
+                  placeholder="e.g. Roman Field, Beach by the Cliffs" 
+                  className="border-2"
+                  {...field} 
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="font-bold text-red-600" />
             </FormItem>
           )}
         />
@@ -410,10 +419,11 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
               name="latitude"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Latitude</FormLabel>
+                  <FormLabel className="text-base font-bold">Latitude <span className="text-red-600">*</span></FormLabel>
                   <FormControl>
                     <Input 
                       placeholder="e.g. 54.093409" 
+                      className="border-2"
                       {...field} 
                       onChange={(e) => {
                         field.onChange(e);
@@ -435,7 +445,7 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
                       }}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="font-bold text-red-600" />
                 </FormItem>
               )}
             />
@@ -445,10 +455,11 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
               name="longitude"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Longitude</FormLabel>
+                  <FormLabel className="text-base font-bold">Longitude <span className="text-red-600">*</span></FormLabel>
                   <FormControl>
                     <Input 
                       placeholder="e.g. -2.89479" 
+                      className="border-2" 
                       {...field} 
                       onChange={(e) => {
                         field.onChange(e);
@@ -470,7 +481,7 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
                       }}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="font-bold text-red-600" />
                 </FormItem>
               )}
             />
@@ -482,17 +493,21 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
           name="type"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Location Type</FormLabel>
+              <FormLabel className="text-base font-bold">Location Type <span className="text-red-600">*</span></FormLabel>
               <Select 
                 onValueChange={field.onChange}
                 value={field.value}
               >
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select location type" />
+                  <SelectTrigger className="border-2">
+                    <SelectValue placeholder="⬇️ Click here to select type" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent position="popper" className="z-[100]">
+                <SelectContent 
+                  position="popper" 
+                  className="z-[100] bg-white"
+                  onInteractOutside={(e) => e.preventDefault()}
+                >
                   {locationTypes.map((type) => (
                     <SelectItem key={type} value={type}>
                       {type}
@@ -500,7 +515,7 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
                   ))}
                 </SelectContent>
               </Select>
-              <FormMessage />
+              <FormMessage className="font-bold text-red-600" />
             </FormItem>
           )}
         />
@@ -562,16 +577,16 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
         </div>
         
         <div className="space-y-4">
-          <div className={`p-3 rounded-md text-sm mb-4 ${!selectedPosition && !hasValidCoordinates() ? 'bg-amber-50 text-amber-700' : 'bg-green-50 text-green-700'}`}>
-            <p className="font-medium">
-              {!selectedPosition && !hasValidCoordinates() ? "Important:" : "Location Information"}
+          <div className={`p-4 rounded-lg border-2 mb-4 ${!selectedPosition && !hasValidCoordinates() ? 'bg-red-50 text-red-800 border-red-300' : 'bg-green-50 text-green-800 border-green-300'}`}>
+            <p className="font-bold text-lg mb-2">
+              {!selectedPosition && !hasValidCoordinates() ? "⚠️ Coordinates Required!" : "✅ Ready to Save!"}
             </p>
-            <p>
+            <p className="font-medium">
               {!selectedPosition && !hasValidCoordinates()
-                ? "Please either click on the map to select a location or manually enter valid latitude and longitude coordinates."
+                ? "To save this location, you MUST: 1) Click on the map where you want to place the pin, OR 2) Manually type latitude and longitude numbers in the boxes above."
                 : selectedPosition 
-                  ? "Location has been selected on the map. You can now save this detecting spot."
-                  : "Coordinates have been manually entered. You can now save this detecting spot."}
+                  ? "✓ Location selected on map. The Save Location button is now active!"
+                  : "✓ Coordinates entered manually. The Save Location button is now active!"}
             </p>
           </div>
           
@@ -595,15 +610,21 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
             
             <Button 
               type="submit" 
-              className="bg-metallic-gold hover:bg-amber-600 text-forest-green font-medium"
+              className={`font-bold text-base ${
+                isSubmitting || (!selectedPosition && !hasValidCoordinates())
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-green-600 hover:bg-green-700 text-white animate-pulse'
+              }`}
               disabled={isSubmitting || (!selectedPosition && !hasValidCoordinates())}
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Adding...
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Adding Location...
                 </>
+              ) : (!selectedPosition && !hasValidCoordinates()) ? (
+                "❌ Save Disabled - Add Coordinates First"
               ) : (
-                "Save Location"
+                "💾 Save Location to Map"
               )}
             </Button>
           </div>
