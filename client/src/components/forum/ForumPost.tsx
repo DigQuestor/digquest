@@ -274,22 +274,25 @@ const ForumPost = ({ post, isLink = true }: ForumPostProps) => {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Post</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete this post? This action cannot be undone.
+            <AlertDialogTitle className="text-xl font-bold text-red-600">
+              Permanently Delete This Post?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-base space-y-2">
+              <p className="font-semibold text-gray-900">"{post.title}"</p>
+              <p>This will permanently delete your forum post and all associated comments. This action cannot be undone.</p>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="font-semibold">Cancel</AlertDialogCancel>
             <AlertDialogAction 
               onClick={(e) => {
                 e.preventDefault();
                 handleDeletePost(e as unknown as React.MouseEvent);
                 setDeleteDialogOpen(false);
               }}
-              className="bg-red-600 hover:bg-red-700 text-white"
+              className="bg-red-600 hover:bg-red-700 text-white font-semibold"
             >
-              Delete
+              Yes, Delete Post
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
