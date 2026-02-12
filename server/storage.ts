@@ -152,6 +152,10 @@ export interface IStorage {
   getUserGroups(userId: number): Promise<Group[]>;
   getPublicGroups(): Promise<Group[]>;
   joinGroup(userId: number, groupId: number): Promise<boolean>;
+  leaveGroup(userId: number, groupId: number): Promise<boolean>;
+  getGroupMembers(groupId: number): Promise<User[]>;
+  updateGroup(groupId: number, groupData: Partial<Group>): Promise<Group | undefined>;
+  deleteGroup(groupId: number): Promise<boolean>;
   getAllGroups(): Promise<Group[]>;
   
   // Messages
@@ -243,6 +247,9 @@ const restoreDates = <T>(obj: T): T => {
   
   return result as T;
 };
+
+const normalizeGroupName = (name: string): string =>
+  name.toLowerCase().replace(/\s+/g, "").trim();
 
 // Create default store
 const createDefaultStore = (): PersistentDataStore => ({
@@ -1450,11 +1457,21 @@ export class MemStorage implements IStorage {
 
   // Groups
   async createGroup(group: InsertGroup): Promise<Group> {
+    const existingGroup = Array.from(this.groups.values()).find(
+      (existing) =>
+        existing.creatorId === group.creatorId &&
+        normalizeGroupName(existing.name) === normalizeGroupName(group.name)
+    );
+
+    if (existingGroup) {
+      return existingGroup;
+    }
+
     const id = this.groupId++;
     const newGroup: Group = {
       ...group,
       id,
-      memberCount: 1,
+      memberCount: 0,
       created_at: new Date()
     };
     this.groups.set(id, newGroup);
@@ -1466,12 +1483,28 @@ export class MemStorage implements IStorage {
   }
 
   async getGroup(id: number): Promise<Group | undefined> {
-    const [group] = await db.select().from(groups).where(eq(groups.id, id));
-    return group;
+    return this.groups.get(id);
   }
 
   async getAllGroups(): Promise<Group[]> {
-    return await db.select().from(groups);
+    const uniqueGroups = new Map<string, Group>();
+    for (const group of Array.from(this.groups.values())) {
+      const dedupeKey = `${group.creatorId}:${normalizeGroupName(group.name)}`;
+      const existing = uniqueGroups.get(dedupeKey);
+
+      if (!existing) {
+        uniqueGroups.set(dedupeKey, group);
+        continue;
+      }
+
+      const existingTime = existing.created_at ? new Date(existing.created_at).getTime() : 0;
+      const currentTime = group.created_at ? new Date(group.created_at).getTime() : 0;
+      if (currentTime > existingTime) {
+        uniqueGroups.set(dedupeKey, group);
+      }
+    }
+
+    return Array.from(uniqueGroups.values());
   }
 
   async getUserGroups(userId: number): Promise<Group[]> {
@@ -1485,7 +1518,7 @@ export class MemStorage implements IStorage {
 
   async getPublicGroups(): Promise<Group[]> {
     return Array.from(this.groups.values())
-      .filter(group => group.isPublic)
+      .filter(group => !group.isPrivate)
       .sort((a, b) => (b.created_at?.getTime() || 0) - (a.created_at?.getTime() || 0));
   }
 
@@ -1515,6 +1548,70 @@ export class MemStorage implements IStorage {
       this.groups.set(groupId, group);
     }
     
+    return true;
+  }
+
+  async leaveGroup(userId: number, groupId: number): Promise<boolean> {
+    const membership = Array.from(this.groupMemberships.values())
+      .find(m => m.userId === userId && m.groupId === groupId);
+
+    if (!membership) {
+      return false;
+    }
+
+    this.groupMemberships.delete(membership.id);
+
+    const group = this.groups.get(groupId);
+    if (group) {
+      group.memberCount = Math.max((group.memberCount || 0) - 1, 0);
+      this.groups.set(groupId, group);
+    }
+
+    this.saveToFile();
+    return true;
+  }
+
+  async getGroupMembers(groupId: number): Promise<User[]> {
+    const memberIds = Array.from(this.groupMemberships.values())
+      .filter(membership => membership.groupId === groupId)
+      .map(membership => membership.userId);
+
+    return Array.from(this.users.values()).filter(user => memberIds.includes(user.id));
+  }
+
+  async updateGroup(groupId: number, groupData: Partial<Group>): Promise<Group | undefined> {
+    const existingGroup = this.groups.get(groupId);
+    if (!existingGroup) {
+      return undefined;
+    }
+
+    const updatedGroup: Group = {
+      ...existingGroup,
+      ...groupData,
+      id: existingGroup.id,
+      creatorId: existingGroup.creatorId,
+      created_at: existingGroup.created_at,
+    };
+
+    this.groups.set(groupId, updatedGroup);
+    this.saveToFile();
+    return updatedGroup;
+  }
+
+  async deleteGroup(groupId: number): Promise<boolean> {
+    const groupExists = this.groups.has(groupId);
+    if (!groupExists) {
+      return false;
+    }
+
+    for (const membership of Array.from(this.groupMemberships.values())) {
+      if (membership.groupId === groupId) {
+        this.groupMemberships.delete(membership.id);
+      }
+    }
+
+    this.groups.delete(groupId);
+    this.saveToFile();
     return true;
   }
 
@@ -2462,6 +2559,20 @@ export class DatabaseStorage implements IStorage {
 
   // Groups - Using database storage
   async createGroup(group: InsertGroup): Promise<Group> {
+    const normalizedName = normalizeGroupName(group.name);
+    const duplicate = await db
+      .select()
+      .from(groups)
+      .where(and(
+        eq(groups.creatorId, group.creatorId),
+        sql`LOWER(REGEXP_REPLACE(${groups.name}, '\\s+', '', 'g')) = ${normalizedName}`
+      ))
+      .limit(1);
+
+    if (duplicate.length > 0) {
+      return duplicate[0];
+    }
+
     const [newGroup] = await db.insert(groups).values({
       ...group,
       memberCount: 1
@@ -2484,7 +2595,26 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAllGroups(): Promise<Group[]> {
-    return await db.select().from(groups);
+    const allGroups = await db.select().from(groups);
+    const uniqueGroups = new Map<string, Group>();
+
+    for (const group of allGroups) {
+      const dedupeKey = `${group.creatorId}:${normalizeGroupName(group.name)}`;
+      const existing = uniqueGroups.get(dedupeKey);
+
+      if (!existing) {
+        uniqueGroups.set(dedupeKey, group);
+        continue;
+      }
+
+      const existingTime = existing.created_at ? new Date(existing.created_at).getTime() : 0;
+      const currentTime = group.created_at ? new Date(group.created_at).getTime() : 0;
+      if (currentTime > existingTime) {
+        uniqueGroups.set(dedupeKey, group);
+      }
+    }
+
+    return Array.from(uniqueGroups.values());
   }
 
   async getUserGroups(userId: number): Promise<Group[]> {
@@ -2497,8 +2627,26 @@ export class DatabaseStorage implements IStorage {
         eq(groupMemberships.status, 'active')
       ));
     
-    // Extract just the groups data from the joined result
-    return userGroups.map(result => result.groups);
+    // Extract groups and de-duplicate legacy duplicates by normalized name
+    const uniqueGroups = new Map<string, Group>();
+    for (const result of userGroups) {
+      const group = result.groups;
+      const dedupeKey = `${group.creatorId}:${normalizeGroupName(group.name)}`;
+      const existing = uniqueGroups.get(dedupeKey);
+
+      if (!existing) {
+        uniqueGroups.set(dedupeKey, group);
+        continue;
+      }
+
+      const existingTime = existing.created_at ? new Date(existing.created_at).getTime() : 0;
+      const currentTime = group.created_at ? new Date(group.created_at).getTime() : 0;
+      if (currentTime > existingTime) {
+        uniqueGroups.set(dedupeKey, group);
+      }
+    }
+
+    return Array.from(uniqueGroups.values());
   }
 
   async getPublicGroups(): Promise<Group[]> {
@@ -2534,6 +2682,69 @@ export class DatabaseStorage implements IStorage {
       return true;
     } catch (error) {
       console.error("Error joining group:", error);
+      return false;
+    }
+  }
+
+  async leaveGroup(userId: number, groupId: number): Promise<boolean> {
+    try {
+      const result = await db.update(groupMemberships)
+        .set({ status: 'left' })
+        .where(and(
+          eq(groupMemberships.userId, userId),
+          eq(groupMemberships.groupId, groupId),
+          eq(groupMemberships.status, 'active')
+        ));
+
+      if ((result.rowCount || 0) === 0) {
+        return false;
+      }
+
+      await db.update(groups)
+        .set({ memberCount: sql`GREATEST(member_count - 1, 0)` })
+        .where(eq(groups.id, groupId));
+
+      return true;
+    } catch (error) {
+      console.error("Error leaving group:", error);
+      return false;
+    }
+  }
+
+  async getGroupMembers(groupId: number): Promise<User[]> {
+    const members = await db
+      .select({ user: users })
+      .from(groupMemberships)
+      .innerJoin(users, eq(groupMemberships.userId, users.id))
+      .where(and(
+        eq(groupMemberships.groupId, groupId),
+        eq(groupMemberships.status, 'active')
+      ));
+
+    return members.map(result => result.user);
+  }
+
+  async updateGroup(groupId: number, groupData: Partial<Group>): Promise<Group | undefined> {
+    const [updatedGroup] = await db.update(groups)
+      .set({
+        name: groupData.name,
+        description: groupData.description,
+        location: groupData.location,
+        isPrivate: groupData.isPrivate,
+      })
+      .where(eq(groups.id, groupId))
+      .returning();
+
+    return updatedGroup;
+  }
+
+  async deleteGroup(groupId: number): Promise<boolean> {
+    try {
+      await db.delete(groupMemberships).where(eq(groupMemberships.groupId, groupId));
+      const result = await db.delete(groups).where(eq(groups.id, groupId));
+      return (result.rowCount || 0) > 0;
+    } catch (error) {
+      console.error("Error deleting group:", error);
       return false;
     }
   }
