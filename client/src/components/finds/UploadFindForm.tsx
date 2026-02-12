@@ -248,22 +248,11 @@ const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
       }, 1000); // Wait 1 second for image processing
       
       // Only notify parent component if explicitly asked to do so
-      // We'll handle this differently to prevent button disappearance
       if (onFindUploaded) {
-        // We'll add a small delay to allow the UI to update first
+        // Wait a moment for the UI to update, then show success screen
         setTimeout(() => {
-          // Here we could optionally close the dialog, but we'll leave it open
-          // so users can add multiple finds in succession
-          // onFindUploaded();
-          
-          // Instead of closing, show a message encouraging multiple uploads
-          toast({
-            title: "✨ Add Another Find?",
-            description: "You can upload more treasures or close this dialog when you're done.",
-            duration: 5000,
-            className: "bg-blue-600 text-white border-blue-700 font-semibold shadow-xl"
-          });
-        }, 500);
+          onFindUploaded();
+        }, 800);
       }
     } catch (error) {
       console.error("Find upload error:", error);

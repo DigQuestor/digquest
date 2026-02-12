@@ -32,6 +32,7 @@ const FindsGallery = () => {
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPeriod, setSelectedPeriod] = useState("All Periods");
+  const [showUploadSuccess, setShowUploadSuccess] = useState(false);
   const { user } = useAuth();
 
   // Fetch all finds from API
@@ -169,7 +170,13 @@ const FindsGallery = () => {
         </div>
       )}
       
-      <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
+      <Dialog open={isUploadOpen} onOpenChange={(open) => {
+        setIsUploadOpen(open);
+        if (!open) {
+          // Reset success state when dialog is closed
+          setShowUploadSuccess(false);
+        }
+      }}>
         <DialogContent className="max-w-xl max-h-[80vh] overflow-y-auto sm:max-h-[600px] bg-white" onInteractOutside={(e) => {
           // Prevent closing when clicking on Select dropdown
           const target = e.target as HTMLElement;
@@ -180,27 +187,46 @@ const FindsGallery = () => {
           <DialogTitle className="text-earth-brown font-display text-2xl font-bold">Share Your Find</DialogTitle>
           <DialogDescription className="text-gray-700 font-medium">
             Upload a photo and details of your metal detecting discovery to share with the community.
-            You can add multiple finds without closing this window.
           </DialogDescription>
-          <div className="pb-10"> {/* Added padding to ensure save button is visible */}
-            <UploadFindForm 
-              // We're not auto-closing the dialog anymore to enable multiple uploads
-              onFindUploaded={() => {
-                // The callback still exists but doesn't close the dialog
-                // This allows users to upload multiple finds in sequence
-                console.log("Find uploaded successfully, keeping dialog open for more uploads");
-              }} 
-            />
-          </div>
-          <div className="flex justify-end pb-2">
-            <Button 
-              variant="outline"
-              onClick={() => setIsUploadOpen(false)}
-              className="text-sm"
-            >
-              Close when finished
-            </Button>
-          </div>
+          {showUploadSuccess ? (
+            <div className="py-12 px-6 text-center space-y-6">
+              <div className="mb-4">
+                <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-green-600 mb-2">Find Uploaded Successfully!</h3>
+                <p className="text-gray-600">Your treasure is now visible in the gallery.</p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button 
+                  onClick={() => setShowUploadSuccess(false)}
+                  className="bg-metallic-gold hover:bg-yellow-600 text-forest-green font-semibold"
+                >
+                  <Plus className="h-4 w-4 mr-2" /> Add Another Find
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    setShowUploadSuccess(false);
+                    setIsUploadOpen(false);
+                  }}
+                  className="font-semibold"
+                >
+                  Done
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="pb-4">
+              <UploadFindForm 
+                onFindUploaded={() => {
+                  setShowUploadSuccess(true);
+                }} 
+              />
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </>
