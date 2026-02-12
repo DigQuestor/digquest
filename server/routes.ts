@@ -749,18 +749,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
       for (const user of allUsers) {
         if (user.username !== "DigQuestor") {
           try {
-            // First delete all posts by this user
+            console.log(`Starting cleanup for user: ${user.username} (ID: ${user.id})`);
+            
+            // 1. Delete all posts by this user (which will cascade delete comments and likes on those posts)
             const userPosts = await storage.getPostsByUser(user.id);
             for (const post of userPosts) {
+              // Delete comments on this post
+              const postComments = await storage.getAllCommentsByPost(post.id);
+              for (const comment of postComments) {
+                await storage.deleteComment(comment.id);
+              }
+              // Delete likes on this post
+              await storage.deletePostLikes(post.id);
+              // Delete the post
               await storage.deletePost(post.id);
             }
+            console.log(`  - Deleted ${userPosts.length} posts`);
             
-            // Then delete the user
+            // 2. Delete all finds by this user
+            const userFinds = await storage.getFindsByUser(user.id);
+            for (const find of userFinds) {
+              // Delete comments on this find
+              const findComments = await storage.getFindComments(find.id);
+              for (const comment of findComments) {
+                await storage.deleteFindComment(comment.id);
+              }
+              // Delete the find
+              await storage.deleteFind(find.id);
+            }
+            console.log(`  - Deleted ${userFinds.length} finds`);
+            
+            // 3. Delete all locations by this user
+            const userLocations = await storage.getLocationsByUser(user.id);
+            for (const location of userLocations) {
+              await storage.deleteLocation(location.id);
+            }
+            console.log(`  - Deleted ${userLocations.length} locations`);
+            
+            // 4. Now delete the user
             await storage.deleteUser(user.id);
             deletedCount++;
-            console.log(`Deleted user: ${user.username}`);
+            console.log(`✅ Successfully deleted user: ${user.username}`);
           } catch (error) {
-            console.error(`Error deleting user ${user.username}:`, error);
+            console.error(`❌ Error deleting user ${user.username}:`, error);
             errors.push({ username: user.username, error: String(error) });
           }
         }
