@@ -2590,13 +2590,9 @@ export class DatabaseStorage implements IStorage {
 // Use memory storage by default - more reliable for both development and production
 let storageInstance: IStorage;
 
-// Use DatabaseStorage in production when DATABASE_URL is available
-if (process.env.DATABASE_URL) {
-  console.log("Using DatabaseStorage with PostgreSQL for persistent data storage");
-  storageInstance = new DatabaseStorage();
-} else {
-  console.log("Using MemStorage for local development");
-  storageInstance = new MemStorage();
-}
+// Always use MemStorage (with file-based persistence) for reliability
+// DatabaseStorage requires proper Drizzle schema setup which is not yet configured
+console.log("Using MemStorage with file-based persistence (./data/db.json)");
+storageInstance = new MemStorage();
 
 export const storage = storageInstance;
