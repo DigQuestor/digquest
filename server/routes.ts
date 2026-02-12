@@ -193,23 +193,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       const { targetUserId, action } = req.body;
-      if (!targetUserId) {
+      const parsedTargetUserId = Number(targetUserId);
+
+      if (!Number.isInteger(parsedTargetUserId) || parsedTargetUserId <= 0) {
         console.log("[FOLLOW] Missing targetUserId");
         return res.status(400).json({ message: "Invalid target user" });
       }
 
       const followerId = req.session.userId;
-      console.log(`[FOLLOW] Action: ${action}, Follower: ${followerId}, Target: ${targetUserId}`);
+      console.log(`[FOLLOW] Action: ${action}, Follower: ${followerId}, Target: ${parsedTargetUserId}`);
+
+      if (followerId === parsedTargetUserId) {
+        return res.status(400).json({ message: "You cannot follow yourself" });
+      }
       
       let result = false;
 
       if (action === 'follow') {
-        const connection = await storage.followUser(followerId, targetUserId);
+        const connection = await storage.followUser(followerId, parsedTargetUserId);
         console.log("[FOLLOW] Connection created:", connection);
         result = !!connection;
       } else if (action === 'unfollow') {
-        result = await storage.unfollowUser(followerId, targetUserId);
+        result = await storage.unfollowUser(followerId, parsedTargetUserId);
         console.log("[FOLLOW] Unfollow result:", result);
+      } else {
+        return res.status(400).json({ message: "Invalid action" });
       }
 
       console.log("[FOLLOW] Sending success response:", { success: result });

@@ -2370,10 +2370,7 @@ export class DatabaseStorage implements IStorage {
   // User Connections
   async getUserConnections(userId: number): Promise<UserConnection[]> {
     return await db.select().from(userConnections)
-      .where(and(
-        sql`(follower_id = ${userId} OR following_id = ${userId})`,
-        eq(userConnections.status, 'active')
-      ));
+      .where(sql`(follower_id = ${userId} OR following_id = ${userId})`);
   }
 
   async followUser(followerId: number, followingId: number): Promise<UserConnection> {
@@ -2385,28 +2382,20 @@ export class DatabaseStorage implements IStorage {
       )).limit(1);
     
     if (existing.length > 0) {
-      // Update status to active if it exists
-      const [updated] = await db.update(userConnections)
-        .set({ status: 'active' })
-        .where(eq(userConnections.id, existing[0].id))
-        .returning();
-      return updated;
+      return existing[0];
     }
     
     // Create new connection
     const [newConnection] = await db.insert(userConnections).values({
       followerId,
-      followingId,
-      status: 'active',
-      connectionType: 'follow'
+      followingId
     }).returning();
     
     return newConnection;
   }
 
   async unfollowUser(followerId: number, followingId: number): Promise<boolean> {
-    const result = await db.update(userConnections)
-      .set({ status: 'inactive' })
+    const result = await db.delete(userConnections)
       .where(and(
         eq(userConnections.followerId, followerId),
         eq(userConnections.followingId, followingId)
@@ -2419,18 +2408,12 @@ export class DatabaseStorage implements IStorage {
     const [followersResult] = await db
       .select({ count: sql<number>`count(*)` })
       .from(userConnections)
-      .where(and(
-        eq(userConnections.followingId, userId),
-        eq(userConnections.status, 'active')
-      ));
+      .where(eq(userConnections.followingId, userId));
 
     const [followingResult] = await db
       .select({ count: sql<number>`count(*)` })
       .from(userConnections)
-      .where(and(
-        eq(userConnections.followerId, userId),
-        eq(userConnections.status, 'active')
-      ));
+      .where(eq(userConnections.followerId, userId));
 
     const [postsResult] = await db
       .select({ count: sql<number>`count(*)` })
@@ -2461,10 +2444,7 @@ export class DatabaseStorage implements IStorage {
     const followingIds = await db
       .select({ followingId: userConnections.followingId })
       .from(userConnections)
-      .where(and(
-        eq(userConnections.followerId, userId),
-        eq(userConnections.status, 'active')
-      ));
+      .where(eq(userConnections.followerId, userId));
 
     const userIds = [userId, ...followingIds.map(f => f.followingId)];
     
