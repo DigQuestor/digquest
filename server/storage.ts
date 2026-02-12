@@ -24,7 +24,7 @@ const {
   userAchievements
 } = schema;
 import { db } from "./db/db.js";
-import { eq, desc, and, sql } from "drizzle-orm";
+import { eq, desc, and, inArray, sql } from "drizzle-orm";
 
 // Storage interface
 export interface IStorage {
@@ -509,6 +509,31 @@ export class MemStorage implements IStorage {
         }
       })();
     }
+
+    this.removeLegacyMindSweepersGroup();
+  }
+
+  private removeLegacyMindSweepersGroup(): void {
+    const legacyGroupIds = Array.from(this.groups.values())
+      .filter((group) => normalizeGroupName(group.name) === normalizeGroupName("Mind Sweepers Denmark"))
+      .map((group) => group.id);
+
+    if (legacyGroupIds.length === 0) {
+      return;
+    }
+
+    for (const membership of Array.from(this.groupMemberships.values())) {
+      if (legacyGroupIds.includes(membership.groupId)) {
+        this.groupMemberships.delete(membership.id);
+      }
+    }
+
+    for (const groupId of legacyGroupIds) {
+      this.groups.delete(groupId);
+    }
+
+    this.saveToFile();
+    console.log(`Removed ${legacyGroupIds.length} legacy Mind Sweepers Denmark group(s) from MemStorage`);
   }
   
   private async initializeDefaultData() {
@@ -599,16 +624,6 @@ export class MemStorage implements IStorage {
       const updatedPost = { ...this.posts.get(post1.id)!, views: 32, comments: 4 };
       this.posts.set(post1.id, updatedPost);
     }
-    
-    // Create Mind Sweepers Denmark group for DigQuestor
-    const mindSweeperGroup = await this.createGroup({
-      name: "Mind Sweepers Denmark",
-      description: "A group for metal detecting enthusiasts in Denmark",
-      location: "Denmark",
-      isPrivate: false,
-      creatorId: digQuestor.id
-    });
-    console.log("Created Mind Sweepers Denmark group for DigQuestor");
     
     // Save all default data to file
     this.saveToFile();
@@ -1879,6 +1894,31 @@ export class MemStorage implements IStorage {
 
 // Database storage implementation
 export class DatabaseStorage implements IStorage {
+  constructor() {
+    void this.removeLegacyMindSweepersGroup();
+  }
+
+  private async removeLegacyMindSweepersGroup(): Promise<void> {
+    try {
+      const legacyGroups = await db
+        .select({ id: groups.id })
+        .from(groups)
+        .where(sql`LOWER(${groups.name}) = LOWER(${"Mind Sweepers Denmark"})`);
+
+      if (legacyGroups.length === 0) {
+        return;
+      }
+
+      const legacyGroupIds = legacyGroups.map((group) => group.id);
+      await db.delete(groupMemberships).where(inArray(groupMemberships.groupId, legacyGroupIds));
+      await db.delete(groups).where(inArray(groups.id, legacyGroupIds));
+
+      console.log(`Removed ${legacyGroupIds.length} legacy Mind Sweepers Denmark group(s) from DatabaseStorage`);
+    } catch (error) {
+      console.error("Failed to remove legacy Mind Sweepers Denmark group(s):", error);
+    }
+  }
+
   // Users
   async getUser(id: number): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
