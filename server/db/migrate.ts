@@ -281,13 +281,32 @@ export async function runMigrations() {
       WHERE NOT EXISTS (SELECT 1 FROM categories WHERE slug = 'unearthed-treasures')
     `);
     
-    // Update existing "finds-gallery" category to "unearthed-treasures"
+    // If both categories exist, move posts to the new category before cleanup
     await db.execute(sql`
-      UPDATE categories 
-      SET name = 'Unearthed Treasures', 
-          slug = 'unearthed-treasures', 
+      UPDATE posts
+      SET category_id = target.id
+      FROM categories source, categories target
+      WHERE source.slug = 'finds-gallery'
+        AND target.slug = 'unearthed-treasures'
+        AND posts.category_id = source.id
+        AND source.id <> target.id
+    `);
+
+    // Remove the old category when the new one already exists
+    await db.execute(sql`
+      DELETE FROM categories
+      WHERE slug = 'finds-gallery'
+        AND EXISTS (SELECT 1 FROM categories WHERE slug = 'unearthed-treasures')
+    `);
+
+    // Otherwise rename existing "finds-gallery" category to "unearthed-treasures"
+    await db.execute(sql`
+      UPDATE categories
+      SET name = 'Unearthed Treasures',
+          slug = 'unearthed-treasures',
           description = 'Share your amazing finds and discoveries'
       WHERE slug = 'finds-gallery'
+        AND NOT EXISTS (SELECT 1 FROM categories WHERE slug = 'unearthed-treasures')
     `);
     
     await db.execute(sql`
