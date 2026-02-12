@@ -262,7 +262,7 @@ const createDefaultStore = (): PersistentDataStore => ({
   },
   categories: {
     1: { id: 1, name: "General Discussion", description: "General detecting topics", slug: "general-discussion", icon: "MessageCircle", count: 0 },
-    2: { id: 2, name: "Finds Gallery", description: "Share your amazing finds", slug: "finds-gallery", icon: "Image", count: 0 },
+    2: { id: 2, name: "Unearthed Treasures", description: "Share your amazing finds and discoveries", slug: "unearthed-treasures", icon: "Image", count: 0 },
     3: { id: 3, name: "Equipment Reviews", description: "Detector and equipment discussions", slug: "equipment-reviews", icon: "Settings", count: 0 },
     4: { id: 4, name: "Location Tips", description: "Share detecting locations and tips", slug: "location-tips", icon: "MapPin", count: 0 },
     5: { id: 5, name: "Beginners Corner", description: "Help and advice for newcomers", slug: "beginners-corner", icon: "HelpCircle", count: 0 },

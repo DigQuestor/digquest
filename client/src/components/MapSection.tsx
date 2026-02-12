@@ -700,8 +700,10 @@ const MapSection = () => {
               onLocationAdded={() => {
                 setIsAddLocationOpen(false);
                 toast({
-                  title: "Success!",
-                  description: "Your detecting spot has been added to the map.",
+                  title: "📍 Location Successfully Added!",
+                  description: "Your detecting spot is now on the map and visible to the community. You should see a pin marker at your chosen location.",
+                  duration: 5000,
+                  className: "bg-green-600 text-white border-green-700 font-semibold"
                 });
               }}
             />

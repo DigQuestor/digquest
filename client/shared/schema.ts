@@ -1,26 +1,3 @@
-export default {
-	users,
-	categories,
-	posts,
-	comments,
-	postLikes,
-	findLikes,
-	finds,
-	findComments,
-	locations,
-	events,
-	stories,
-	routes,
-	userPreferences,
-	imageStorage,
-	groups,
-	groupMemberships,
-	userConnections,
-	activities,
-	messages,
-	achievements,
-	userAchievements
-};
 import { z } from "zod";
 
 // Zod schema for creating a post (used by client forms)
@@ -171,5 +148,30 @@ export type InsertAchievement = Partial<Achievement>;
 
 export interface UserAchievement { id: number; userId?: number; achievementId?: number }
 export type InsertUserAchievement = Partial<UserAchievement>;
+
+// Default export for server-side compatibility
+export default {
+	users,
+	categories,
+	posts,
+	comments,
+	postLikes,
+	findLikes,
+	finds,
+	findComments,
+	locations,
+	events,
+	stories,
+	routes,
+	userPreferences,
+	imageStorage,
+	groups,
+	groupMemberships,
+	userConnections,
+	activities,
+	messages,
+	achievements,
+	userAchievements
+};
 
 // Keep this file intentionally simple; it's a compatibility shim.

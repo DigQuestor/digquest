@@ -27,19 +27,8 @@ if (process.env.NODE_ENV === "production") {
   app.set("trust proxy", 1);
 }
 
-// Create PostgreSQL connection pool for session store
-const sessionPool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false
-});
-
-// Session middleware with persistent PostgreSQL store
-app.use(session({
-  store: new PgStore({
-    pool: sessionPool,
-    tableName: 'session', // Table name for storing sessions
-    createTableIfMissing: true, // Auto-create session table if it doesn't exist
-  }),
+// Session configuration - use PostgreSQL in production, memory store in development
+let sessionConfig: any = {
   secret: process.env.SESSION_SECRET || "your-secret-key",
   resave: false,
   saveUninitialized: false,
@@ -49,7 +38,26 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
   }
-}));
+};
+
+// Only use PostgreSQL session store if DATABASE_URL is provided
+if (process.env.DATABASE_URL) {
+  const sessionPool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false
+  });
+  
+  sessionConfig.store = new PgStore({
+    pool: sessionPool,
+    tableName: 'session',
+    createTableIfMissing: true,
+  });
+  console.log("📦 Using PostgreSQL session store");
+} else {
+  console.log("📦 Using memory session store (development mode)");
+}
+
+app.use(session(sessionConfig));
 
 // Run database migrations on startup
 if (process.env.DATABASE_URL) {

@@ -156,29 +156,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const userId = req.params.userId ? parseInt(req.params.userId) : user.id;
       
-      // Mock activity feed data
-      const activities = [
-        {
-          id: 1,
-          userId: 2,
-          activityType: "find",
-          entityType: "find",
-          entityId: 29,
-          content: "BigBird shared a new find: Patterened Spindle Whorl",
-          isPublic: true,
-          created_at: new Date('2024-12-15T10:30:00Z')
-        },
-        {
-          id: 2,
-          userId: 25,
-          activityType: "join",
-          entityType: "group",
-          entityId: 1,
-          content: "DirtySapper joined the Metal Detecting Enthusiasts group",
-          isPublic: true,
-          created_at: new Date('2024-12-14T15:45:00Z')
-        }
-      ];
+      // Get real activities from storage
+      const activities = await storage.getUserActivityFeed(userId);
       
       res.json(activities);
     } catch (error) {
@@ -2683,14 +2662,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log("Received event data:", req.body);
       
-      // Validate the data using the schema directly (keep eventDate as string)
-      const validatedData = insertEventSchema.parse(req.body);
-      
-      // Check if user exists
-      const user = await storage.getUser(validatedData.userId);
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
+      if (!req.session?.userId) {
+        return res.status(401).json({ message: "Authentication required" });
       }
+      
+      // Use the authenticated user's ID from the session, not the client-provided one
+      const eventData = {
+        ...req.body,
+        userId: req.session.userId
+      };
+      
+      // Validate the data using the schema
+      const validatedData = insertEventSchema.parse(eventData);
       
       console.log("Creating event with data:", validatedData);
       const event = await storage.createEvent(validatedData);
@@ -2838,15 +2821,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create a story
   app.post("/api/stories", async (req, res) => {
     try {
-      const storyData = insertStorySchema.parse(req.body);
-      
-      // Check if user exists
-      const user = await storage.getUser(storyData.userId);
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
+      if (!req.session?.userId) {
+        return res.status(401).json({ message: "Authentication required" });
       }
       
-      const story = await storage.createStory(storyData);
+      // Use the authenticated user's ID from the session, not the client-provided one
+      const storyData = {
+        ...req.body,
+        userId: req.session.userId
+      };
+      
+      const validatedData = insertStorySchema.parse(storyData);
+      const story = await storage.createStory(validatedData);
       res.status(201).json(story);
     } catch (error) {
       if (error instanceof Error) {

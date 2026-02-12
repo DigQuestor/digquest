@@ -24,9 +24,9 @@
     },
     "2": {
       "id": 2,
-      "name": "Finds Gallery",
-      "description": "Share your amazing finds",
-      "slug": "finds-gallery",
+      "name": "Unearthed Treasures",
+      "description": "Share your amazing finds and discoveries",
+      "slug": "unearthed-treasures",
       "icon": "Image",
       "count": 0
     },

@@ -40,9 +40,10 @@ const timePeriods = [
 
 interface UploadFindFormProps {
   onFindUploaded?: () => void;
+  onCancel?: () => void;
 }
 
-const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
+const UploadFindForm = ({ onFindUploaded, onCancel }: UploadFindFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -271,20 +272,6 @@ const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {/* Warning about potential image display issues */}
-        <div className="bg-blue-100 border-2 border-blue-400 rounded-lg p-4 mb-4">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="h-6 w-6 text-blue-600 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="font-bold text-blue-800 text-base mb-1">📸 About Image Uploads</p>
-              <p className="text-blue-700 text-sm">
-                Images are uploaded to AWS S3. If they don't display after upload, you'll see a specific error message 
-                telling you whether it's a CORS issue, S3 permissions, or AWS credentials problem.
-              </p>
-            </div>
-          </div>
-        </div>
-        
         <div className="mb-4">
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-earth-brown transition-colors"
             onClick={() => document.getElementById('file-upload')?.click()}>
@@ -415,7 +402,7 @@ const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
             type="button" 
             variant="outline"
             onClick={() => {
-              if (onFindUploaded) onFindUploaded();
+              if (onCancel) onCancel();
             }}
             disabled={isSubmitting}
           >

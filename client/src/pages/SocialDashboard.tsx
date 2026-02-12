@@ -100,19 +100,33 @@ export default function SocialDashboard() {
   const followMutation = useMutation({
     mutationFn: async ({ targetUserId, action }: { targetUserId: number; action: 'follow' | 'unfollow' }) => {
       await apiRequest("POST", "/api/social/follow", { targetUserId, action });
+      return action;
     },
-    onSuccess: () => {
+    onSuccess: (action) => {
       queryClient.invalidateQueries({ queryKey: ['/api/social/connections'] });
-      toast({
-        title: "Success",
-        description: "Connection updated successfully",
-      });
+      queryClient.invalidateQueries({ queryKey: ['/api/social/stats'] });
+      
+      if (action === 'follow') {
+        toast({
+          title: "✅ Connection Added!",
+          description: "You are now following this user and will see their updates in your feed.",
+          duration: 4000,
+          className: "bg-green-600 text-white border-green-700 font-semibold"
+        });
+      } else {
+        toast({
+          title: "Connection Removed",
+          description: "You have unfollowed this user.",
+          duration: 3000,
+        });
+      }
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to update connection",
+        title: "⚠️ Connection Failed",
+        description: "Unable to update connection. Please try again.",
         variant: "destructive",
+        duration: 4000,
       });
     },
   });
@@ -253,7 +267,7 @@ export default function SocialDashboard() {
   );
 
   const isUserFollowed = (userId: number): boolean => {
-    return connections.some(conn => conn.followingId === userId);
+    return connections.some(conn => conn.followerId === currentUser?.id && conn.followingId === userId);
   };
 
   // Event handlers

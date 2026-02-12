@@ -297,12 +297,7 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
         console.warn("No location data returned from server");
       }
       
-      toast({
-        title: "✅ Success!",
-        description: "Your detecting spot has been added to the map! You should see a pin marker appear.",
-        duration: 5000,
-        className: "bg-green-600 text-white border-green-700 font-bold text-lg"
-      });
+      // Toast is now handled by parent component
       
       // Reset form and invalidate queries to refresh data
       form.reset();

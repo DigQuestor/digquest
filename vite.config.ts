@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 
 export default defineConfig({
+  root: "client", // Set client as the root directory for Vite
   plugins: [react()],
   resolve: {
     alias: {
@@ -11,6 +12,10 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: "dist"
+    outDir: "../dist/public" // Output relative to root (client dir)
+  },
+  server: {
+    port: 5173,
+    host: true // Allow external access
   }
 });

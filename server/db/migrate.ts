@@ -277,8 +277,17 @@ export async function runMigrations() {
     
     await db.execute(sql`
       INSERT INTO categories (name, slug, description, post_count)
-      SELECT 'Finds Gallery', 'finds-gallery', 'Share your amazing finds', 0
-      WHERE NOT EXISTS (SELECT 1 FROM categories WHERE slug = 'finds-gallery')
+      SELECT 'Unearthed Treasures', 'unearthed-treasures', 'Share your amazing finds and discoveries', 0
+      WHERE NOT EXISTS (SELECT 1 FROM categories WHERE slug = 'unearthed-treasures')
+    `);
+    
+    // Update existing "finds-gallery" category to "unearthed-treasures"
+    await db.execute(sql`
+      UPDATE categories 
+      SET name = 'Unearthed Treasures', 
+          slug = 'unearthed-treasures', 
+          description = 'Share your amazing finds and discoveries'
+      WHERE slug = 'finds-gallery'
     `);
     
     await db.execute(sql`

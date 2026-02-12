@@ -223,7 +223,10 @@ const FindsGallery = () => {
               <UploadFindForm 
                 onFindUploaded={() => {
                   setShowUploadSuccess(true);
-                }} 
+                }}
+                onCancel={() => {
+                  setIsUploadOpen(false);
+                }}
               />
             </div>
           )}
