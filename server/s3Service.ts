@@ -73,6 +73,8 @@ export async function uploadToS3(
     const url = `https://${BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${key}`;
     console.log('S3 upload successful, URL:', url);
     console.log('Testing URL accessibility...');
+    console.log('⚠️ IMPORTANT: If images don\'t display, you need to configure CORS on the S3 bucket!');
+    console.log('   See: AWS_S3_CORS_SETUP.md for instructions');
     
     // Test if the URL is accessible
     try {
@@ -80,8 +82,10 @@ export async function uploadToS3(
       console.log('URL test response status:', testResponse.status);
       if (!testResponse.ok) {
         console.warn('⚠️ Uploaded image may not be publicly accessible. Status:', testResponse.status);
+        console.warn('   Check both: 1) Bucket public access settings, 2) CORS configuration');
       } else {
-        console.log('✅ Image URL is publicly accessible');
+        console.log('✅ Image URL is publicly accessible from server');
+        console.log('   If browsers still can\'t load it, configure CORS!');
       }
     } catch (testError) {
       console.warn('⚠️ Could not verify image URL accessibility:', testError.message);

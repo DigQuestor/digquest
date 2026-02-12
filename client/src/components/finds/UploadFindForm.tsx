@@ -244,9 +244,9 @@ const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
             <div>
               <p className="font-bold text-orange-800 text-base mb-1">⚠️ Known Issue: Images May Not Display</p>
               <p className="text-orange-700 text-sm">
-                Images upload successfully but may not be visible due to AWS S3 bucket configuration. 
-                The S3 bucket needs "Block all public access" turned OFF and a public read policy configured.
-                <strong> Your find will still be saved with all details.</strong>
+                Images upload successfully but may not be visible due to AWS S3 CORS configuration. 
+                The S3 bucket needs <strong>CORS (Cross-Origin Resource Sharing)</strong> configured to allow browsers to load images.
+                See <strong>AWS_S3_CORS_SETUP.md</strong> for step-by-step instructions.
               </p>
             </div>
           </div>

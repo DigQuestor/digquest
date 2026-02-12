@@ -234,9 +234,10 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
                     const errorDiv = document.createElement('div');
                     errorDiv.className = 'image-error-message absolute inset-0 flex flex-col items-center justify-center bg-red-50 p-4 text-center';
                     errorDiv.innerHTML = `
-                      <div class="text-red-600 font-bold text-lg mb-2">⚠️ Image Upload Issue</div>
-                      <div class="text-red-800 text-sm">Image uploaded but not publicly accessible</div>
-                      <div class="text-red-700 text-xs mt-2">AWS S3 bucket needs public access enabled</div>
+                      <div class="text-red-600 font-bold text-lg mb-2">⚠️ Image Can't Load</div>
+                      <div class="text-red-800 text-sm mb-1">Image uploaded but browser blocked it</div>
+                      <div class="text-red-700 text-xs font-bold">AWS S3 needs CORS configured!</div>
+                      <div class="text-red-600 text-xs mt-1">See AWS_S3_CORS_SETUP.md</div>
                     `;
                     parent.appendChild(errorDiv);
                   }
