@@ -20,7 +20,7 @@ export const categories = pgTable("categories", {
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
   description: text("description"),
-  postCount: integer("post_count").default(0),
+  count: integer("post_count").default(0),
   created_at: timestamp("created_at").defaultNow().notNull(),
 });
 

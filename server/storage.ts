@@ -1916,7 +1916,7 @@ export class DatabaseStorage implements IStorage {
 
   async incrementCategoryCount(id: number): Promise<void> {
     await db.update(categories)
-      .set({ count: sql`count + 1` })
+      .set({ count: sql`post_count + 1` })
       .where(eq(categories.id, id));
   }
 
