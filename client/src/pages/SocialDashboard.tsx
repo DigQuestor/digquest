@@ -170,9 +170,16 @@ export default function SocialDashboard() {
 
   const createGroupMutation = useMutation({
     mutationFn: async (groupData: typeof newGroup) => {
-      return apiRequest("POST", "/api/groups", groupData);
+      const response = await apiRequest("POST", "/api/social/groups", groupData);
+      return response.json() as Promise<Group>;
     },
-    onSuccess: () => {
+    onSuccess: (createdGroup) => {
+      queryClient.setQueryData<Group[]>(['/api/social/groups'], (currentGroups = []) => {
+        if (currentGroups.some(group => group.id === createdGroup.id)) {
+          return currentGroups;
+        }
+        return [createdGroup, ...currentGroups];
+      });
       toast({
         title: "Group Created",
         description: "Your group has been created successfully.",
@@ -612,7 +619,7 @@ export default function SocialDashboard() {
                     <DialogTrigger asChild>
                       <Button>
                         <Plus className="h-4 w-4 mr-2" />
-                        Create Group
+                        Create New Group
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-md">
@@ -665,7 +672,7 @@ export default function SocialDashboard() {
                           className="w-full"
                           disabled={createGroupMutation.isPending || !newGroup.name.trim()}
                         >
-                          {createGroupMutation.isPending ? "Creating..." : "Create Group"}
+                          {createGroupMutation.isPending ? "Creating..." : "Create New Group"}
                         </Button>
                       </div>
                     </DialogContent>
@@ -754,7 +761,7 @@ export default function SocialDashboard() {
                       onClick={() => setIsCreateGroupOpen(true)}
                       className="mr-2"
                     >
-                      Create Your First Group
+                      Create New Group
                     </Button>
                     <Button variant="outline" onClick={() => setIsBrowseGroupsOpen(true)}>
                       Browse Groups
