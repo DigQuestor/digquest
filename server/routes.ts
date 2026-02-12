@@ -867,6 +867,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin endpoint - recalculate category post counts
+  app.post("/api/admin/recalculate-categories", async (req, res) => {
+    try {
+      const { adminKey } = req.body;
+      
+      // Simple admin verification
+      if (adminKey !== "admin123") {
+        return res.status(403).json({ message: "Unauthorized" });
+      }
+      
+      const categories = await storage.getAllCategories();
+      const updates = [];
+      
+      for (const category of categories) {
+        // Count actual posts for this category
+        const categoryPosts = await storage.getPostsByCategory(category.id);
+        const actualCount = categoryPosts.length;
+        
+        // Update if count is different
+        if (category.count !== actualCount) {
+          await storage.updateCategoryCount(category.id, actualCount);
+          updates.push({
+            category: category.name,
+            oldCount: category.count,
+            newCount: actualCount
+          });
+          console.log(`Updated ${category.name}: ${category.count} → ${actualCount}`);
+        }
+      }
+      
+      res.json({ 
+        message: `Category counts recalculated. Updated ${updates.length} categories.`,
+        updates
+      });
+      
+    } catch (error) {
+      console.error("Error recalculating category counts:", error);
+      res.status(500).json({ message: "Error recalculating categories", error: String(error) });
+    }
+  });
+
   // Admin password update endpoint (for fixing DigQuestor password)
   app.post("/api/admin/update-password", async (req, res) => {
     try {

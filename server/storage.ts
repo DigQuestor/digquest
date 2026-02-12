@@ -1900,7 +1900,25 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deletePost(id: number): Promise<boolean> {
+    // First get the post to retrieve its categoryId
+    const post = await this.getPost(id);
+    if (!post) {
+      return false;
+    }
+    
+    const categoryId = post.categoryId;
+    
+    // Delete the post
     const result = await db.delete(posts).where(eq(posts.id, id));
+    
+    // Decrement the category count if deletion was successful
+    if (result.rowCount > 0 && categoryId) {
+      await db.update(categories)
+        .set({ count: sql`post_count - 1` })
+        .where(eq(categories.id, categoryId));
+      console.log(`Decremented count for category ${categoryId} after deleting post ${id}`);
+    }
+    
     return result.rowCount > 0;
   }
 
