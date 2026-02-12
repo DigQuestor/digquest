@@ -185,28 +185,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Follow/unfollow a user
   app.post("/api/social/follow", async (req, res) => {
     try {
+      console.log("[FOLLOW] Request body:", req.body);
+      console.log("[FOLLOW] Session userId:", req.session?.userId);
+      
       if (!req.session?.userId) {
         return res.status(401).json({ message: "Authentication required" });
       }
       
       const { targetUserId, action } = req.body;
       if (!targetUserId) {
+        console.log("[FOLLOW] Missing targetUserId");
         return res.status(400).json({ message: "Invalid target user" });
       }
 
       const followerId = req.session.userId;
+      console.log(`[FOLLOW] Action: ${action}, Follower: ${followerId}, Target: ${targetUserId}`);
+      
       let result = false;
 
       if (action === 'follow') {
         const connection = await storage.followUser(followerId, targetUserId);
+        console.log("[FOLLOW] Connection created:", connection);
         result = !!connection;
       } else if (action === 'unfollow') {
         result = await storage.unfollowUser(followerId, targetUserId);
+        console.log("[FOLLOW] Unfollow result:", result);
       }
 
+      console.log("[FOLLOW] Sending success response:", { success: result });
       res.json({ success: result });
     } catch (error) {
-      console.error("Error following/unfollowing user:", error);
+      console.error("[FOLLOW] Error following/unfollowing user:", error);
       res.status(500).json({ message: "Failed to update connection" });
     }
   });
@@ -2693,6 +2702,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Update event
   app.put("/api/events/:id", async (req, res) => {
     try {
+      if (!req.session?.userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
       const eventId = parseInt(req.params.id);
       const updateData = insertEventSchema.parse(req.body);
       
@@ -2703,7 +2716,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Check if user is the owner of the event
-      if (existingEvent.userId !== updateData.userId) {
+      if (existingEvent.userId !== req.session.userId) {
         return res.status(403).json({ message: "Not authorized to edit this event" });
       }
       
@@ -2726,6 +2739,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Delete event
   app.delete("/api/events/:id", async (req, res) => {
     try {
+      if (!req.session?.userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
       const eventId = parseInt(req.params.id);
       
       // Check if event exists
@@ -2734,7 +2751,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Event not found" });
       }
       
-      // Allow event owner to delete
+      // Check if user is the owner of the event
+      if (existingEvent.userId !== req.session.userId) {
+        return res.status(403).json({ message: "Not authorized to delete this event" });
+      }
+      
+      // Delete the event
       const deleted = await storage.deleteEvent(eventId);
       if (!deleted) {
         return res.status(404).json({ message: "Event not found" });

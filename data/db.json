@@ -11,6 +11,18 @@
       "bio": "Platform Administrator",
       "isEmailVerified": true,
       "created_at": "2025-01-01T00:00:00.000Z"
+    },
+    "2": {
+      "id": 2,
+      "username": "BigBird",
+      "email": "bigbird@test.com",
+      "password": "$2b$10$1LGuacLus5jhZ1VpvmY7h.YhQlshdsL8YIfAfuLaCu7yw/7A1HeLy",
+      "emailVerificationToken": null,
+      "emailVerificationExpires": null,
+      "avatarUrl": "https://api.dicebear.com/7.x/personas/svg?seed=BigBird",
+      "bio": "Test user for connection testing",
+      "isEmailVerified": true,
+      "created_at": "2026-02-12T00:00:00.000Z"
     }
   },
   "categories": {
@@ -83,14 +95,14 @@
   "locations": {},
   "events": {},
   "stories": {},
-  "userId": 2,
+  "userId": 3,
   "categoryId": 7,
   "postId": 2,
   "commentId": 1,
   "findId": 1,
   "findCommentId": 1,
   "locationId": 1,
-  "eventId": 1,
+  "eventId": 2,
   "storyId": 1,
   "initialized": true
 }

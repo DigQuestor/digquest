@@ -45,7 +45,7 @@ const EventCard = ({ event }: EventCardProps) => {
 
   const attendMutation = useMutation({
     mutationFn: async (eventId: number) => {
-      const response = await apiRequest("POST", `/api/events/${eventId}/attend`);
+      const response = await apiRequest("POST", `/api/events/${eventId}/join`);
       if (!response.ok) {
         throw new Error("Failed to join event");
       }
@@ -156,7 +156,7 @@ const EventCard = ({ event }: EventCardProps) => {
       </div>
       
       <p className="text-sm text-gray-700 mb-2">
-        {formatEventDate(event.eventDate)} • {formatLocation(event.location)}
+        {formatEventDate(event.date)} • {formatLocation(event.location)}
       </p>
       
       {event.description && (

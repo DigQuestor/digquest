@@ -23,7 +23,7 @@ export function EditEventForm({ event, onEventUpdated, onClose }: EditEventFormP
     title: event.title,
     description: event.description || "",
     location: event.location,
-    eventDate: format(new Date(event.eventDate), "yyyy-MM-dd'T'HH:mm")
+    eventDate: format(new Date(event.date), "yyyy-MM-dd'T'HH:mm")
   });
   const { toast } = useToast();
 
@@ -33,9 +33,10 @@ export function EditEventForm({ event, onEventUpdated, onClose }: EditEventFormP
 
     try {
       const eventData = {
-        ...formData,
-        userId: event.userId,
-        eventDate: new Date(formData.eventDate).toISOString()
+        title: formData.title,
+        description: formData.description,
+        location: formData.location,
+        date: formData.eventDate, // Backend expects 'date' field, not 'eventDate'
       };
 
       const response = await apiRequest("PUT", `/api/events/${event.id}`, eventData);

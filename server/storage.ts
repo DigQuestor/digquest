@@ -1257,15 +1257,13 @@ export class MemStorage implements IStorage {
   async createEvent(insertEvent: InsertEvent): Promise<Event> {
     const id = this.eventId++;
     const createdAt = new Date();
-    // Convert string eventDate to Date object for storage
-    const eventDate = new Date(insertEvent.eventDate);
+    // Use 'date' field to match database schema
     const event: Event = { 
       ...insertEvent, 
       id, 
       created_at: createdAt,
       attendeeCount: 0,
       description: insertEvent.description ?? null,
-      eventDate: eventDate
     };
     this.events.set(id, event);
     this.saveToFile();
@@ -1276,7 +1274,9 @@ export class MemStorage implements IStorage {
     return Array.from(this.events.values())
       .sort((a, b) => {
         // Sort by upcoming events first
-        return (a.eventDate?.getTime() || 0) - (b.eventDate?.getTime() || 0);
+        const aDate = a.date ? new Date(a.date).getTime() : 0;
+        const bDate = b.date ? new Date(b.date).getTime() : 0;
+        return aDate - bDate;
       });
   }
 
@@ -1287,8 +1287,7 @@ export class MemStorage implements IStorage {
     const updatedEvent: Event = {
       ...event,
       ...data,
-      // Convert string eventDate to Date if provided
-      eventDate: data.eventDate ? new Date(data.eventDate) : event.eventDate
+      userId: event.userId, // Preserve original userId - don't let it be overwritten
     };
     
     this.events.set(id, updatedEvent);

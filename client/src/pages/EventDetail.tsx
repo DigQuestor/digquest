@@ -133,7 +133,7 @@ const EventDetail = () => {
     );
   }
 
-  const isPastEvent = isEventPast(event.eventDate);
+  const isPastEvent = isEventPast(event.date);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -166,7 +166,7 @@ const EventDetail = () => {
             <div className="flex-1">
               <div className="flex items-center mb-4 text-gray-700">
                 <Calendar className="h-5 w-5 mr-2 text-metallic-gold" />
-                <span className="font-semibold">{formatEventDate(event.eventDate)}</span>
+                <span className="font-semibold">{formatEventDate(event.date)}</span>
               </div>
               
               <div className="flex items-center mb-4 text-gray-700">

@@ -28,9 +28,9 @@ const Events = () => {
                          event.location.toLowerCase().includes(searchTerm.toLowerCase());
     
     if (filter === "upcoming") {
-      return matchesSearch && !isPast(new Date(event.eventDate));
+      return matchesSearch && !isPast(new Date(event.date));
     } else if (filter === "past") {
-      return matchesSearch && isPast(new Date(event.eventDate));
+      return matchesSearch && isPast(new Date(event.date));
     }
     return matchesSearch;
   });
@@ -134,7 +134,7 @@ const Events = () => {
                     <CardTitle className="text-lg text-forest-green line-clamp-2">
                       {event.title}
                     </CardTitle>
-                    {isPast(new Date(event.eventDate)) && (
+                    {isPast(new Date(event.date)) && (
                       <Badge variant="secondary" className="text-xs">Past</Badge>
                     )}
                   </div>
@@ -142,7 +142,7 @@ const Events = () => {
                 <CardContent className="space-y-3">
                   <div className="flex items-center text-sm text-gray-600">
                     <Calendar className="h-4 w-4 mr-2 text-metallic-gold" />
-                    <span>{getEventDateText(event.eventDate)} at {getEventTimeText(event.eventDate)}</span>
+                    <span>{getEventDateText(event.date)} at {getEventTimeText(event.date)}</span>
                   </div>
                   <div className="flex items-center text-sm text-gray-600">
                     <MapPin className="h-4 w-4 mr-2 text-metallic-gold" />

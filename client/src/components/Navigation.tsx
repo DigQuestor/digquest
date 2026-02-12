@@ -6,6 +6,7 @@ import {
   Map, 
   Heart,
   Users,
+  Calendar,
   Navigation as NavigationIcon
 } from "lucide-react";
 
@@ -42,6 +43,16 @@ const Navigation = () => {
             `}
           >
             <MessageSquare className="h-4 w-4 mr-1 md:mr-2" /> Community
+          </Link>
+          
+          <Link href="/events" 
+            className={`whitespace-nowrap transition-colors duration-300 px-3 py-2 font-medium flex items-center text-sm md:text-base flex-shrink-0 min-w-fit cursor-pointer
+              ${location === '/events' 
+                ? 'text-metallic-gold border-b-2 border-metallic-gold' 
+                : 'text-sand-beige hover:text-metallic-gold'}
+            `}
+          >
+            <Calendar className="h-4 w-4 mr-1 md:mr-2" /> Events
           </Link>
           
           <Link href="/finds" 

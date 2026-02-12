@@ -53,6 +53,8 @@ export const insertLocationSchema = z.object({
 export const insertEventSchema = z.object({
 	title: z.string().min(1),
 	date: z.string().optional(),
+	description: z.string().optional(),
+	location: z.string().optional(),
 });
 
 export const insertStorySchema = z.object({

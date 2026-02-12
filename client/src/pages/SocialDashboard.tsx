@@ -263,7 +263,7 @@ export default function SocialDashboard() {
 
   const searchableUsers = (allUsers || []).filter(user => 
     user.id !== currentUser?.id && 
-    user.username.toLowerCase().includes(searchTerm.toLowerCase())
+    (searchTerm === "" || user.username.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const isUserFollowed = (userId: number): boolean => {
@@ -965,7 +965,7 @@ export default function SocialDashboard() {
                   ))
                 ) : (
                   <p className="text-gray-500 text-center py-4">
-                    {searchTerm ? 'No users found' : 'Start typing to search for users'}
+                    {searchTerm ? 'No users found matching your search' : 'No other users available'}
                   </p>
                 )}
               </div>

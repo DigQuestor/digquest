@@ -74,12 +74,13 @@ const NewEventForm = ({ onEventCreated }: NewEventFormProps) => {
     setIsSubmitting(true);
     
     try {
-      // Keep eventDate as string for the API
+      // Map eventDate to date for backend schema
       const eventData = {
-        ...data,
+        title: data.title,
+        description: data.description,
+        location: data.location,
+        date: data.eventDate, // Backend expects 'date', not 'eventDate'
         userId: user.id,
-        // Keep eventDate as ISO string
-        eventDate: data.eventDate,
       };
 
       console.log("Submitting event:", eventData);
