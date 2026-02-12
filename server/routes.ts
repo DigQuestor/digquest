@@ -743,25 +743,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get all users
       const allUsers = await storage.getAllUsers();
       let deletedCount = 0;
+      const errors = [];
       
       // Delete all users except DigQuestor
       for (const user of allUsers) {
         if (user.username !== "DigQuestor") {
-          await storage.deleteUser(user.id);
-          deletedCount++;
-          console.log(`Deleted user: ${user.username}`);
+          try {
+            // First delete all posts by this user
+            const userPosts = await storage.getPostsByUser(user.id);
+            for (const post of userPosts) {
+              await storage.deletePost(post.id);
+            }
+            
+            // Then delete the user
+            await storage.deleteUser(user.id);
+            deletedCount++;
+            console.log(`Deleted user: ${user.username}`);
+          } catch (error) {
+            console.error(`Error deleting user ${user.username}:`, error);
+            errors.push({ username: user.username, error: String(error) });
+          }
         }
       }
       
       console.log(`Cleanup complete. Deleted ${deletedCount} users.`);
       res.json({ 
         message: `Cleanup complete. Deleted ${deletedCount} users. DigQuestor preserved.`,
-        deletedCount 
+        deletedCount,
+        errors: errors.length > 0 ? errors : undefined
       });
       
     } catch (error) {
       console.error("Error cleaning up users:", error);
-      res.status(500).json({ message: "Error cleaning up users" });
+      res.status(500).json({ message: "Error cleaning up users", error: String(error) });
     }
   });
 
