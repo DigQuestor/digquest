@@ -838,7 +838,16 @@ export default function SocialDashboard() {
         </Tabs>
 
         {/* View Group Dialog */}
-        <Dialog open={isViewGroupOpen} onOpenChange={setIsViewGroupOpen}>
+        <Dialog
+          open={isViewGroupOpen}
+          modal={false}
+          onOpenChange={(open) => {
+            setIsViewGroupOpen(open);
+            if (!open) {
+              setViewingGroup(null);
+            }
+          }}
+        >
           <DialogContent className="sm:max-w-2xl">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
