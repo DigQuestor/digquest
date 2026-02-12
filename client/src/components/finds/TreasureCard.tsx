@@ -244,12 +244,12 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
       <div className="treasure-card bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 w-full h-80 flex flex-col relative">
         <Link href={`/finds/${find.id}`} className="block">
           {/* Card-style photo area */}
-          <div className="h-40 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+          <div className="aspect-[4/3] w-full bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
             {find.imageUrl ? (
               <img 
                 src={find.imageUrl} 
                 alt={find.title} 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain object-center"
                 loading="lazy"
                 onError={(e) => {
                   console.error(`❌ Failed to load image for find ${find.id}:`, find.imageUrl);

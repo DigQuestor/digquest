@@ -13,6 +13,7 @@ import { useAuth, findStorage } from "@/hooks/use-auth-simple";
 import { useQueryClient } from "@tanstack/react-query";
 import { Find } from "@shared/schema";
 import { FIND_TIME_PERIODS } from "@/lib/timePeriods";
+import { optimizeImageForUpload } from "@/lib/imageUtils";
 
 type EditFind = Find & {
   title?: string;
@@ -66,7 +67,7 @@ const EditFindForm = ({ find, onFindUpdated }: EditFindFormProps) => {
     }
   }, [find]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       
@@ -92,14 +93,37 @@ const EditFindForm = ({ find, onFindUpdated }: EditFindFormProps) => {
         return;
       }
       
-      setSelectedFile(file);
-      
-      // Create an image preview
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const optimizedFile = await optimizeImageForUpload(file, {
+          maxWidth: 1200,
+          maxHeight: 1200,
+          quality: 0.82,
+          maxOutputBytes: 2.5 * 1024 * 1024,
+        });
+
+        if (optimizedFile.size > maxSize) {
+          toast({
+            title: "File Too Large",
+            description: "Please upload an image smaller than 5MB.",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        setSelectedFile(optimizedFile);
+        
+        const reader = new FileReader();
+        reader.onload = () => {
+          setImagePreview(reader.result as string);
+        };
+        reader.readAsDataURL(optimizedFile);
+      } catch (error) {
+        toast({
+          title: "Image Processing Failed",
+          description: "Please try another image.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
