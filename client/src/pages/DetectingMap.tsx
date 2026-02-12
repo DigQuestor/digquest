@@ -1169,30 +1169,46 @@ const DetectingMap = () => {
               )}
               
               {/* The actual map container */}
-              <div id="map-container" ref={mapRef} className="w-full h-full" />
+              <div 
+                id="map-container" 
+                ref={mapRef} 
+                className="w-full h-full" 
+                style={{ pointerEvents: 'auto', zIndex: 1 }}
+              />
             </div>
           </div>
         </div>
       </div>
       
       {/* Add location dialog */}
-      <Dialog open={isAddLocationOpen} onOpenChange={setIsAddLocationOpen}>
+      <Dialog open={isAddLocationOpen} onOpenChange={setIsAddLocationOpen} modal={false}>
         <DialogContent 
-          className="sm:max-w-md max-h-[80vh] overflow-y-auto"
+          className="sm:max-w-md max-h-[80vh] overflow-y-auto pointer-events-auto"
           onInteractOutside={(e) => {
             // Prevent dialog from closing when clicking on Select dropdowns or the map
             const target = e.target as HTMLElement;
             if (target.closest('[role="listbox"]') || 
                 target.closest('[data-radix-popper-content-wrapper]') ||
                 target.closest('#map-container') ||
-                mapRef.current?.contains(target)) {
+                mapRef.current?.contains(target) ||
+                target.tagName === 'CANVAS') {
+              e.preventDefault();
+            }
+          }}
+          onPointerDownOutside={(e) => {
+            // Also prevent closing on pointer down outside (for map clicks)
+            const target = e.target as HTMLElement;
+            if (target.closest('#map-container') ||
+                mapRef.current?.contains(target) ||
+                target.tagName === 'CANVAS') {
               e.preventDefault();
             }
           }}
         >
           <DialogTitle>Add New Detecting Location</DialogTitle>
-          <DialogDescription>
-            Share a detecting location with the community. Provide details to help others find great spots.
+          <DialogDescription className="space-y-2">
+            <p>Share a detecting location with the community. Provide details to help others find great spots.</p>
+            <p className="font-semibold text-blue-600">💡 Tip: Click directly on the map to set your location coordinates!</p>
           </DialogDescription>
           
           <div className="pb-10"> {/* Added padding to ensure save button is visible */}
