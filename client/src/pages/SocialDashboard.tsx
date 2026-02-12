@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth-simple";
@@ -189,9 +189,20 @@ export default function SocialDashboard() {
       setNewGroup({ name: "", description: "", location: "", isPrivate: false });
     },
     onError: (error) => {
+      let errorMessage = "Failed to create group. Please try again.";
+      if (error instanceof Error) {
+        const cleanMessage = error.message.replace(/^\d+:\s*/, "");
+        try {
+          const parsedError = JSON.parse(cleanMessage);
+          errorMessage = parsedError?.message || cleanMessage;
+        } catch {
+          errorMessage = cleanMessage;
+        }
+      }
+
       toast({
-        title: "Creation Failed",
-        description: "Failed to create group. Please try again.",
+        title: "Create Group Failed",
+        description: errorMessage,
         variant: "destructive",
       });
     },
@@ -658,13 +669,32 @@ export default function SocialDashboard() {
                           />
                         </div>
                         
-                        <div className="flex items-center space-x-2">
-                          <Switch
-                            id="isPrivate"
-                            checked={newGroup.isPrivate}
-                            onCheckedChange={(checked) => setNewGroup({...newGroup, isPrivate: checked})}
-                          />
-                          <Label htmlFor="isPrivate">Private Group</Label>
+                        <div className="space-y-2">
+                          <Label>Group Visibility</Label>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="groupPrivate"
+                              checked={newGroup.isPrivate}
+                              onCheckedChange={(checked) => {
+                                if (checked === true) {
+                                  setNewGroup({ ...newGroup, isPrivate: true });
+                                }
+                              }}
+                            />
+                            <Label htmlFor="groupPrivate">Private Group</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="groupPublic"
+                              checked={!newGroup.isPrivate}
+                              onCheckedChange={(checked) => {
+                                if (checked === true) {
+                                  setNewGroup({ ...newGroup, isPrivate: false });
+                                }
+                              }}
+                            />
+                            <Label htmlFor="groupPublic">Public Group</Label>
+                          </div>
                         </div>
                         
                         <Button 
@@ -904,13 +934,32 @@ export default function SocialDashboard() {
                   />
                 </div>
                 
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="editGroupPrivate"
-                    checked={editingGroup.isPrivate}
-                    onCheckedChange={(checked) => setEditingGroup({...editingGroup, isPrivate: checked})}
-                  />
-                  <Label htmlFor="editGroupPrivate">Private Group</Label>
+                <div className="space-y-2">
+                  <Label>Group Visibility</Label>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="editGroupPrivate"
+                      checked={editingGroup.isPrivate}
+                      onCheckedChange={(checked) => {
+                        if (checked === true) {
+                          setEditingGroup({...editingGroup, isPrivate: true});
+                        }
+                      }}
+                    />
+                    <Label htmlFor="editGroupPrivate">Private Group</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="editGroupPublic"
+                      checked={!editingGroup.isPrivate}
+                      onCheckedChange={(checked) => {
+                        if (checked === true) {
+                          setEditingGroup({...editingGroup, isPrivate: false});
+                        }
+                      }}
+                    />
+                    <Label htmlFor="editGroupPublic">Public Group</Label>
+                  </div>
                 </div>
                 
                 <div className="flex gap-2">

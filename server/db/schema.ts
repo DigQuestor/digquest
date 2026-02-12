@@ -157,6 +157,8 @@ export const groups = pgTable("groups", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   description: text("description"),
+  location: text("location"),
+  isPrivate: boolean("is_private").default(false),
   creatorId: integer("creator_id").notNull().references(() => users.id),
   memberCount: integer("member_count").default(0),
   created_at: timestamp("created_at").defaultNow().notNull(),
@@ -168,6 +170,7 @@ export const groupMemberships = pgTable("group_memberships", {
   groupId: integer("group_id").notNull().references(() => groups.id),
   userId: integer("user_id").notNull().references(() => users.id),
   role: text("role").default("member"),
+  status: text("status").default("active"),
   created_at: timestamp("created_at").defaultNow().notNull(),
 });
 

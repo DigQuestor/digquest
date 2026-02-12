@@ -459,15 +459,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const groupData = { ...req.body, creatorId: userId };
       const group = await storage.createGroup(groupData);
-      
-      await storage.createActivity({
-        userId,
-        activityType: "create",
-        entityType: "group",
-        entityId: group.id,
-        content: `Created group "${group.name}"`,
-        isPublic: true,
-      });
+
+      try {
+        await storage.createActivity({
+          userId,
+          type: "group_created",
+          content: `Created group "${group.name}"`,
+        });
+      } catch (activityError) {
+        console.error("Error creating group activity:", activityError);
+      }
 
       res.json(group);
     } catch (error) {

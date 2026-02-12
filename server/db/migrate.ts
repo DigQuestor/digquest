@@ -191,10 +191,23 @@ export async function runMigrations() {
         id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
         description TEXT,
+        location TEXT,
+        is_private BOOLEAN DEFAULT FALSE,
         creator_id INTEGER NOT NULL REFERENCES users(id),
         member_count INTEGER DEFAULT 0,
         created_at TIMESTAMP DEFAULT NOW() NOT NULL
       )
+    `);
+
+    // Ensure groups table has latest columns in existing databases
+    await db.execute(sql`
+      ALTER TABLE groups
+      ADD COLUMN IF NOT EXISTS location TEXT
+    `);
+
+    await db.execute(sql`
+      ALTER TABLE groups
+      ADD COLUMN IF NOT EXISTS is_private BOOLEAN DEFAULT FALSE
     `);
 
     // Create group_memberships table
@@ -204,8 +217,15 @@ export async function runMigrations() {
         group_id INTEGER NOT NULL REFERENCES groups(id),
         user_id INTEGER NOT NULL REFERENCES users(id),
         role TEXT DEFAULT 'member',
+        status TEXT DEFAULT 'active',
         created_at TIMESTAMP DEFAULT NOW() NOT NULL
       )
+    `);
+
+    // Ensure group_memberships table has latest columns in existing databases
+    await db.execute(sql`
+      ALTER TABLE group_memberships
+      ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'active'
     `);
 
     // Create user_connections table
