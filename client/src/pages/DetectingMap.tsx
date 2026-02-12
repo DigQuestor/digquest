@@ -1169,7 +1169,7 @@ const DetectingMap = () => {
               )}
               
               {/* The actual map container */}
-              <div ref={mapRef} className="w-full h-full" />
+              <div id="map-container" ref={mapRef} className="w-full h-full" />
             </div>
           </div>
         </div>
@@ -1180,9 +1180,12 @@ const DetectingMap = () => {
         <DialogContent 
           className="sm:max-w-md max-h-[80vh] overflow-y-auto"
           onInteractOutside={(e) => {
-            // Prevent dialog from closing when clicking on Select dropdowns
+            // Prevent dialog from closing when clicking on Select dropdowns or the map
             const target = e.target as HTMLElement;
-            if (target.closest('[role="listbox"]') || target.closest('[data-radix-popper-content-wrapper]')) {
+            if (target.closest('[role="listbox"]') || 
+                target.closest('[data-radix-popper-content-wrapper]') ||
+                target.closest('#map-container') ||
+                mapRef.current?.contains(target)) {
               e.preventDefault();
             }
           }}

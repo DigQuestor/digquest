@@ -130,8 +130,10 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
             }
             
             toast({
-              title: "Location Selected",
-              description: "Coordinates have been set for your detecting spot.",
+              title: "✅ Coordinates Set!",
+              description: `Location: ${e.latLng.lat().toFixed(6)}, ${e.latLng.lng().toFixed(6)}`,
+              className: "bg-green-600 text-white border-green-700 font-semibold",
+              duration: 3000,
             });
           } catch (error) {
             console.error("Error handling map click:", error);
@@ -356,11 +358,23 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         {!selectedPosition && !hasValidCoordinates() && (
-          <div className="bg-amber-50 text-amber-700 p-3 rounded-md text-sm mb-4 flex items-start">
-            <MapPin className="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" />
+          <div className="bg-blue-50 border-2 border-blue-400 text-blue-800 p-4 rounded-md text-sm mb-4 flex items-start">
+            <MapPin className="h-6 w-6 mr-3 flex-shrink-0 mt-0.5 text-blue-600" />
             <div>
-              {map ? "Please click on the map to select the location or enter coordinates manually." : "Please enter location coordinates manually."}
+              <p className="font-bold text-base mb-1">📍 Set Location Coordinates</p>
+              {map ? (
+                <p><strong>Click anywhere on the map</strong> to set the pin location, or enter coordinates manually below.</p>
+              ) : (
+                <p>Map is loading... You can enter coordinates manually below while you wait.</p>
+              )}
             </div>
+          </div>
+        )}
+        
+        {selectedPosition && (
+          <div className="bg-green-50 border-2 border-green-400 text-green-800 p-3 rounded-md text-sm mb-4 flex items-center">
+            <MapPin className="h-5 w-5 mr-2 flex-shrink-0 text-green-600" />
+            <p className="font-semibold">✅ Location coordinates set! You can click the map again to change it.</p>
           </div>
         )}
         
