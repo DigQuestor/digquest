@@ -262,6 +262,43 @@ export async function runMigrations() {
       )
     `);
     
+    // Seed default categories if they don't exist
+    await db.execute(sql`
+      INSERT INTO categories (name, slug, description, post_count)
+      SELECT 'General Discussion', 'general-discussion', 'General community discussions', 0
+      WHERE NOT EXISTS (SELECT 1 FROM categories WHERE slug = 'general-discussion')
+    `);
+    
+    await db.execute(sql`
+      INSERT INTO categories (name, slug, description, post_count)
+      SELECT 'Metal Detecting', 'metal-detecting', 'Tips, techniques, and equipment discussions', 0
+      WHERE NOT EXISTS (SELECT 1 FROM categories WHERE slug = 'metal-detecting')
+    `);
+    
+    await db.execute(sql`
+      INSERT INTO categories (name, slug, description, post_count)
+      SELECT 'Finds Gallery', 'finds-gallery', 'Share your amazing finds', 0
+      WHERE NOT EXISTS (SELECT 1 FROM categories WHERE slug = 'finds-gallery')
+    `);
+    
+    await db.execute(sql`
+      INSERT INTO categories (name, slug, description, post_count)
+      SELECT 'Equipment Reviews', 'equipment-reviews', 'Reviews and recommendations for detectors and gear', 0
+      WHERE NOT EXISTS (SELECT 1 FROM categories WHERE slug = 'equipment-reviews')
+    `);
+    
+    await db.execute(sql`
+      INSERT INTO categories (name, slug, description, post_count)
+      SELECT 'Location Tips', 'location-tips', 'Share detecting locations and tips', 0
+      WHERE NOT EXISTS (SELECT 1 FROM categories WHERE slug = 'location-tips')
+    `);
+    
+    await db.execute(sql`
+      INSERT INTO categories (name, slug, description, post_count)
+      SELECT 'Wellbeing', 'wellbeing', 'Mental health and community support', 0
+      WHERE NOT EXISTS (SELECT 1 FROM categories WHERE slug = 'wellbeing')
+    `);
+    
     console.log('✅ Database migrations completed successfully!');
     return true;
   } catch (error) {
