@@ -796,25 +796,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get all posts
       const allPosts = await storage.getAllPosts();
       let deletedCount = 0;
+      const errors = [];
       
       // Delete all posts not by DigQuestor
       for (const post of allPosts) {
         if (post.userId !== digquestorId) {
-          await storage.deletePost(post.id);
-          deletedCount++;
-          console.log(`Deleted post: ${post.title} by user ${post.userId}`);
+          try {
+            // Delete all comments on this post first
+            const comments = await storage.getAllCommentsByPost(post.id);
+            for (const comment of comments) {
+              await storage.deleteComment(comment.id);
+            }
+            
+            // Delete all likes on this post
+            await storage.deletePostLikes(post.id);
+            
+            // Now delete the post
+            await storage.deletePost(post.id);
+            deletedCount++;
+            console.log(`Deleted post: ${post.title} by user ${post.userId}`);
+          } catch (error) {
+            console.error(`Error deleting post ${post.id}:`, error);
+            errors.push({ postId: post.id, title: post.title, error: String(error) });
+          }
         }
       }
       
       console.log(`Post cleanup complete. Deleted ${deletedCount} posts.`);
       res.json({ 
         message: `Post cleanup complete. Deleted ${deletedCount} posts. DigQuestor's posts preserved.`,
-        deletedCount 
+        deletedCount,
+        errors: errors.length > 0 ? errors : undefined
       });
       
     } catch (error) {
       console.error("Error cleaning up posts:", error);
-      res.status(500).json({ message: "Error cleaning up posts" });
+      res.status(500).json({ message: "Error cleaning up posts", error: String(error) });
     }
   });
 

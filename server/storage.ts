@@ -70,6 +70,7 @@ export interface IStorage {
   unlikePost(userId: number, postId: number): Promise<boolean>;
   isPostLikedByUser(userId: number, postId: number): Promise<boolean>;
   getPostLikeCount(postId: number): Promise<number>;
+  deletePostLikes(postId: number): Promise<void>;
   
   // Find likes
   likeFind(userId: number, findId: number): Promise<boolean>;
@@ -1633,6 +1634,11 @@ export class MemStorage implements IStorage {
     return post?.likes || 0;
   }
 
+  async deletePostLikes(postId: number): Promise<void> {
+    // MemStorage doesn't track individual likes, just counts
+    // This is a no-op for MemStorage
+  }
+
   async likeFind(userId: number, findId: number): Promise<boolean> {
     const find = this.finds.get(findId);
     if (find) {
@@ -2040,6 +2046,10 @@ export class DatabaseStorage implements IStorage {
   async getPostLikeCount(postId: number): Promise<number> {
     const result = await db.select({ count: sql<number>`count(*)` }).from(postLikes).where(eq(postLikes.postId, postId));
     return result[0]?.count || 0;
+  }
+
+  async deletePostLikes(postId: number): Promise<void> {
+    await db.delete(postLikes).where(eq(postLikes.postId, postId));
   }
 
   // Finds
