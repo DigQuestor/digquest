@@ -6,8 +6,7 @@ import {
   Map, 
   Heart,
   Users,
-  Calendar,
-  Navigation as NavigationIcon
+  Calendar
 } from "lucide-react";
 
 const Navigation = () => {
@@ -73,16 +72,6 @@ const Navigation = () => {
             `}
           >
             <Map className="h-4 w-4 mr-1 md:mr-2" /> Detecting Map
-          </Link>
-          
-          <Link href="/ar-routes" 
-            className={`whitespace-nowrap transition-colors duration-300 px-3 py-2 font-medium flex items-center text-sm md:text-base flex-shrink-0 min-w-fit cursor-pointer
-              ${location === '/ar-routes' 
-                ? 'text-metallic-gold border-b-2 border-metallic-gold' 
-                : 'text-sand-beige hover:text-metallic-gold'}
-            `}
-          >
-            <NavigationIcon className="h-4 w-4 mr-1 md:mr-2" /> AR Routes
           </Link>
           
           <Link href="/social" 

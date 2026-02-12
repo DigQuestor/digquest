@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { Location } from "@shared/schema";
 import { Search, MapPin, Coins, Waves, CheckCircle, Users, Star, Loader2, UserCircle, Ruler, X, Trash2, ExternalLink, Upload } from "lucide-react";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -890,7 +891,15 @@ const DetectingMap = () => {
       </Helmet>
       
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">Interactive Detecting Map</h1>
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-3xl font-bold">Interactive Detecting Map</h1>
+          <Link href="/ar-routes">
+            <Button variant="outline" className="flex items-center gap-2">
+              <span>AR Routes</span>
+              <span className="rounded bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-800">BETA</span>
+            </Button>
+          </Link>
+        </div>
         
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Map filters */}
