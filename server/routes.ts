@@ -1491,6 +1491,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get all posts
   app.get("/api/posts", async (req, res) => {
     try {
+      console.log("📥 GET /api/posts called");
       const categoryId = req.query.categoryId 
         ? parseInt(req.query.categoryId as string) 
         : undefined;
@@ -1503,10 +1504,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (categoryId && !isNaN(categoryId)) {
         posts = await storage.getPostsByCategory(categoryId);
+        console.log(`   Fetched ${posts.length} posts for category ${categoryId}`);
       } else if (userId && !isNaN(userId)) {
         posts = await storage.getPostsByUser(userId);
+        console.log(`   Fetched ${posts.length} posts for user ${userId}`);
       } else {
         posts = await storage.getAllPosts();
+        console.log(`   Fetched ${posts.length} total posts from database`);
+        if (posts.length > 0) {
+          console.log(`   Most recent post: ID ${posts[0].id}, Title: "${posts[0].title}"`);
+        }
       }
       
       res.status(200).json(posts);

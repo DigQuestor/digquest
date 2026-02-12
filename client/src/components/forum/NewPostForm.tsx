@@ -208,18 +208,18 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
       setSelectedImage(null);
       setImagePreview(null);
 
-      // Invalidate queries to refresh data
+      // Invalidate and refetch queries to ensure fresh data
       await queryClient.invalidateQueries({ queryKey: ['/api/posts'] });
       await queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
       
-      // Add a small delay to ensure the data is fully saved
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Force refetch to get the latest posts
+      // Force immediate refetch of posts
       await queryClient.refetchQueries({ queryKey: ['/api/posts'] });
       console.log("✅ Refetched posts after creating new post");
+      
+      // Small delay to ensure UI updates with new data before closing dialog
+      await new Promise(resolve => setTimeout(resolve, 300));
 
-      // Call the callback if provided
+      // Call the callback if provided (this will close the dialog)
       if (onPostCreated) {
         onPostCreated();
       }

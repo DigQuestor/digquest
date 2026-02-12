@@ -30,10 +30,14 @@ const Forum = () => {
     // Add a custom select function to merge localStorage posts even if API returns empty
     select: (apiPosts) => {
       try {
-        console.log("Forum select function - API posts received:", apiPosts?.length || 0);
+        console.log("🔍 Forum select function - API posts received:", apiPosts?.length || 0);
+        if (apiPosts && apiPosts.length > 0) {
+          console.log("   First post ID:", apiPosts[0].id, "Title:", apiPosts[0].title);
+          console.log("   Last post ID:", apiPosts[apiPosts.length - 1].id, "Title:", apiPosts[apiPosts.length - 1].title);
+        }
         // Always check localStorage for additional posts
         const storedPosts = getStoredForumPosts();
-        console.log("Forum select function - localStorage posts:", storedPosts.length);
+        console.log("   localStorage posts:", storedPosts.length);
         
         if (!storedPosts.length) {
           // No stored posts, just return API posts
@@ -460,10 +464,9 @@ const Forum = () => {
           </DialogDescription>
           <div className="pb-4">
             <NewPostForm onPostCreated={() => {
+              console.log("Post creation completed - closing dialog");
+              // Close dialog (refetch already happened in form)
               setIsNewPostOpen(false);
-              // Force immediate refetch of posts after creation
-              refetchPosts();
-              console.log("Post created - refetching forum posts");
             }} />
           </div>
         </DialogContent>
