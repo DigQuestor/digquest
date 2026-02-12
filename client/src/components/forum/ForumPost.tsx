@@ -63,12 +63,20 @@ const ForumPost = ({ post, isLink = true }: ForumPostProps) => {
   };
   
   // Enhanced user data query with better caching and error handling
-  const { data: author, isLoading: isLoadingAuthor } = useQuery<User>({
+  const { data: author, isLoading: isLoadingAuthor, error: authorError } = useQuery<User>({
     queryKey: [`/api/users/${post.userId}`],
     enabled: !!post.userId,
     staleTime: 0, // Always fetch fresh user data to reflect profile updates
-    refetchOnWindowFocus: true
+    refetchOnWindowFocus: true,
+    retry: 1
   });
+  
+  // Debug logging for author fetch issues
+  useEffect(() => {
+    if (post.userId && !author && !isLoadingAuthor) {
+      console.log(`⚠️ Failed to fetch author for post ${post.id}, userId: ${post.userId}`, authorError);
+    }
+  }, [post.id, post.userId, author, isLoadingAuthor, authorError]);
 
   // Load avatar URL with proper author-specific fallbacks
   useEffect(() => {
@@ -122,8 +130,8 @@ const ForumPost = ({ post, isLink = true }: ForumPostProps) => {
     queryKey: [`/api/categories/${post.categoryId}`],
   });
   
-  // Check if current user is the author of this post
-  const isAuthor = user && post.userId === user.id;
+  // Check if current user is the author of this post (ensure both are numbers for comparison)
+  const isAuthor = user && post.userId && Number(post.userId) === Number(user.id);
   
   // Handle post deletion
   const handleDeletePost = async (e: React.MouseEvent) => {
@@ -233,7 +241,9 @@ const ForumPost = ({ post, isLink = true }: ForumPostProps) => {
         )}
         <div className="flex justify-between items-center text-sm">
           <div className="flex items-center text-forest-green">
-            <span className="font-semibold mr-2">{getDisplayName(author?.username)}</span>
+            <span className="font-semibold mr-2">
+              {isLoadingAuthor ? "Loading..." : getDisplayName(author?.username)}
+            </span>
             <span className="text-gray-500">{post.created_at ? formatTimeAgo(post.created_at) : "Recently"}</span>
           </div>
           <div className="flex items-center space-x-3 text-gray-500">
