@@ -211,13 +211,36 @@ const mapToObject = <T>(map: Map<number, T>): Record<number, T> => {
   return obj;
 };
 
-// Convert objects back to maps
+// Convert objects back to maps, restoring Date objects
 const objectToMap = <T>(obj: Record<number, T>): Map<number, T> => {
   const map = new Map<number, T>();
   Object.entries(obj).forEach(([key, value]) => {
-    map.set(parseInt(key), value);
+    // Deep clone and restore dates
+    const restoredValue = restoreDates(value);
+    map.set(parseInt(key), restoredValue);
   });
   return map;
+};
+
+// Helper function to restore Date objects from ISO strings
+const restoreDates = <T>(obj: T): T => {
+  if (!obj || typeof obj !== 'object') return obj;
+  
+  const result: any = Array.isArray(obj) ? [] : {};
+  
+  for (const [key, value] of Object.entries(obj)) {
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value)) {
+      // This looks like an ISO date string
+      result[key] = new Date(value);
+    } else if (value && typeof value === 'object') {
+      // Recursively process nested objects
+      result[key] = restoreDates(value);
+    } else {
+      result[key] = value;
+    }
+  }
+  
+  return result as T;
 };
 
 // Create default store
