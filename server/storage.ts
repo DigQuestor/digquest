@@ -251,6 +251,11 @@ const restoreDates = <T>(obj: T): T => {
 const normalizeGroupName = (name: string): string =>
   name.toLowerCase().replace(/\s+/g, "").trim();
 
+const legacyMindSweepersGroupName = normalizeGroupName("MindSweepers Denmark");
+
+const isLegacyMindSweepersGroup = (name: string): boolean =>
+  normalizeGroupName(name) === legacyMindSweepersGroupName;
+
 // Create default store
 const createDefaultStore = (): PersistentDataStore => ({
   users: {
@@ -515,7 +520,7 @@ export class MemStorage implements IStorage {
 
   private removeLegacyMindSweepersGroup(): void {
     const legacyGroupIds = Array.from(this.groups.values())
-      .filter((group) => normalizeGroupName(group.name) === normalizeGroupName("Mind Sweepers Denmark"))
+      .filter((group) => isLegacyMindSweepersGroup(group.name))
       .map((group) => group.id);
 
     if (legacyGroupIds.length === 0) {
@@ -1503,7 +1508,7 @@ export class MemStorage implements IStorage {
 
   async getAllGroups(): Promise<Group[]> {
     const uniqueGroups = new Map<string, Group>();
-    for (const group of Array.from(this.groups.values())) {
+    for (const group of Array.from(this.groups.values()).filter((item) => !isLegacyMindSweepersGroup(item.name))) {
       const dedupeKey = `${group.creatorId}:${normalizeGroupName(group.name)}`;
       const existing = uniqueGroups.get(dedupeKey);
 
@@ -1528,12 +1533,12 @@ export class MemStorage implements IStorage {
       .map(membership => membership.groupId);
     
     return Array.from(this.groups.values())
-      .filter(group => userGroupIds.includes(group.id));
+      .filter(group => userGroupIds.includes(group.id) && !isLegacyMindSweepersGroup(group.name));
   }
 
   async getPublicGroups(): Promise<Group[]> {
     return Array.from(this.groups.values())
-      .filter(group => !group.isPrivate)
+      .filter(group => !group.isPrivate && !isLegacyMindSweepersGroup(group.name))
       .sort((a, b) => (b.created_at?.getTime() || 0) - (a.created_at?.getTime() || 0));
   }
 
@@ -1900,10 +1905,11 @@ export class DatabaseStorage implements IStorage {
 
   private async removeLegacyMindSweepersGroup(): Promise<void> {
     try {
+      const normalizedLegacyName = legacyMindSweepersGroupName;
       const legacyGroups = await db
         .select({ id: groups.id })
         .from(groups)
-        .where(sql`LOWER(${groups.name}) = LOWER(${"Mind Sweepers Denmark"})`);
+        .where(sql`LOWER(REGEXP_REPLACE(${groups.name}, '\\s+', '', 'g')) = ${normalizedLegacyName}`);
 
       if (legacyGroups.length === 0) {
         return;
@@ -2635,7 +2641,10 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAllGroups(): Promise<Group[]> {
-    const allGroups = await db.select().from(groups);
+    const allGroups = await db
+      .select()
+      .from(groups)
+      .where(sql`LOWER(REGEXP_REPLACE(${groups.name}, '\\s+', '', 'g')) <> ${legacyMindSweepersGroupName}`);
     const uniqueGroups = new Map<string, Group>();
 
     for (const group of allGroups) {
@@ -2664,7 +2673,8 @@ export class DatabaseStorage implements IStorage {
       .innerJoin(groupMemberships, eq(groups.id, groupMemberships.groupId))
       .where(and(
         eq(groupMemberships.userId, userId),
-        eq(groupMemberships.status, 'active')
+        eq(groupMemberships.status, 'active'),
+        sql`LOWER(REGEXP_REPLACE(${groups.name}, '\\s+', '', 'g')) <> ${legacyMindSweepersGroupName}`
       ));
     
     // Extract groups and de-duplicate legacy duplicates by normalized name
@@ -2690,7 +2700,13 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getPublicGroups(): Promise<Group[]> {
-    return await db.select().from(groups).where(eq(groups.isPrivate, false));
+    return await db
+      .select()
+      .from(groups)
+      .where(and(
+        eq(groups.isPrivate, false),
+        sql`LOWER(REGEXP_REPLACE(${groups.name}, '\\s+', '', 'g')) <> ${legacyMindSweepersGroupName}`
+      ));
   }
 
   async joinGroup(userId: number, groupId: number): Promise<boolean> {
