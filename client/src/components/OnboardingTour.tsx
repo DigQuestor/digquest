@@ -341,7 +341,12 @@ const OnboardingTour = ({ isOpen, onClose, onComplete }: OnboardingTourProps) =>
         if (reward) {
           toast({
             title: "🏆 Achievement Unlocked!",
-            description: `${reward.achievement} • +${reward.points} points`,
+            description: (
+              <div className="space-y-1">
+                <p className="font-semibold text-base">{reward.achievement}</p>
+                <p className="text-sm font-medium text-primary">+{reward.points} points earned!</p>
+              </div>
+            ),
           });
         }
       }

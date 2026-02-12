@@ -349,21 +349,32 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-xl font-bold text-red-600">
-              Permanently Delete This Find?
+            <AlertDialogTitle className="text-2xl font-bold text-red-600 flex items-center gap-2">
+              <span>⚠️</span>
+              <span>Permanently Delete This Find?</span>
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-base space-y-2">
-              <p className="font-semibold text-gray-900">"{find.title}"</p>
-              <p>This will permanently delete your find, including the image and all comments. This action cannot be undone.</p>
+            <AlertDialogDescription className="text-base space-y-3">
+              <div className="bg-gray-100 p-3 rounded border border-gray-300">
+                <p className="font-bold text-lg text-gray-900">"{find.title}"</p>
+              </div>
+              <div className="bg-red-50 p-4 rounded border-2 border-red-300">
+                <p className="font-semibold text-red-800 text-base mb-2">⚠️ This will permanently delete:</p>
+                <ul className="list-disc list-inside space-y-1 text-red-700">
+                  <li>The find and its image</li>
+                  <li>All comments and interactions</li>
+                  <li>All likes received</li>
+                </ul>
+                <p className="mt-3 font-bold text-red-900">This action CANNOT be undone!</p>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="font-semibold">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="font-bold text-base">No, Keep This Find</AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleDelete}
-              className="bg-red-600 hover:bg-red-700 text-white font-semibold"
+              className="bg-red-600 hover:bg-red-700 text-white font-bold text-base"
             >
-              Yes, Delete Find
+              Yes, Permanently Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

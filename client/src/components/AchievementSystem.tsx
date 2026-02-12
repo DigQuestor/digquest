@@ -80,8 +80,21 @@ const AchievementSystem = ({ showNotifications = true, compact = false }: Achiev
       // Only show notification if this is a new unlock and notifications are enabled
       if (isNowUnlocked && !current.isUnlocked && showNotifications && !suppressNotification && hasCheckedInitialAchievements) {
         toast({
-          title: "Achievement Unlocked!",
-          description: `${achievement.name} - ${achievement.points} points earned`,
+          title: (
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🏆</span>
+              <span className="text-lg font-bold">Achievement Unlocked!</span>
+            </div>
+          ),
+          description: (
+            <div className="space-y-2 mt-2">
+              <p className="font-bold text-lg text-yellow-600">{achievement.name}</p>
+              <p className="text-base text-gray-700">{achievement.description}</p>
+              <div className="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded">
+                <p className="text-base font-bold text-yellow-800">+{achievement.points} Points Earned!</p>
+              </div>
+            </div>
+          ),
         });
       }
       
