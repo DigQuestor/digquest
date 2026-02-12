@@ -205,15 +205,15 @@ const ARRoutes = () => {
           {!cameraActive ? (
             // Setup screen
             <div className="space-y-6">
-              <Card className="max-w-md mx-auto">
+              <Card className="max-w-md mx-auto bg-white border border-gray-200 shadow-xl">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-gray-900">
                     <Camera className="h-5 w-5" />
                     Start AR Experience
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-700">
                     Enable camera and location access to see personalized route recommendations 
                     overlaid on your surroundings.
                   </p>
