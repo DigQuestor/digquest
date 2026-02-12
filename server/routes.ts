@@ -1894,16 +1894,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
             'finds'
           );
           imageUrl = uploadResult.url;
-          console.log("S3 upload completed, URL:", imageUrl);
+          console.log("✅ S3 upload completed, URL:", imageUrl);
+          
+          if (!imageUrl || imageUrl.trim() === '') {
+            console.error("❌ S3 upload returned empty URL!");
+            return res.status(500).json({ message: "S3 upload succeeded but returned empty URL" });
+          }
         } catch (error) {
-          console.error('S3 upload error details:', error);
+          console.error('❌ S3 upload error details:', error);
+          console.error('Error message:', error.message);
           console.error('Error stack:', error.stack);
-          return res.status(500).json({ message: `Failed to upload image: ${error.message}` });
+          return res.status(500).json({ 
+            message: `Failed to upload image to S3: ${error.message}. Check AWS credentials and bucket permissions.` 
+          });
         }
       } else if (req.file) {
-        console.log("File upload validation failed - missing required properties");
+        console.error("❌ File upload validation failed - missing required properties");
         console.log("File object:", JSON.stringify(req.file, null, 2));
         return res.status(400).json({ message: "Invalid file upload - missing required properties" });
+      } else {
+        console.warn("⚠️ No file attached to request");
+        return res.status(400).json({ message: "No image file provided. Please attach an image." });
       }
 
       // Create a cleaned data object with proper type handling

@@ -9,6 +9,12 @@ const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID || 'AKIAZDLN3HTIH4JFRNE2
 const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY || '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';
 const BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME || 'digquest-images';
 
+// Warn if using fallback credentials
+if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
+  console.warn('⚠️ WARNING: Using hardcoded AWS credentials. Set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in environment variables for production.');
+  console.warn('   Current credentials may be invalid or have insufficient permissions.');
+}
+
 const s3Client = new S3Client({
   region: AWS_REGION,
   credentials: {
@@ -30,7 +36,12 @@ export async function uploadToS3(
 ): Promise<UploadResult> {
   try {
     console.log('S3 Upload starting:', { originalName, mimeType, folder, bufferSize: fileBuffer.length });
-    console.log('S3 Config:', { region: AWS_REGION, bucket: BUCKET_NAME });
+    console.log('S3 Config:', { region: AWS_REGION, bucket: BUCKET_NAME, accessKeyId: AWS_ACCESS_KEY_ID.substring(0, 8) + '...' });
+    
+    // Validate credentials
+    if (!AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY || AWS_ACCESS_KEY_ID.length < 16) {
+      throw new Error('Invalid AWS credentials. Please check your AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.');
+    }
     
     // Validate originalName before using path.extname
     if (!originalName || typeof originalName !== 'string') {

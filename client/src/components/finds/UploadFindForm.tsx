@@ -147,7 +147,18 @@ const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: "Unknown error" }));
         console.error("Upload error response:", errorData);
-        throw new Error(errorData.message || "Failed to upload find");
+        
+        // Show specific error message from server
+        toast({
+          title: "❌ Upload Failed",
+          description: errorData.message || "Failed to upload find",
+          variant: "destructive",
+          duration: 10000,
+          className: "bg-red-600 text-white border-red-700 font-bold text-base"
+        });
+        
+        setIsSubmitting(false);
+        return;
       }
       
       // Get the newly created find data from the response
