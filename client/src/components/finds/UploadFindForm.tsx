@@ -146,16 +146,23 @@ const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: "Unknown error" }));
-        console.error("Upload error response:", errorData);
+        console.error("❌ Upload error response:", errorData);
+        console.error("   Status:", response.status);
+        console.error("   Full error:", JSON.stringify(errorData, null, 2));
         
-        // Show specific error message from server
+        // Show specific error message from server with more details
+        const errorMsg = errorData.message || "Failed to upload find";
+        
         toast({
           title: "❌ Upload Failed",
-          description: errorData.message || "Failed to upload find",
+          description: errorMsg,
           variant: "destructive",
-          duration: 10000,
-          className: "bg-red-600 text-white border-red-700 font-bold text-base"
+          duration: 15000,
+          className: "bg-red-600 text-white border-red-700 font-bold text-sm max-w-md"
         });
+        
+        // Also show in alert for Chromebook users who can't see console
+        alert(`Upload Error:\n\n${errorMsg}\n\nCheck browser console (F12) for more details.`);
         
         setIsSubmitting(false);
         return;
