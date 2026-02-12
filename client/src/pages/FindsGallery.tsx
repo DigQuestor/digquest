@@ -11,22 +11,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import TreasureCard from "@/components/finds/TreasureCard";
 import UploadFindForm from "@/components/finds/UploadFindForm";
 import { useAuth, findStorage } from "@/hooks/use-auth-simple";
+import { FIND_TIME_PERIOD_FILTERS } from "@/lib/timePeriods";
 
-// Time periods for filtering
-const timePeriods = [
-  "All Periods",
-  "Roman",
-  "Medieval",
-  "Victorian",
-  "Bronze Age",
-  "Iron Age",
-  "Saxon",
-  "Viking",     // Added as requested
-  "Byzantine Era", // Added as requested
-  "Georgian",    // Added as requested
-  "Modern",
-  "Unknown"
-];
+type GalleryFind = Find & {
+  title?: string;
+  description?: string | null;
+  location?: string | null;
+  period?: string | null;
+};
 
 const FindsGallery = () => {
   const [isUploadOpen, setIsUploadOpen] = useState(false);
@@ -36,7 +28,7 @@ const FindsGallery = () => {
   const { user } = useAuth();
 
   // Fetch all finds from API
-  const { data: apiFinds, isLoading } = useQuery<Find[]>({
+  const { data: apiFinds, isLoading } = useQuery<GalleryFind[]>({
     queryKey: ['/api/finds'],
   });
   
@@ -48,7 +40,7 @@ const FindsGallery = () => {
   // Filter finds based on search and period
   const filteredFinds = finds?.filter(find => {
     const matchesSearch = searchQuery 
-      ? find.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ? (find.title ?? "").toLowerCase().includes(searchQuery.toLowerCase()) ||
         (find.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false) ||
         (find.location?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false)
       : true;
@@ -100,7 +92,7 @@ const FindsGallery = () => {
                     </div>
                   </SelectTrigger>
                   <SelectContent position="popper" className="z-[100]">
-                    {timePeriods.map(period => (
+                    {FIND_TIME_PERIOD_FILTERS.map(period => (
                       <SelectItem key={period} value={period}>
                         {period}
                       </SelectItem>

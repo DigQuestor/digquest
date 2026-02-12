@@ -11,6 +11,7 @@ import { AlertCircle, Loader2, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth, findStorage } from "@/hooks/use-auth-simple";
 import { useQueryClient } from "@tanstack/react-query";
+import { FIND_TIME_PERIODS } from "@/lib/timePeriods";
 
 // Form schema for find upload
 const findFormSchema = z.object({
@@ -22,21 +23,6 @@ const findFormSchema = z.object({
 });
 
 type FindFormValues = z.infer<typeof findFormSchema>;
-
-// Time periods for the select dropdown
-const timePeriods = [
-  "Roman",
-  "Medieval",
-  "Victorian",
-  "Bronze Age",
-  "Iron Age",
-  "Saxon",
-  "Viking",      // Added as requested
-  "Byzantine Era", // Added as requested
-  "Georgian",    // Added as requested
-  "Modern",
-  "Unknown"
-];
 
 interface UploadFindFormProps {
   onFindUploaded?: () => void;
@@ -384,7 +370,7 @@ const UploadFindForm = ({ onFindUploaded, onCancel }: UploadFindFormProps) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent position="popper" className="z-[100]">
-                    {timePeriods.map((period) => (
+                    {FIND_TIME_PERIODS.map((period) => (
                       <SelectItem key={period} value={period}>
                         {period}
                       </SelectItem>

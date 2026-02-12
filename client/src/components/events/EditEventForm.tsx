@@ -10,8 +10,15 @@ import { apiRequest } from "@/lib/queryClient";
 import { format } from "date-fns";
 import type { Event } from "@shared/schema";
 
+type EditableEvent = Event & {
+  title?: string;
+  description?: string | null;
+  location?: string | null;
+  date?: string | Date | null;
+};
+
 interface EditEventFormProps {
-  event: Event;
+  event: EditableEvent;
   onEventUpdated?: () => void;
   onClose?: () => void;
 }
@@ -20,10 +27,10 @@ export function EditEventForm({ event, onEventUpdated, onClose }: EditEventFormP
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    title: event.title,
+    title: event.title || "",
     description: event.description || "",
-    location: event.location,
-    eventDate: format(new Date(event.date), "yyyy-MM-dd'T'HH:mm")
+    location: event.location || "",
+    eventDate: event.date ? format(new Date(event.date), "yyyy-MM-dd'T'HH:mm") : ""
   });
   const { toast } = useToast();
 

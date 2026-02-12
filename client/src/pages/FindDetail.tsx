@@ -25,23 +25,38 @@ import { FindCommentList } from "@/components/finds/FindCommentList";
 import { useAuth } from "@/hooks/use-auth-simple";
 import { useToast } from "@/hooks/use-toast";
 
+type DetailFind = Find & {
+  title?: string;
+  description?: string | null;
+  location?: string | null;
+  period?: string | null;
+  created_at?: string | Date | null;
+  imageUrl?: string | null;
+};
+
+type DetailUser = UserType & {
+  username?: string;
+  avatarUrl?: string | null;
+  created_at?: string | Date | null;
+};
+
 const FindDetail = () => {
-  const [, params] = useRoute("/finds/:id");
+  const [, params] = useRoute<{ id: string }>("/finds/:id");
   const [, setLocation] = useLocation();
-  const findId = params?.id ? parseInt(params.id) : null;
+  const findId = params?.id ? Number.parseInt(params.id, 10) : null;
   const [userAvatarUrl, setUserAvatarUrl] = useState<string | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const { user: currentUser } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: find, isLoading, error } = useQuery<Find>({
+  const { data: find, isLoading, error } = useQuery<DetailFind>({
     queryKey: ['/api/finds/' + findId],
     enabled: !!findId, // Only run query if findId exists
   });
 
   // Get user data for the find
-  const { data: user, isLoading: isUserLoading } = useQuery<UserType>({
+  const { data: user, isLoading: isUserLoading } = useQuery<DetailUser>({
     queryKey: ['/api/users/' + find?.userId],
     enabled: !!find?.userId, // Only run query if find.userId exists
   });
@@ -181,8 +196,8 @@ const FindDetail = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <Helmet>
-        <title>{find.title} | Metal Detecting Wellbeing</title>
-        <meta name="description" content={find.description || `Details about ${find.title} - a find from the Metal Detecting Wellbeing community.`} />
+        <title>{find.title || "Find Details"} | Metal Detecting Wellbeing</title>
+        <meta name="description" content={find.description || `Details about ${find.title || "this find"} - a find from the Metal Detecting Wellbeing community.`} />
         <link rel="canonical" href={`https://digquest.org/finds/${findId}`} />
       </Helmet>
 
@@ -233,8 +248,8 @@ const FindDetail = () => {
         {/* Find image */}
         <div className="relative">
           <img 
-            src={find.imageUrl} 
-            alt={find.title} 
+            src={find.imageUrl || "https://images.unsplash.com/photo-1589656966895-2f33e7653819?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1200&h=800"} 
+            alt={find.title || "Find image"} 
             className="w-full h-full max-h-[500px] object-contain bg-gray-100 p-4"
             onError={(e) => {
               console.error(`❌ Failed to load image in FindDetail for find ${findId}:`, find.imageUrl);
@@ -268,12 +283,12 @@ const FindDetail = () => {
                 <Avatar className="h-12 w-12 mr-3">
                   <AvatarImage
                     src={userAvatarUrl || user.avatarUrl || `https://api.dicebear.com/7.x/personas/svg?seed=${user.id}`}
-                    alt={user.username}
+                    alt={user.username || "User"}
                   />
-                  <AvatarFallback>{user.username.charAt(0).toUpperCase()}</AvatarFallback>
+                  <AvatarFallback>{user.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="font-semibold text-forest-green">{user.username}</p>
+                  <p className="font-semibold text-forest-green">{user.username || "Unknown User"}</p>
                   <p className="text-sm text-gray-600">Member since {formatDate(user.created_at || new Date())}</p>
                 </div>
               </div>

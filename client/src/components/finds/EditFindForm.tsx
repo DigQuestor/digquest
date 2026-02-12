@@ -12,6 +12,15 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth, findStorage } from "@/hooks/use-auth-simple";
 import { useQueryClient } from "@tanstack/react-query";
 import { Find } from "@shared/schema";
+import { FIND_TIME_PERIODS } from "@/lib/timePeriods";
+
+type EditFind = Find & {
+  title?: string;
+  description?: string | null;
+  location?: string | null;
+  period?: string | null;
+  imageUrl?: string | null;
+};
 
 // Form schema for find editing
 const findFormSchema = z.object({
@@ -24,23 +33,8 @@ const findFormSchema = z.object({
 
 type FindFormValues = z.infer<typeof findFormSchema>;
 
-// Time periods for the select dropdown
-const timePeriods = [
-  "Roman",
-  "Medieval",
-  "Victorian",
-  "Bronze Age",
-  "Iron Age",
-  "Saxon",
-  "Viking",      // Added as requested
-  "Byzantine Era", // Added as requested
-  "Georgian",    // Added as requested
-  "Modern",
-  "Unknown"
-];
-
 interface EditFindFormProps {
-  find: Find;
+  find: EditFind;
   onFindUpdated?: () => void;
 }
 
@@ -321,7 +315,7 @@ const EditFindForm = ({ find, onFindUpdated }: EditFindFormProps) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent position="popper" className="z-[100]">
-                    {timePeriods.map((period) => (
+                    {FIND_TIME_PERIODS.map((period) => (
                       <SelectItem key={period} value={period}>
                         {period}
                       </SelectItem>

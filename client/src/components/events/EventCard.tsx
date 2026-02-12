@@ -19,8 +19,17 @@ import {
 } from "@/components/ui/alert-dialog";
 import type { Event } from "@shared/schema";
 
+type CardEvent = Event & {
+  title?: string;
+  date?: string | Date | null;
+  location?: string | null;
+  description?: string | null;
+  attendeeCount?: number | null;
+  userId?: number;
+};
+
 interface EventCardProps {
-  event: Event;
+  event: CardEvent;
 }
 
 const EventCard = ({ event }: EventCardProps) => {
@@ -29,8 +38,9 @@ const EventCard = ({ event }: EventCardProps) => {
   const { user } = useAuth();
 
   // Format the date for display
-  const formatEventDate = (dateString: string | Date) => {
+  const formatEventDate = (dateString?: string | Date | null) => {
     try {
+      if (!dateString) return "Date unavailable";
       const date = new Date(dateString);
       return format(date, "EEE, MMM d");
     } catch (error) {
@@ -39,7 +49,7 @@ const EventCard = ({ event }: EventCardProps) => {
   };
   
   // Format location with a fallback
-  const formatLocation = (location: string) => {
+  const formatLocation = (location?: string | null) => {
     return location || "Location TBD";
   };
 
@@ -110,7 +120,7 @@ const EventCard = ({ event }: EventCardProps) => {
     <div className="border-l-4 border-metallic-gold pl-3 py-3 hover:bg-amber-50 transition-colors">
       <div className="flex justify-between items-start mb-2">
         <h4 className="font-semibold text-forest-green">
-          {event.title}
+          {event.title || "Untitled Event"}
         </h4>
         {isEventOwner && (
           <div className="flex items-center gap-1">
@@ -136,7 +146,7 @@ const EventCard = ({ event }: EventCardProps) => {
                     Delete Event
                   </AlertDialogTitle>
                   <AlertDialogDescription>
-                    Are you sure you want to delete "{event.title}"? This action cannot be undone.
+                    Are you sure you want to delete "{event.title || "this event"}"? This action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

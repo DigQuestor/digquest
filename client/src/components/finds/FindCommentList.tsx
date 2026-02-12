@@ -7,10 +7,21 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { MoreHorizontal, Edit, Trash2, Check, X } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { formatTimeAgo, getAvatarUrl } from '@/lib/utils';
-import { Category, insertPostSchema } from "@shared/schema";
+import { FindComment, User } from "@shared/schema";
 import { userCache } from '@/hooks/use-auth-simple';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
+
+type FindCommentItem = FindComment & {
+  userId?: number;
+  content?: string;
+  created_at?: string | Date | null;
+};
+
+type CommentUser = User & {
+  username?: string;
+  avatarUrl?: string | null;
+};
 
 interface FindCommentListProps {
   findId: number | null;
@@ -56,7 +67,7 @@ export function FindCommentList({ findId }: FindCommentListProps) {
     data: comments, 
     isLoading: isCommentsLoading,
     error: commentsError
-  } = useQuery<FindComment[]>({
+  } = useQuery<FindCommentItem[]>({
     queryKey: [`/api/finds/${findId}/comments`],
     enabled: !!findId,
     staleTime: 10 * 1000, // Consider data fresh for 10 seconds
@@ -67,7 +78,7 @@ export function FindCommentList({ findId }: FindCommentListProps) {
   const { 
     data: users,
     isLoading: isUsersLoading
-  } = useQuery<User[]>({
+  } = useQuery<CommentUser[]>({
     queryKey: ['/api/users'],
     staleTime: 60 * 1000, // Users data can be fresh for longer
   });
@@ -158,7 +169,8 @@ export function FindCommentList({ findId }: FindCommentListProps) {
   }, [users]);
 
   // Find user data for a comment
-  const getUserForComment = (userId: number) => {
+  const getUserForComment = (userId?: number) => {
+    if (!userId) return null;
     // First try to get from API-fetched users
     const apiUser = users?.find(user => user.id === userId);
     if (apiUser) return apiUser;
@@ -198,7 +210,7 @@ export function FindCommentList({ findId }: FindCommentListProps) {
 
   const handleEditStart = (comment: FindComment) => {
     setEditingCommentId(comment.id);
-    setEditContent(comment.content);
+    setEditContent(comment.content || '');
   };
 
   const handleEditCancel = () => {
@@ -233,7 +245,7 @@ export function FindCommentList({ findId }: FindCommentListProps) {
             <div className="flex items-start gap-3">
               <Avatar className="h-10 w-10">
                 <AvatarImage 
-                  src={userAvatarUrls[comment.userId] || user?.avatarUrl || getAvatarUrl(comment.userId)} 
+                  src={comment.userId ? (userAvatarUrls[comment.userId] || user?.avatarUrl || getAvatarUrl(comment.userId)) : undefined} 
                   alt={user?.username || 'User'} 
                 />
                 <AvatarFallback>

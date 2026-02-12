@@ -23,8 +23,22 @@ import {
 import EditFindForm from "@/components/finds/EditFindForm";
 import { FindLikeButton } from "@/components/finds/FindLikeButton";
 
+type TreasureFind = Find & {
+  title?: string;
+  period?: string | null;
+  imageUrl?: string | null;
+  location?: string | null;
+  likes?: number | null;
+  username?: string;
+};
+
+type TreasureUser = User & {
+  avatarUrl?: string | null;
+  username?: string;
+};
+
 interface TreasureCardProps {
-  find: Find;
+  find: TreasureFind;
 }
 
 const TreasureCard = ({ find }: TreasureCardProps) => {
@@ -45,7 +59,7 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
   
   // Make sure to request the correct user for this find
   // Use enabled: !!find.userId to prevent query from running with invalid userId
-  const { data: user, isError: userError } = useQuery<User>({
+  const { data: user, isError: userError } = useQuery<TreasureUser>({
     queryKey: [`/api/users/${find.userId}`],
     enabled: !!find.userId,
     staleTime: 1000 * 60 * 5, // Cache user data for 5 minutes
