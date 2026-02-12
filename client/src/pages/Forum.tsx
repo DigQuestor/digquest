@@ -13,7 +13,6 @@ import { Badge } from "@/components/ui/badge";
 import ForumPost from "@/components/forum/ForumPost";
 import NewPostForm from "@/components/forum/NewPostForm";
 import { useAuth } from "@/hooks/use-auth-simple";
-import { getStoredForumPosts } from "@/lib/storageUtils";
 
 const Forum = () => {
   const [isNewPostOpen, setIsNewPostOpen] = useState(false);
@@ -22,69 +21,27 @@ const Forum = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  // Fetch all posts
+  // Fetch all posts - simplified to use API data only
   const { data: posts, isLoading: isLoadingPosts, refetch: refetchPosts } = useQuery<Post[]>({
     queryKey: ['/api/posts'],
     staleTime: 0, // Always fetch fresh data
     refetchOnMount: true,
-    // Add a custom select function to merge localStorage posts even if API returns empty
-    select: (apiPosts) => {
-      try {
-        console.log("🔍 Forum select function - API posts received:", apiPosts?.length || 0);
-        if (apiPosts && apiPosts.length > 0) {
-          console.log("   First post ID:", apiPosts[0].id, "Title:", apiPosts[0].title);
-          console.log("   Last post ID:", apiPosts[apiPosts.length - 1].id, "Title:", apiPosts[apiPosts.length - 1].title);
-        }
-        // Always check localStorage for additional posts
-        const storedPosts = getStoredForumPosts();
-        console.log("   localStorage posts:", storedPosts.length);
-        
-        if (!storedPosts.length) {
-          // No stored posts, just return API posts
-          return apiPosts;
-        }
-        
-        if (!apiPosts || apiPosts.length === 0) {
-          // No API posts but we have localStorage posts - use those
-          console.log("Forum - No API posts but found localStorage posts, using those instead");
-          return storedPosts;
-        }
-        
-        // We have both - merge them
-        const postsMap = new Map<number, Post>();
-        
-        // Add API posts
-        apiPosts.forEach(post => postsMap.set(post.id, post));
-        
-        // Add localStorage posts with priority
-        storedPosts.forEach(post => postsMap.set(post.id, post));
-        
-        // Convert back to array
-        const mergedPosts = Array.from(postsMap.values());
-        
-        console.log("Forum - Merged posts from API and localStorage:", mergedPosts.length);
-        
-        // Sort by newest first
-        mergedPosts.sort((a, b) => {
-          const dateAStr = a.created_at || new Date().toISOString();
-          const dateBStr = b.created_at || new Date().toISOString();
-          const dateA = new Date(dateAStr).getTime();
-          const dateB = new Date(dateBStr).getTime();
-          return dateB - dateA;
-        });
-        
-        return mergedPosts;
-      } catch (error) {
-        console.error("Error in Forum select function:", error);
-        return apiPosts;
-      }
-    }
   });
   
-  // Refetch posts when the forum mounts to ensure we show the latest data
+  // Simple refetch on mount to ensure latest data
   useEffect(() => {
+    console.log("📋 Forum loaded - fetching latest posts");
     refetchPosts();
   }, [refetchPosts]);
+  
+  // Log posts for debugging
+  useEffect(() => {
+    console.log("📝 Forum posts updated:", {
+      total: posts?.length || 0,
+      loading: isLoadingPosts,
+      data: posts ? posts.map(p => ({ id: p.id, title: p.title })) : null
+    });
+  }, [posts, isLoadingPosts]);
 
   // Fetch all categories
   const { data: categories, isLoading: isLoadingCategories } = useQuery<Category[]>({
@@ -103,123 +60,6 @@ const Forum = () => {
     }
   }, [categories]);
   
-  // Load saved posts from localStorage and check URL parameters when component mounts
-  useEffect(() => {
-    try {
-      // Parse URL for category parameter
-      const urlParams = new URLSearchParams(window.location.search);
-      const categoryParam = urlParams.get('category');
-      
-      if (categoryParam) {
-        console.log(`Setting selected category from URL: ${categoryParam}`);
-        setSelectedCategory(categoryParam);
-      }
-      
-      // This function ensures posts from localStorage are merged with API posts
-      const syncPostsWithLocalStorage = () => {
-        // Load saved posts from localStorage using our utility function
-        const storedPosts = getStoredForumPosts();
-        
-        // If we have posts from our utility function, update the query cache
-        if (storedPosts && storedPosts.length > 0) {
-          console.log(`Loaded ${storedPosts.length} posts from localStorage using utility function`);
-          
-          // Combine API posts with localStorage posts
-          const existingPosts = queryClient.getQueryData<Post[]>(['/api/posts']) || [];
-          
-          // Use a Map to deduplicate by ID
-          const postsMap = new Map();
-          
-          // Add existing API posts to the map
-          existingPosts.forEach(post => postsMap.set(post.id, post));
-          
-          // Add localStorage posts, overwriting duplicates
-          storedPosts.forEach((post: Post) => postsMap.set(post.id, post));
-          
-          // Convert back to array
-          const combinedPosts = Array.from(postsMap.values());
-          
-          // Sort by latest created_at
-          combinedPosts.sort((a, b) => {
-            // Make sure we have valid created_at dates and convert them to timestamps
-            const dateAStr = a.created_at || new Date().toISOString();
-            const dateBStr = b.created_at || new Date().toISOString();
-            
-            const dateA = new Date(dateAStr).getTime();
-            const dateB = new Date(dateBStr).getTime();
-            
-            return dateB - dateA; // Newest first
-          });
-          
-          console.log(`Total posts after merging: ${combinedPosts.length}`);
-          
-          // Update the query cache
-          queryClient.setQueryData(['/api/posts'], combinedPosts);
-          
-          return combinedPosts;
-        }
-        return null;
-      };
-      
-      // Sync when component mounts
-      syncPostsWithLocalStorage();
-      
-      // Also sync when the forum page gains focus (user switches back to tab)
-      const handleFocus = () => {
-        console.log("Window focused - syncing posts with localStorage");
-        syncPostsWithLocalStorage();
-      };
-      
-      // Also sync periodically (every 30 seconds)
-      const syncInterval = setInterval(() => {
-        console.log("Periodic sync - syncing posts with localStorage");
-        syncPostsWithLocalStorage();
-      }, 30000);
-      
-      window.addEventListener('focus', handleFocus);
-      
-      // Cleanup
-      return () => {
-        window.removeEventListener('focus', handleFocus);
-        clearInterval(syncInterval);
-      };
-    } catch (error) {
-      console.error("Error loading posts from localStorage or parsing URL:", error);
-    }
-  }, [queryClient, refetchPosts]);
-
-  // Debug log for mobile issue
-  useEffect(() => {
-    if (posts) {
-      console.log(`DEBUG - Forum posts received from cache: ${posts.length}`);
-      posts.forEach((post, index) => {
-        console.log(`DEBUG - Post ${index}: ID=${post.id}, Title=${post.title.substring(0, 20)}...`);
-      });
-    } else {
-      console.log('DEBUG - Posts array is null or undefined');
-    }
-    
-    // Add check for UA to detect mobile devices
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    console.log(`DEBUG - Device type: ${isMobile ? 'Mobile' : 'Desktop'}`);
-    
-    // Also check viewport size
-    console.log(`DEBUG - Viewport size: ${window.innerWidth}x${window.innerHeight}`);
-    
-    // Check localStorage directly
-    try {
-      const rawStoredPosts = localStorage.getItem('forum_posts');
-      if (rawStoredPosts) {
-        const parsedPosts = JSON.parse(rawStoredPosts);
-        console.log(`DEBUG - Posts directly from localStorage: ${parsedPosts.length}`);
-      } else {
-        console.log('DEBUG - No posts found directly in localStorage');
-      }
-    } catch (e) {
-      console.error('DEBUG - Error checking localStorage:', e);
-    }
-  }, [posts]);
-
   // Filter posts based on search and category
   const filteredPosts: Post[] = posts?.filter(post => {
     const matchesSearch = searchQuery 
@@ -236,10 +76,15 @@ const Forum = () => {
     return result;
   }) || [];
   
-  // Debug log filtered posts
+  // Debug log for filtered posts
   useEffect(() => {
-    console.log(`DEBUG - Filtered posts: ${filteredPosts.length}`);
-  }, [filteredPosts]);
+    console.log(`🔍 Filtered posts:`, {
+      total: filteredPosts.length,
+      searchQuery,
+      selectedCategory,
+      rawPostsCount: posts?.length || 0
+    });
+  }, [filteredPosts, searchQuery, selectedCategory, posts]);
 
   return (
     <>
