@@ -47,6 +47,10 @@ export const insertCommentSchema = z.object({
 export const insertFindSchema = z.object({
 	title: z.string().min(1),
 	userId: z.number().optional(),
+	description: z.string().optional().nullable(),
+	location: z.string().optional().nullable(),
+	period: z.string().optional().nullable(),
+	imageUrl: z.string().optional().nullable(),
 });
 
 export const insertFindCommentSchema = z.object({
