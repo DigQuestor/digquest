@@ -156,34 +156,61 @@ const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
       console.log("✅ Find uploaded successfully!");
       console.log("   - Find ID:", newFind.id);
       console.log("   - Image URL:", newFind.imageUrl);
-      console.log("   - Full find object:", JSON.stringify(newFind, null, 2));
       
-      // Verify image URL format
-      if (newFind.imageUrl) {
-        console.log("   - Image URL format check:");
-        console.log("     * Starts with https://:", newFind.imageUrl.startsWith('https://'));
-        console.log("     * Contains bucket name:", newFind.imageUrl.includes('digquest-images'));
-        console.log("     * URL length:", newFind.imageUrl.length);
-        
-        // Try to test if the URL is accessible
-        try {
-          const testImg = new Image();
-          testImg.onload = () => console.log("✅ Image URL is accessible from browser");
-          testImg.onerror = (e) => console.error("❌ Image URL failed to load in browser:", e);
-          testImg.src = newFind.imageUrl;
-        } catch (imgError) {
-          console.error("❌ Error testing image URL:", imgError);
-        }
-      } else {
-        console.warn("⚠️ No imageUrl returned in response!");
+      // Check if image URL was returned
+      if (!newFind.imageUrl) {
+        toast({
+          title: "❌ Upload Problem",
+          description: "Find created but no image URL returned. The image may not have uploaded to S3. Check your AWS credentials.",
+          variant: "destructive",
+          duration: 10000,
+        });
+        setIsSubmitting(false);
+        return;
       }
       
-      toast({
-        title: "✅ Find Uploaded Successfully!",
-        description: `Your treasure has been shared! ${newFind.imageUrl ? '(Image uploaded)' : '⚠️ No image URL'}`,
-        duration: 3000,
-        className: "bg-green-600 text-white border-green-700 font-semibold text-lg"
-      });
+      // Test if the image URL actually loads in the browser
+      try {
+        const testImage = new Image();
+        let imageLoaded = false;
+        
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            reject(new Error('Image load timed out after 5 seconds'));
+          }, 5000);
+          
+          testImage.onload = () => {
+            clearTimeout(timeout);
+            imageLoaded = true;
+            resolve(true);
+          };
+          
+          testImage.onerror = () => {
+            clearTimeout(timeout);
+            reject(new Error('Browser blocked image - CORS issue'));
+          };
+          
+          testImage.src = newFind.imageUrl;
+        });
+        
+        // Image loaded successfully!
+        toast({
+          title: "✅ Success!",
+          description: "Your find and image are now visible in the gallery!",
+          duration: 4000,
+          className: "bg-green-600 text-white border-green-700 font-bold text-lg"
+        });
+        
+      } catch (imageError) {
+        // Image URL exists but can't be loaded
+        const shortUrl = newFind.imageUrl.length > 60 ? newFind.imageUrl.substring(0, 60) + '...' : newFind.imageUrl;
+        toast({
+          title: "⚠️ Find Saved - Image Won't Display",
+          description: `Your find is saved but the image can't load. ${imageError.message}. URL: ${shortUrl}`,
+          variant: "destructive",
+          duration: 10000,
+        });
+      }
       
       // Reset form fields but keep the dialog open
       form.reset();
@@ -237,16 +264,15 @@ const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {/* Warning about S3 configuration */}
-        <div className="bg-orange-100 border-2 border-orange-400 rounded-lg p-4 mb-4">
+        {/* Warning about potential image display issues */}
+        <div className="bg-blue-100 border-2 border-blue-400 rounded-lg p-4 mb-4">
           <div className="flex items-start gap-3">
-            <AlertCircle className="h-6 w-6 text-orange-600 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="h-6 w-6 text-blue-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-bold text-orange-800 text-base mb-1">⚠️ Known Issue: Images May Not Display</p>
-              <p className="text-orange-700 text-sm">
-                Images upload successfully but may not be visible due to AWS S3 CORS configuration. 
-                The S3 bucket needs <strong>CORS (Cross-Origin Resource Sharing)</strong> configured to allow browsers to load images.
-                See <strong>AWS_S3_CORS_SETUP.md</strong> for step-by-step instructions.
+              <p className="font-bold text-blue-800 text-base mb-1">📸 About Image Uploads</p>
+              <p className="text-blue-700 text-sm">
+                Images are uploaded to AWS S3. If they don't display after upload, you'll see a specific error message 
+                telling you whether it's a CORS issue, S3 permissions, or AWS credentials problem.
               </p>
             </div>
           </div>
