@@ -778,15 +778,15 @@ const DetectingMap = () => {
       const infoWindow = new google.maps.InfoWindow({
         content: `
           <div style="padding: 8px; max-width: 200px;">
-            <div style="display: flex; justify-content: space-between; align-items: start;">
-              <h3 style="margin: 0 0 8px; font-weight: bold;">${location.name}</h3>
+            <div style="display: flex; justify-content: space-between; align-items: start; gap: 8px;">
+              <h3 style="margin: 0 0 8px; font-weight: bold; flex: 1;">${location.name}</h3>
               ${isCreator ? 
                 `<button 
                   id="delete-location-${location.id}" 
-                  style="background: none; border: none; cursor: pointer; color: #e11d48; padding: 0; margin: 0; font-size: 1.2em;"
-                  title="Delete location"
+                  style="background: #dc2626; border: none; cursor: pointer; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px;"
+                  title="Delete this location"
                   onclick="window.handleDeleteLocationClick(${location.id})"
-                >&times;</button>` 
+                >🗑️ Delete</button>` 
               : ''}
             </div>
             <p style="margin: 0 0 4px; font-size: 14px;">${location.description || 'No description available'}</p>
@@ -1247,9 +1247,28 @@ const DetectingMap = () => {
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Delete Location</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this location? This action cannot be undone.
+            <DialogTitle className="text-xl font-bold text-red-600 flex items-center gap-2">
+              <span>⚠️</span> Permanently Delete This Location?
+            </DialogTitle>
+            <DialogDescription className="text-base space-y-3">
+              {deleteLocationId && locations && (
+                <>
+                  <div className="p-2 bg-gray-100 rounded border border-gray-300">
+                    <p className="font-semibold text-gray-900">
+                      "{locations.find(loc => loc.id === deleteLocationId)?.name}"
+                    </p>
+                  </div>
+                  <div className="p-3 bg-red-50 border border-red-200 rounded">
+                    <p className="font-semibold text-red-900 mb-2">This will permanently delete:</p>
+                    <ul className="list-disc list-inside space-y-1 text-red-800 text-sm">
+                      <li>The location marker from the map</li>
+                      <li>All saved location details and notes</li>
+                      <li>This location will be removed for all users</li>
+                    </ul>
+                  </div>
+                  <p className="font-bold text-gray-900">This action CANNOT be undone!</p>
+                </>
+              )}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex justify-end space-x-2 mt-4">
@@ -1257,21 +1276,22 @@ const DetectingMap = () => {
               variant="outline" 
               onClick={() => setIsDeleteDialogOpen(false)}
               disabled={deleteMutation.isPending}
+              className="font-semibold"
             >
-              Cancel
+              No, Keep This Location
             </Button>
             <Button 
               variant="destructive" 
               onClick={handleConfirmDelete}
               disabled={deleteMutation.isPending}
-              className="bg-red-600 hover:bg-red-700 text-white"
+              className="bg-red-600 hover:bg-red-700 text-white font-semibold"
             >
               {deleteMutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Deleting...
                 </>
-              ) : "Delete"}
+              ) : "Yes, Permanently Delete"}
             </Button>
           </DialogFooter>
         </DialogContent>
