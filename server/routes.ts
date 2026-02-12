@@ -2270,13 +2270,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         longitude: req.body.longitude,
         userId: req.session.userId, // Use authenticated session userId
         description: req.body.description || null,
-        isPrivate: req.body.isPrivate !== false, // Default to private unless explicitly set to false
-        terrainType: req.body.terrainType || null,
+        // Handle both old and new schema fields
+        type: req.body.type || req.body.terrainType || null,
+        hasPermission: req.body.hasPermission || false,
+        isGroupDig: req.body.isGroupDig || false,
+        // Map isShared to isPrivate correctly (isPrivate = !isShared)
+        // If isShared is true, location is NOT private
+        // If isShared is false or undefined, location defaults to NOT private for visibility
+        isPrivate: req.body.isShared === true ? false : (req.body.isPrivate === true ? true : false),
+        terrainType: req.body.terrainType || req.body.type || null,
         accessInfo: req.body.accessInfo || null,
         bestTimeToVisit: req.body.bestTimeToVisit || null
       };
       
       console.log("✓ Cleaned location data:", cleanedData);
+      console.log("  isPrivate:", cleanedData.isPrivate, "(location will be", cleanedData.isPrivate ? "HIDDEN" : "VISIBLE", "on map)");
       
       const locationData = insertLocationSchema.parse(cleanedData);
       
@@ -2296,6 +2304,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get all locations (filtered by privacy settings)
   app.get("/api/locations", async (req, res) => {
     try {
+      console.log("📥 GET /api/locations called with userId:", req.query.userId);
       const type = req.query.type as string;
       const userId = req.query.userId ? parseInt(req.query.userId as string) : null;
       
@@ -2303,10 +2312,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (type) {
         locations = await storage.getLocationsByType(type);
-        console.log(`Getting locations by type '${type}'. Total: ${locations.length}`);
+        console.log(`  Found ${locations.length} locations with type '${type}'`);
       } else {
         locations = await storage.getAllLocations();
-        console.log(`Getting all locations. Total: ${locations.length}`);
+        console.log(`  Found ${locations.length} total locations in database`);
       }
       
       // Filter locations based on privacy settings
@@ -2320,7 +2329,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return !location.isPrivate;
       });
       
-      console.log(`Filtered locations for user ${userId}. Showing: ${filteredLocations.length}/${locations.length}`);
+      console.log(`  Returning ${filteredLocations.length}/${locations.length} locations for user ${userId || 'anonymous'}`);
+      if (filteredLocations.length > 0) {
+        console.log(`  Most recent location: ID ${filteredLocations[0].id}, Name: "${filteredLocations[0].name}", isPrivate: ${filteredLocations[0].isPrivate}`);
+      }
       res.status(200).json(filteredLocations);
     } catch (error) {
       if (error instanceof Error) {

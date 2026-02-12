@@ -294,7 +294,31 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
         currentMarkerRef.current = null;
       }
       
-      queryClient.invalidateQueries({ queryKey: ['/api/locations'] });
+      // Invalidate ALL location queries (including those with userId parameter)
+      console.log("🔄 Invalidating all location queries...");
+      await queryClient.invalidateQueries({ 
+        predicate: (query) => {
+          // Invalidate any query that starts with '/api/locations'
+          return Array.isArray(query.queryKey) && 
+                 query.queryKey.length > 0 && 
+                 query.queryKey[0] === '/api/locations';
+        }
+      });
+      
+      // Force refetch to ensure markers update immediately
+      console.log("✅ Refetching location queries...");
+      await queryClient.refetchQueries({ 
+        predicate: (query) => {
+          return Array.isArray(query.queryKey) && 
+                 query.queryKey.length > 0 && 
+                 query.queryKey[0] === '/api/locations';
+        }
+      });
+      
+      // Small delay to ensure map updates before closing dialog
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      console.log("🎉 Location added and markers should now be visible!");
       
       // Call either of the success callbacks provided
       if (onLocationAdded) {

@@ -632,10 +632,14 @@ const DetectingMap = () => {
   
   // Add location markers when map is initialized and locations change
   useEffect(() => {
-    if (!map || !locations) return;
+    if (!map || !locations) {
+      console.log("🗺️ Skipping marker render - map:", !!map, "locations:", locations?.length || 0);
+      return;
+    }
     
     // Skip if locations haven't actually changed (prevents flashing)
     if (lastLocationsRef.current === locations) {
+      console.log("📍 Locations unchanged, skipping marker update");
       return;
     }
     
@@ -643,12 +647,13 @@ const DetectingMap = () => {
     lastLocationsRef.current = locations;
     
     // Clear existing markers
+    console.log(`🗑️ Clearing ${markers.length} existing markers`);
     markers.forEach(marker => marker.setMap(null));
     
     // Create new markers array
     const newMarkers: google.maps.Marker[] = [];
     
-    console.log(`Rendering ${locations.length} locations on map`);
+    console.log(`🎯 Rendering ${locations.length} locations on map`);
     
     // Get filtered locations
     const filteredLocations = locations.filter(location => {
@@ -802,6 +807,11 @@ const DetectingMap = () => {
       // Add to array
       newMarkers.push(marker);
     });
+    
+    console.log(`✅ Created ${newMarkers.length} markers (filtered from ${locations.length} total locations)`);
+    if (newMarkers.length < locations.length) {
+      console.log(`   ℹ️ ${locations.length - newMarkers.length} locations filtered out by current filters`);
+    }
     
     // Update markers state
     setMarkers(newMarkers);
