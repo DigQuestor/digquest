@@ -43,6 +43,7 @@ export const insertUserSchema = z.object({
 export const insertCommentSchema = z.object({
 	postId: z.number().min(1),
 	content: z.string().min(1),
+	userId: z.number().optional(),
 });
 
 export const insertFindSchema = z.object({
@@ -57,6 +58,7 @@ export const insertFindSchema = z.object({
 export const insertFindCommentSchema = z.object({
 	findId: z.number().min(1),
 	content: z.string().min(1),
+	userId: z.number().optional(),
 });
 
 export const insertLocationSchema = z.object({

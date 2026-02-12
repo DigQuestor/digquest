@@ -1600,12 +1600,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/comments", async (req, res) => {
     try {
       console.log("Creating comment with data:", req.body);
-      const commentData = insertCommentSchema.parse(req.body);
+      console.log("Session userId:", req.session?.userId);
       
-      // Check if user exists
-      const user = await storage.getUser(commentData.userId);
+      // Check if user is authenticated via session
+      if (!req.session?.userId) {
+        console.log("❌ User not authenticated - no session userId");
+        return res.status(401).json({ message: "Not authenticated. Please log in." });
+      }
+      
+      // Parse the request body
+      const parsedData = insertCommentSchema.parse(req.body);
+      
+      // Create comment data with authenticated userId
+      const commentData = {
+        ...parsedData,
+        userId: req.session.userId
+      };
+      
+      // Verify the authenticated user exists
+      const user = await storage.getUser(req.session.userId);
       if (!user) {
-        console.log("User not found:", commentData.userId);
+        console.log("User not found:", req.session.userId);
         return res.status(404).json({ message: "User not found" });
       }
       
@@ -1616,7 +1631,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Post not found" });
       }
       
-      console.log("Creating comment for post:", commentData.postId);
+      console.log("Creating comment for post:", commentData.postId, "by user:", user.username);
       const comment = await storage.createComment(commentData);
       console.log("Comment created successfully:", comment.id);
       
@@ -2143,29 +2158,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid find ID" });
       }
       
+      // Check if user is authenticated via session
+      if (!req.session?.userId) {
+        console.log("❌ User not authenticated - no session userId");
+        return res.status(401).json({ message: "Not authenticated. Please log in." });
+      }
+      
       const find = await storage.getFind(findId);
       
       if (!find) {
         return res.status(404).json({ message: "Find not found" });
       }
       
-      // Create a cleaned data object for validation
-      const cleanedData = {
+      // Verify the authenticated user exists
+      const user = await storage.getUser(req.session.userId);
+      if (!user) {
+        console.log("User not found:", req.session.userId);
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Create comment data with authenticated userId
+      const commentData = {
         content: req.body.content,
-        userId: parseInt(req.body.userId),
+        userId: req.session.userId,
         findId: findId
       };
       
       // Validate with schema
-      const commentData = insertFindCommentSchema.parse(cleanedData);
+      const validatedData = insertFindCommentSchema.parse(commentData);
       
-      // Check if user exists
-      const user = await storage.getUser(commentData.userId);
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-      
-      const newComment = await storage.createFindComment(commentData);
+      console.log("Creating find comment for find:", findId, "by user:", user.username);
+      const newComment = await storage.createFindComment(validatedData);
       res.status(201).json(newComment);
     } catch (error) {
       if (error instanceof Error) {
