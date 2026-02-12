@@ -310,12 +310,12 @@ export default function SocialDashboard() {
 
   const handleViewGroup = (group: Group) => {
     setViewingGroup(group);
-    setIsViewGroupOpen(true);
+    setTimeout(() => setIsViewGroupOpen(true), 0);
   };
 
   const handleEditGroup = (group: Group) => {
     setEditingGroup({...group}); // Create a copy to avoid modifying the original
-    setIsEditGroupOpen(true);
+    setTimeout(() => setIsEditGroupOpen(true), 0);
   };
 
   const handleUpdateGroup = () => {
@@ -742,7 +742,7 @@ export default function SocialDashboard() {
                             )}
                           </div>
                           
-                          <DropdownMenu>
+                          <DropdownMenu modal={false}>
                             <DropdownMenuTrigger asChild>
                               <Button variant="ghost" size="sm">
                                 <MoreHorizontal className="h-4 w-4" />
@@ -905,7 +905,16 @@ export default function SocialDashboard() {
         </Dialog>
 
         {/* Edit Group Dialog */}
-        <Dialog open={isEditGroupOpen} onOpenChange={setIsEditGroupOpen}>
+        <Dialog
+          open={isEditGroupOpen}
+          modal={false}
+          onOpenChange={(open) => {
+            setIsEditGroupOpen(open);
+            if (!open) {
+              setEditingGroup(null);
+            }
+          }}
+        >
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle>Edit Group</DialogTitle>
