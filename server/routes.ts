@@ -765,6 +765,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin cleanup endpoint - delete all posts by non-DigQuestor users
+  app.post("/api/admin/cleanup-posts", async (req, res) => {
+    try {
+      const { adminKey } = req.body;
+      
+      // Simple admin verification
+      if (adminKey !== "admin123") {
+        return res.status(403).json({ message: "Unauthorized" });
+      }
+      
+      // Get DigQuestor's user ID
+      const digquestor = await storage.getUserByUsername("DigQuestor");
+      const digquestorId = digquestor ? digquestor.id : null;
+      
+      // Get all posts
+      const allPosts = await storage.getAllPosts();
+      let deletedCount = 0;
+      
+      // Delete all posts not by DigQuestor
+      for (const post of allPosts) {
+        if (post.userId !== digquestorId) {
+          await storage.deletePost(post.id);
+          deletedCount++;
+          console.log(`Deleted post: ${post.title} by user ${post.userId}`);
+        }
+      }
+      
+      console.log(`Post cleanup complete. Deleted ${deletedCount} posts.`);
+      res.json({ 
+        message: `Post cleanup complete. Deleted ${deletedCount} posts. DigQuestor's posts preserved.`,
+        deletedCount 
+      });
+      
+    } catch (error) {
+      console.error("Error cleaning up posts:", error);
+      res.status(500).json({ message: "Error cleaning up posts" });
+    }
+  });
+
   // Admin password update endpoint (for fixing DigQuestor password)
   app.post("/api/admin/update-password", async (req, res) => {
     try {
