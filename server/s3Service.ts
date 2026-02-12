@@ -9,6 +9,14 @@ const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID || 'AKIAZDLN3HTIH4JFRNE2
 const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY || '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';
 const BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME || 'digquest-images';
 
+// Log credential status on startup
+console.log('🔑 AWS S3 Configuration:');
+console.log('   Region:', AWS_REGION);
+console.log('   Bucket:', BUCKET_NAME);
+console.log('   Access Key ID:', AWS_ACCESS_KEY_ID ? AWS_ACCESS_KEY_ID.substring(0, 10) + '...' : 'NOT SET');
+console.log('   Secret Key:', AWS_SECRET_ACCESS_KEY ? 'SET (length: ' + AWS_SECRET_ACCESS_KEY.length + ')' : 'NOT SET');
+console.log('   Using environment variables:', process.env.AWS_ACCESS_KEY_ID ? 'YES ✅' : 'NO - using hardcoded fallback ⚠️');
+
 // Warn if using fallback credentials
 if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
   console.warn('⚠️ WARNING: Using hardcoded AWS credentials. Set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in environment variables for production.');
@@ -103,9 +111,30 @@ export async function uploadToS3(
     }
 
     return { key, url };
-  } catch (error) {
-    console.error('S3 upload error details:', error);
-    throw error;
+  } catch (error: any) {
+    console.error('❌ S3 upload error details:', error);
+    console.error('   Error name:', error.name);
+    console.error('   Error message:', error.message);
+    console.error('   Error code:', error.Code || error.$metadata?.httpStatusCode);
+    
+    // Provide more specific error messages based on AWS error types
+    let errorMessage = 'S3 upload failed: ';
+    
+    if (error.name === 'InvalidAccessKeyId') {
+      errorMessage += 'Invalid AWS Access Key ID. Check your AWS_ACCESS_KEY_ID environment variable.';
+    } else if (error.name === 'SignatureDoesNotMatch') {
+      errorMessage += 'Invalid AWS Secret Access Key. Check your AWS_SECRET_ACCESS_KEY environment variable.';
+    } else if (error.name === 'NoSuchBucket') {
+      errorMessage += `Bucket "${BUCKET_NAME}" does not exist. Create it in AWS S3 or check the bucket name.`;
+    } else if (error.name === 'AccessDenied') {
+      errorMessage += 'Access denied. IAM user needs s3:PutObject and s3:PutObjectAcl permissions.';
+    } else if (error.message) {
+      errorMessage += error.message;
+    } else {
+      errorMessage += 'Unknown error occurred.';
+    }
+    
+    throw new Error(errorMessage);
   }
 }
 
