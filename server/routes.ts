@@ -780,7 +780,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             console.log(`  - Deleted ${userFinds.length} finds`);
             
             // 3. Delete all locations by this user
-            const userLocations = await storage.getLocationsByUser(user.id);
+            const allLocations = await storage.getAllLocations();
+            const userLocations = allLocations.filter(loc => loc.userId === user.id);
             for (const location of userLocations) {
               await storage.deleteLocation(location.id);
             }
