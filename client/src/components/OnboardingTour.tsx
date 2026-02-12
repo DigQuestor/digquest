@@ -277,46 +277,44 @@ const OnboardingTour = ({ isOpen, onClose, onComplete }: OnboardingTourProps) =>
       description: "Welcome to the DigQuest community",
       icon: <Trophy className="h-8 w-8 text-metallic-gold" />,
       content: (
-        <div className="space-y-4">
+        <div className="space-y-3">
           <div className="text-center">
-            <div className="mb-4 p-6 bg-gradient-to-br from-metallic-gold/20 to-earth-brown/20 rounded-lg">
-              <Trophy className="h-16 w-16 text-metallic-gold mx-auto mb-3" />
-              <h3 className="text-xl font-bold text-earth-brown">Congratulations!</h3>
-              <p className="text-sm text-gray-600 mt-2">
+            <div className="mb-3 p-4 bg-gradient-to-br from-metallic-gold/20 to-earth-brown/20 rounded-lg">
+              <Trophy className="h-12 w-12 text-metallic-gold mx-auto mb-2" />
+              <h3 className="text-lg font-bold text-earth-brown">Congratulations!</h3>
+              <p className="text-xs text-gray-600 mt-1">
                 You've completed the DigQuest tour
               </p>
             </div>
           </div>
           
           <Card className="border-2 border-metallic-gold/30 bg-gradient-to-br from-metallic-gold/5 to-earth-brown/5">
-            <CardHeader>
-              <CardTitle className="text-center text-lg">🏆 Tour Complete Achievement</CardTitle>
-            </CardHeader>
-            <CardContent className="text-center">
-              <div className="space-y-3">
-                <Badge className="bg-metallic-gold text-black px-4 py-2">
+            <CardContent className="pt-4 pb-3">
+              <div className="text-center space-y-2">
+                <p className="text-sm font-semibold">🏆 Tour Complete Achievement</p>
+                <Badge className="bg-metallic-gold text-black px-3 py-1">
                   DigQuest Explorer • 205 Points
                 </Badge>
-                <p className="text-sm text-gray-600">
-                  You're now ready to start your detecting journey with our amazing community!
+                <p className="text-xs text-gray-600">
+                  You're now ready to start your detecting journey!
                 </p>
               </div>
             </CardContent>
           </Card>
           
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-center">Ready to start your adventure?</p>
-            <div className="grid grid-cols-2 gap-2">
-              <Button variant="outline" size="sm" className="text-xs">
+          <div className="space-y-1.5">
+            <p className="text-xs font-medium text-center text-gray-500">Quick Links:</p>
+            <div className="grid grid-cols-2 gap-1.5">
+              <Button variant="outline" size="sm" className="text-xs py-1 h-8">
                 Browse Forum
               </Button>
-              <Button variant="outline" size="sm" className="text-xs">
+              <Button variant="outline" size="sm" className="text-xs py-1 h-8">
                 Upload Find
               </Button>
-              <Button variant="outline" size="sm" className="text-xs">
+              <Button variant="outline" size="sm" className="text-xs py-1 h-8">
                 Explore Map
               </Button>
-              <Button variant="outline" size="sm" className="text-xs">
+              <Button variant="outline" size="sm" className="text-xs py-1 h-8">
                 Try AR Routes
               </Button>
             </div>
@@ -340,11 +338,19 @@ const OnboardingTour = ({ isOpen, onClose, onComplete }: OnboardingTourProps) =>
         const reward = steps[currentStep].completionReward;
         if (reward) {
           toast({
-            title: "🏆 Achievement Unlocked!",
+            title: (
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">🏆</span>
+                <span className="text-lg font-bold">Achievement Unlocked!</span>
+              </div>
+            ),
             description: (
-              <div className="space-y-1">
-                <p className="font-semibold text-base">{reward.achievement}</p>
-                <p className="text-sm font-medium text-primary">+{reward.points} points earned!</p>
+              <div className="space-y-2 mt-2">
+                <p className="font-bold text-lg text-yellow-600">{reward.achievement}</p>
+                <p className="text-sm text-gray-600">Step {currentStep + 1} completed</p>
+                <div className="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded">
+                  <p className="text-base font-bold text-yellow-800">+{reward.points} Points Earned!</p>
+                </div>
               </div>
             ),
           });
@@ -365,10 +371,24 @@ const OnboardingTour = ({ isOpen, onClose, onComplete }: OnboardingTourProps) =>
   const handleComplete = () => {
     // Award final achievement
     toast({
-      title: "🎉 Welcome to DigQuest!",
-      description: "You've earned the DigQuest Explorer achievement! Happy detecting!",
-      duration: 3000,
-      className: "bg-green-600 text-white border-green-700 font-semibold text-lg",
+      title: (
+        <div className="flex items-center gap-2">
+          <span className="text-2xl">🎉</span>
+          <span className="text-lg font-bold">Welcome to DigQuest!</span>
+        </div>
+      ),
+      description: (
+        <div className="space-y-2 mt-2">
+          <p className="font-bold text-lg text-green-200">DigQuest Explorer</p>
+          <p className="text-sm text-green-100">All tour steps completed!</p>
+          <div className="mt-3 p-2 bg-green-700 border border-green-600 rounded">
+            <p className="text-base font-bold text-white">+100 Points Earned!</p>
+          </div>
+          <p className="text-sm text-green-100 mt-2">Happy detecting! 🏆</p>
+        </div>
+      ),
+      duration: 5000,
+      className: "bg-green-600 text-white border-green-700",
     });
     
     onComplete();
