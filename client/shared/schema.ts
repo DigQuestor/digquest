@@ -60,8 +60,14 @@ export const insertFindCommentSchema = z.object({
 
 export const insertLocationSchema = z.object({
 	name: z.string().min(1),
-	lat: z.number().optional(),
-	lng: z.number().optional(),
+	description: z.string().optional().nullable(),
+	latitude: z.string().min(1),
+	longitude: z.string().min(1),
+	type: z.string().optional().nullable(),
+	hasPermission: z.boolean().optional().default(false),
+	isGroupDig: z.boolean().optional().default(false),
+	isShared: z.boolean().optional().default(false),
+	userId: z.number().optional(),
 });
 
 export const insertEventSchema = z.object({

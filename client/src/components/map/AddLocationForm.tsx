@@ -245,6 +245,8 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
         
+        console.error("❌ Location save failed:", response.status, errorData);
+        
         // Handle authentication errors specifically
         if (response.status === 401) {
           toast({
@@ -255,13 +257,24 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
           });
           // Trigger auth state refresh
           window.dispatchEvent(new Event('auth-changed'));
+          setIsSubmitting(false);
           return;
         }
         
+        // Show detailed error message
+        toast({
+          title: "❌ Failed to Save Location",
+          description: errorData.message || `Server error: ${response.status}`,
+          variant: "destructive",
+          duration: 8000,
+          className: "bg-red-600 text-white border-red-700 font-bold"
+        });
+        
+        setIsSubmitting(false);
         throw new Error(errorData.message || 'Failed to add location');
-      } else {
-        createdLocation = await response.json();
       }
+      
+      createdLocation = await response.json();
       
       // Log the created location
       if (createdLocation) {

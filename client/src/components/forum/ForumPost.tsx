@@ -65,10 +65,22 @@ const ForumPost = ({ post, isLink = true }: ForumPostProps) => {
   // Enhanced user data query with better caching and error handling
   const { data: author, isLoading: isLoadingAuthor, error: authorError } = useQuery<User>({
     queryKey: [`/api/users/${post.userId}`],
-    enabled: !!post.userId,
-    staleTime: 0, // Always fetch fresh user data to reflect profile updates
-    refetchOnWindowFocus: true,
-    retry: 1
+    queryFn: async () => {
+      console.log(`Fetching author for post ${post.id}, userId: ${post.userId}`);
+      const response = await fetch(`/api/users/${post.userId}`, {
+        credentials: 'include'
+      });
+      if (!response.ok) {
+        console.error(`Failed to fetch user ${post.userId}:`, response.status);
+        throw new Error(`Failed to fetch user: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(`✅ Fetched author for post ${post.id}:`, data.username);
+      return data;
+    },
+    enabled: !!post.userId && post.userId > 0,
+    staleTime: 5000,
+    retry: 2
   });
   
   // Debug logging for author fetch issues
