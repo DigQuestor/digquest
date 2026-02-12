@@ -2487,9 +2487,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         hasPermission: req.body.hasPermission || false,
         isGroupDig: req.body.isGroupDig || false,
         // Map isShared to isPrivate correctly (isPrivate = !isShared)
-        // If isShared is true, location is NOT private
-        // If isShared is false or undefined, location defaults to NOT private for visibility
-        isPrivate: req.body.isShared === true ? false : (req.body.isPrivate === true ? true : false),
+        // If isShared is true, location is NOT private (visible to everyone)
+        // If isShared is false or undefined, location IS private (only visible to creator)
+        isPrivate: req.body.isShared === true ? false : true,
         terrainType: req.body.terrainType || req.body.type || null,
         accessInfo: req.body.accessInfo || null,
         bestTimeToVisit: req.body.bestTimeToVisit || null

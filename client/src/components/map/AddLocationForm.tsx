@@ -588,16 +588,22 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
             control={form.control}
             name="isShared"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 bg-blue-50">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <FormLabel className="font-normal cursor-pointer">
-                  Share location with other detectorists (unchecked = private, only visible to you)
-                </FormLabel>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-semibold cursor-pointer text-base">
+                    🌍 Share this location with the community
+                  </FormLabel>
+                  <p className="text-sm text-gray-600">
+                    <strong>Unchecked (default):</strong> Private - only you can see this location<br/>
+                    <strong>Checked:</strong> Public - visible to all detectorists on the map
+                  </p>
+                </div>
               </FormItem>
             )}
           />
