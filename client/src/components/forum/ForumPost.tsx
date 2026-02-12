@@ -274,16 +274,26 @@ const ForumPost = ({ post, isLink = true }: ForumPostProps) => {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-xl font-bold text-red-600">
-              Permanently Delete This Post?
+            <AlertDialogTitle className="text-xl font-bold text-red-600 flex items-center gap-2">
+              <span>⚠️</span> Permanently Delete This Post?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-base space-y-2">
-              <p className="font-semibold text-gray-900">"{post.title}"</p>
-              <p>This will permanently delete your forum post and all associated comments. This action cannot be undone.</p>
+            <AlertDialogDescription className="text-base space-y-3">
+              <div className="p-2 bg-gray-100 rounded border border-gray-300">
+                <p className="font-semibold text-gray-900">"{post.title}"</p>
+              </div>
+              <div className="p-3 bg-red-50 border border-red-200 rounded">
+                <p className="font-semibold text-red-900 mb-2">This will permanently delete:</p>
+                <ul className="list-disc list-inside space-y-1 text-red-800 text-sm">
+                  <li>Your forum post{post.imageUrl ? ' and attached image' : ''}</li>
+                  <li>All comments on this post ({post.comments || 0})</li>
+                  <li>All likes on this post ({post.likes || 0})</li>
+                </ul>
+              </div>
+              <p className="font-bold text-gray-900">This action CANNOT be undone!</p>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="font-semibold">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="font-semibold">No, Keep This Post</AlertDialogCancel>
             <AlertDialogAction 
               onClick={(e) => {
                 e.preventDefault();
@@ -292,7 +302,7 @@ const ForumPost = ({ post, isLink = true }: ForumPostProps) => {
               }}
               className="bg-red-600 hover:bg-red-700 text-white font-semibold"
             >
-              Yes, Delete Post
+              Yes, Permanently Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

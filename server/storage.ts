@@ -1908,18 +1908,31 @@ export class DatabaseStorage implements IStorage {
     
     const categoryId = post.categoryId;
     
-    // Delete the post
-    const result = await db.delete(posts).where(eq(posts.id, id));
-    
-    // Decrement the category count if deletion was successful
-    if (result.rowCount > 0 && categoryId) {
-      await db.update(categories)
-        .set({ count: sql`post_count - 1` })
-        .where(eq(categories.id, categoryId));
-      console.log(`Decremented count for category ${categoryId} after deleting post ${id}`);
+    try {
+      // Delete all comments for this post first (foreign key constraint)
+      await db.delete(comments).where(eq(comments.postId, id));
+      console.log(`Deleted comments for post ${id}`);
+      
+      // Delete all likes for this post (foreign key constraint)
+      await db.delete(postLikes).where(eq(postLikes.postId, id));
+      console.log(`Deleted likes for post ${id}`);
+      
+      // Now delete the post itself
+      const result = await db.delete(posts).where(eq(posts.id, id));
+      
+      // Decrement the category count if deletion was successful
+      if (result.rowCount > 0 && categoryId) {
+        await db.update(categories)
+          .set({ count: sql`post_count - 1` })
+          .where(eq(categories.id, categoryId));
+        console.log(`Decremented count for category ${categoryId} after deleting post ${id}`);
+      }
+      
+      return result.rowCount > 0;
+    } catch (error) {
+      console.error(`Error deleting post ${id}:`, error);
+      throw error;
     }
-    
-    return result.rowCount > 0;
   }
 
   async updatePostViewCount(id: number): Promise<void> {
