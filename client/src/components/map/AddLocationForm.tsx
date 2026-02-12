@@ -370,7 +370,7 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {!selectedPosition && !hasValidCoordinates() && (
+        {!isSubmitting && !selectedPosition && !hasValidCoordinates() && (
           <div className="bg-blue-50 border-2 border-blue-400 text-blue-800 p-4 rounded-md text-sm mb-4 flex items-start">
             <MapPin className="h-6 w-6 mr-3 flex-shrink-0 mt-0.5 text-blue-600" />
             <div>
@@ -384,7 +384,7 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
           </div>
         )}
         
-        {selectedPosition && (
+        {!isSubmitting && selectedPosition && (
           <div className="bg-green-50 border-2 border-green-400 text-green-800 p-3 rounded-md text-sm mb-4 flex items-center">
             <MapPin className="h-5 w-5 mr-2 flex-shrink-0 text-green-600" />
             <p className="font-semibold">✅ Location coordinates set! You can click the map again to change it.</p>
@@ -604,18 +604,20 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
         </div>
         
         <div className="space-y-4">
-          <div className={`p-4 rounded-lg border-2 mb-4 ${!selectedPosition && !hasValidCoordinates() ? 'bg-red-50 text-red-800 border-red-300' : 'bg-green-50 text-green-800 border-green-300'}`}>
-            <p className="font-bold text-lg mb-2">
-              {!selectedPosition && !hasValidCoordinates() ? "⚠️ Coordinates Required!" : "✅ Ready to Save!"}
-            </p>
-            <p className="font-medium">
-              {!selectedPosition && !hasValidCoordinates()
-                ? "To save this location, you MUST: 1) Click on the map where you want to place the pin, OR 2) Manually type latitude and longitude numbers in the boxes above."
-                : selectedPosition 
-                  ? "✓ Location selected on map. The Save Location button is now active!"
-                  : "✓ Coordinates entered manually. The Save Location button is now active!"}
-            </p>
-          </div>
+          {!isSubmitting && (
+            <div className={`p-4 rounded-lg border-2 mb-4 ${!selectedPosition && !hasValidCoordinates() ? 'bg-red-50 text-red-800 border-red-300' : 'bg-green-50 text-green-800 border-green-300'}`}>
+              <p className="font-bold text-lg mb-2">
+                {!selectedPosition && !hasValidCoordinates() ? "⚠️ Coordinates Required!" : "✅ Ready to Save!"}
+              </p>
+              <p className="font-medium">
+                {!selectedPosition && !hasValidCoordinates()
+                  ? "To save this location, you MUST: 1) Click on the map where you want to place the pin, OR 2) Manually type latitude and longitude numbers in the boxes above."
+                  : selectedPosition 
+                    ? "✓ Location selected on map. The Save Location button is now active!"
+                    : "✓ Coordinates entered manually. The Save Location button is now active!"}
+              </p>
+            </div>
+          )}
           
           <div className="flex justify-between">
             <Button 
