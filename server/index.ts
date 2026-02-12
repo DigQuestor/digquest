@@ -3,7 +3,12 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
+import pg from "pg";
 import { registerRoutes } from "./routes.js";
+
+const PgStore = connectPgSimple(session);
+const { Pool } = pg;
 
 const app = express();
 
@@ -21,8 +26,19 @@ if (process.env.NODE_ENV === "production") {
   app.set("trust proxy", 1);
 }
 
-// Session middleware
+// Create PostgreSQL connection pool for session store
+const sessionPool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false
+});
+
+// Session middleware with persistent PostgreSQL store
 app.use(session({
+  store: new PgStore({
+    pool: sessionPool,
+    tableName: 'session', // Table name for storing sessions
+    createTableIfMissing: true, // Auto-create session table if it doesn't exist
+  }),
   secret: process.env.SESSION_SECRET || "your-secret-key",
   resave: false,
   saveUninitialized: false,
