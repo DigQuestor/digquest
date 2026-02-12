@@ -10,6 +10,16 @@ import { getPeriodBadgeColor, formatLocation } from "@/lib/utils";
 import { useAuth, findStorage } from "@/hooks/use-auth-simple";
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import EditFindForm from "@/components/finds/EditFindForm";
 import { FindLikeButton } from "@/components/finds/FindLikeButton";
 
@@ -29,6 +39,7 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   // Use state to store user avatar URL
   const [userAvatarUrl, setUserAvatarUrl] = useState<string | null>(null);
   
@@ -164,12 +175,15 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
     setIsEditOpen(true);
   };
 
-  // Handle find deletion
-  const handleDelete = (e: React.MouseEvent) => {
+  // Handle delete button click
+  const handleDeleteClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation to find detail
     e.stopPropagation(); // Prevent event bubbling
-
-    if (confirm("Are you sure you want to delete this find? This action cannot be undone.")) {
+    setDeleteDialogOpen(true);
+  };
+  
+  // Handle find deletion
+  const handleDelete = () => {
       // Call the API to delete the find
       fetch(`/api/finds/${find.id}?userId=${currentUser?.id}`, {
         method: 'DELETE',
@@ -195,7 +209,7 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
             // Show error toast with message from API
             const errorData = await response.json();
             toast({
-              title: "Error",
+              title: "❌ Error",
               description: errorData.message || "Failed to delete find",
               variant: "destructive",
             });
@@ -204,12 +218,11 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
         .catch((error) => {
           console.error("Error deleting find:", error);
           toast({
-            title: "Error",
-            description: "There was a problem deleting your find. Please try again.",
+            title: "❌ Error",
+            description: "An unexpected error occurred while deleting the find.",
             variant: "destructive",
           });
         });
-    }
   };
 
   return (
@@ -276,7 +289,7 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
                   variant="destructive"
                   size="icon"
                   className="w-7 h-7 rounded-full opacity-80 hover:opacity-100 shadow-sm"
-                  onClick={handleDelete}
+                  onClick={handleDeleteClick}
                   title="Delete this find"
                 >
                   <Trash2 className="h-3 w-3" />
@@ -331,6 +344,30 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
           </div>
         </Link>
       </div>
+      
+      {/* Delete confirmation dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-xl font-bold text-red-600">
+              Permanently Delete This Find?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-base space-y-2">
+              <p className="font-semibold text-gray-900">"{find.title}"</p>
+              <p>This will permanently delete your find, including the image and all comments. This action cannot be undone.</p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="font-semibold">Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDelete}
+              className="bg-red-600 hover:bg-red-700 text-white font-semibold"
+            >
+              Yes, Delete Find
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       
       {/* Edit dialog */}
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>

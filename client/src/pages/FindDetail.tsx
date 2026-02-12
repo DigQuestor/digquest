@@ -1,22 +1,39 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useQuery } from "@tanstack/react-query";
-import { Link, useRoute } from "wouter";
-import { ArrowLeft, MapPin, User, Calendar, MessageCircle } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link, useRoute, useLocation } from "wouter";
+import { ArrowLeft, MapPin, User, Calendar, MessageCircle, Trash2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { formatDate, getPeriodBadgeColor, formatLocation } from "@/lib/utils";
 import { Find, User as UserType } from "@shared/schema";
 import { FindCommentForm } from "@/components/finds/FindCommentForm";
 import { FindCommentList } from "@/components/finds/FindCommentList";
+import { useAuth } from "@/hooks/use-auth-simple";
+import { useToast } from "@/hooks/use-toast";
 
 const FindDetail = () => {
   const [, params] = useRoute("/finds/:id");
+  const [, setLocation] = useLocation();
   const findId = params?.id ? parseInt(params.id) : null;
   const [userAvatarUrl, setUserAvatarUrl] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const { user: currentUser } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const { data: find, isLoading, error } = useQuery<Find>({
     queryKey: ['/api/finds/' + findId],
@@ -77,6 +94,52 @@ const FindDetail = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Check if current user is the owner of this find
+  const isOwner = currentUser?.id === find?.userId;
+
+  // Handle find deletion
+  const handleDelete = () => {
+    if (!findId || !currentUser?.id) return;
+
+    fetch(`/api/finds/${findId}?userId=${currentUser.id}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    })
+      .then(async (response) => {
+        if (response.ok) {
+          toast({
+            title: "✅ Find Deleted Successfully",
+            description: "Your find has been permanently removed from the gallery.",
+            className: "bg-green-600 text-white border-green-700 font-semibold shadow-xl",
+            duration: 3000,
+          });
+
+          // Invalidate finds query
+          queryClient.invalidateQueries({ queryKey: ['/api/finds'] });
+
+          // Redirect to finds gallery
+          setTimeout(() => {
+            setLocation('/finds');
+          }, 1500);
+        } else {
+          const errorData = await response.json();
+          toast({
+            title: "❌ Error",
+            description: errorData.message || "Failed to delete find",
+            variant: "destructive",
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting find:", error);
+        toast({
+          title: "❌ Error",
+          description: "An unexpected error occurred while deleting the find.",
+          variant: "destructive",
+        });
+      });
+  };
+
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -136,7 +199,7 @@ const FindDetail = () => {
         {/* Find header */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
-            <div>
+            <div className="flex-1">
               <h1 className="text-3xl font-bold text-earth-brown mb-2">{find.title}</h1>
               <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600">
                 <Badge className={getPeriodBadgeColor(find.period || 'Unknown')}>
@@ -152,6 +215,18 @@ const FindDetail = () => {
                 </div>
               </div>
             </div>
+            {/* Delete button - only shown to the owner */}
+            {isOwner && (
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => setDeleteDialogOpen(true)}
+                className="flex items-center gap-2"
+              >
+                <Trash2 className="h-4 w-4" />
+                Delete Find
+              </Button>
+            )}
           </div>
         </div>
 
@@ -235,6 +310,30 @@ const FindDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Delete confirmation dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-xl font-bold text-red-600">
+              Permanently Delete This Find?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-base space-y-2">
+              <p className="font-semibold text-gray-900">"{find.title}"</p>
+              <p>This will permanently delete your find, including the image and all {comments?.length || 0} comments. This action cannot be undone.</p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="font-semibold">Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDelete}
+              className="bg-red-600 hover:bg-red-700 text-white font-semibold"
+            >
+              Yes, Delete Find
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
