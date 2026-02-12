@@ -237,6 +237,21 @@ const UploadFindForm = ({ onFindUploaded }: UploadFindFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {/* Warning about S3 configuration */}
+        <div className="bg-orange-100 border-2 border-orange-400 rounded-lg p-4 mb-4">
+          <div className="flex items-start gap-3">
+            <AlertCircle className="h-6 w-6 text-orange-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-bold text-orange-800 text-base mb-1">⚠️ Known Issue: Images May Not Display</p>
+              <p className="text-orange-700 text-sm">
+                Images upload successfully but may not be visible due to AWS S3 bucket configuration. 
+                The S3 bucket needs "Block all public access" turned OFF and a public read policy configured.
+                <strong> Your find will still be saved with all details.</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        
         <div className="mb-4">
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-earth-brown transition-colors"
             onClick={() => document.getElementById('file-upload')?.click()}>

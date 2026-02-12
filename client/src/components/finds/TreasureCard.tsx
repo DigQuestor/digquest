@@ -218,21 +218,39 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
         <Link href={`/finds/${find.id}`} className="block">
           {/* Card-style photo area */}
           <div className="h-40 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
-            <img 
-              src={find.imageUrl} 
-              alt={find.title} 
-              className="w-full h-full object-cover"
-              loading="lazy"
-              onError={(e) => {
-                console.error(`❌ Failed to load image for find ${find.id}:`, find.imageUrl);
-                console.error('Find object:', find);
-                // Fallback image if the actual image fails to load
-                e.currentTarget.src = "https://images.unsplash.com/photo-1589656966895-2f33e7653819?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300";
-              }}
-              onLoad={() => {
-                console.log(`✅ Successfully loaded image for find ${find.id}:`, find.imageUrl);
-              }}
-            />
+            {find.imageUrl ? (
+              <img 
+                src={find.imageUrl} 
+                alt={find.title} 
+                className="w-full h-full object-cover"
+                loading="lazy"
+                onError={(e) => {
+                  console.error(`❌ Failed to load image for find ${find.id}:`, find.imageUrl);
+                  console.error('Find object:', find);
+                  // Show a clear error message in place of the image
+                  e.currentTarget.style.display = 'none';
+                  const parent = e.currentTarget.parentElement;
+                  if (parent && !parent.querySelector('.image-error-message')) {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'image-error-message absolute inset-0 flex flex-col items-center justify-center bg-red-50 p-4 text-center';
+                    errorDiv.innerHTML = `
+                      <div class="text-red-600 font-bold text-lg mb-2">⚠️ Image Upload Issue</div>
+                      <div class="text-red-800 text-sm">Image uploaded but not publicly accessible</div>
+                      <div class="text-red-700 text-xs mt-2">AWS S3 bucket needs public access enabled</div>
+                    `;
+                    parent.appendChild(errorDiv);
+                  }
+                }}
+                onLoad={() => {
+                  console.log(`✅ Successfully loaded image for find ${find.id}:`, find.imageUrl);
+                }}
+              />
+            ) : (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-amber-50 p-4 text-center">
+                <div className="text-amber-600 font-bold text-lg mb-2">📷 No Image</div>
+                <div className="text-amber-800 text-sm">This find was uploaded without an image</div>
+              </div>
+            )}
             
             {/* Period badge in corner like a card suit */}
             <div className="absolute top-3 right-3">
