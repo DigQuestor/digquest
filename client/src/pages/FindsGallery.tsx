@@ -73,16 +73,6 @@ const FindsGallery = () => {
             <h1 className="font-display text-4xl text-earth-brown mb-2">Treasure Finds Gallery</h1>
             <p className="text-gray-600">Explore fascinating discoveries from our community of metal detectorists</p>
           </div>
-          
-          {/* Always visible "Add Find" button at the top */}
-          {user && (
-            <Button 
-              className="bg-metallic-gold hover:bg-yellow-600 text-forest-green font-semibold py-2 px-4"
-              onClick={() => setIsUploadOpen(true)}
-            >
-              <Plus className="h-4 w-4 mr-2" /> Share Your Find
-            </Button>
-          )}
         </div>
 
         <Card className="mb-8">
