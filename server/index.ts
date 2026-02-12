@@ -6,6 +6,7 @@ import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import pg from "pg";
 import { registerRoutes } from "./routes.js";
+import { runMigrations } from "./db/migrate.js";
 
 const PgStore = connectPgSimple(session);
 const { Pool } = pg;
@@ -49,6 +50,11 @@ app.use(session({
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
   }
 }));
+
+// Run database migrations on startup
+if (process.env.DATABASE_URL) {
+  await runMigrations();
+}
 
 // Register API routes
 await registerRoutes(app);
