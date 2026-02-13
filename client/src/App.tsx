@@ -38,12 +38,9 @@ function Router() {
     }
   }, [location]);
   
-  // Only scroll to top on route changes (not for all location updates)
+  // Scroll to top on route changes
   useEffect(() => {
-    // Only scroll to top when navigating between different pages
-    if (location !== window.location.pathname) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [location]);
   return (
     <div className="flex flex-col min-h-screen">
