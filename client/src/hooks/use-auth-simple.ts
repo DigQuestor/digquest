@@ -228,147 +228,108 @@ export function useAuth() {
   // Create state to track the current user
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const fetchWithTimeout = async (url: string, init: RequestInit = {}, timeoutMs = 2500) => {
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      return await fetch(url, { ...init, signal: controller.signal });
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+  };
   
   // We no longer use a default mock user - we create users with specific values
   // This ensures consistent behavior and proper persistence of all user attributes
   
   // Load user from localStorage on initialization
   useEffect(() => {
+    const parseStoredUser = (): User | null => {
+      const storedUser = localStorage.getItem(USER_STORAGE_KEY);
+      if (!storedUser) return null;
+
+      const parsedUser = JSON.parse(storedUser);
+      if (!parsedUser || !parsedUser.username) return null;
+
+      if (typeof parsedUser.created_at === 'string') {
+        parsedUser.created_at = new Date(parsedUser.created_at);
+      }
+
+      return parsedUser;
+    };
+
+    const handleAuthChange = () => {
+      try {
+        setUser(parseStoredUser());
+      } catch (error) {
+        console.error("Error handling auth change:", error);
+        setUser(null);
+      }
+    };
+
     const initializeAuth = async () => {
       setIsLoading(true);
-      
+
       try {
-        // Fetch all users from the server to populate our cache
-        console.log("Fetching all users to update cache...");
-        const response = await fetch('/api/users');
-        if (response.ok) {
-          const users = await response.json();
-          userCache.syncWithServer(users);
-        }
-      } catch (error) {
-        console.error("Error fetching users for cache:", error);
-      }
-      
-      try {
-        // Mark first visit but don't prevent authentication  
         const isFirstVisit = !localStorage.getItem('site_visited');
         if (isFirstVisit) {
           console.log("First visit detected - marking as visited");
           localStorage.setItem('site_visited', 'true');
         }
-        
-        // Check for active server session first
+
+        const cachedUser = parseStoredUser();
+        if (cachedUser) {
+          setUser(cachedUser);
+        }
+
         console.log("Checking for active server session...");
-        const sessionResponse = await fetch('/api/auth/user', {
+        const sessionResponse = await fetchWithTimeout('/api/auth/user', {
           credentials: 'include'
-        });
-        
+        }, 2500);
+
         if (sessionResponse.ok) {
           const serverUser = await sessionResponse.json();
           console.log("Active server session found for:", serverUser.username);
-          
+
           if (typeof serverUser.created_at === 'string') {
             serverUser.created_at = new Date(serverUser.created_at);
           }
-          
+
           localStorage.setItem(USER_STORAGE_KEY, safeStringify(serverUser));
           userCache.addUser(serverUser);
           setUser(serverUser);
-          setIsLoading(false);
-          return;
-        } else {
+        } else if (!cachedUser) {
           console.log("No active server session found");
+          setUser(null);
         }
-        
-        // Fallback: Check localStorage for saved user
-        const storedUser = localStorage.getItem(USER_STORAGE_KEY);
-        if (storedUser) {
-          const parsedUser = JSON.parse(storedUser);
-          
-          if (parsedUser && parsedUser.username) {
-            if (typeof parsedUser.created_at === 'string') {
-              parsedUser.created_at = new Date(parsedUser.created_at);
+
+        fetch('/api/users')
+          .then(response => response.ok ? response.json() : [])
+          .then(users => {
+            if (Array.isArray(users) && users.length > 0) {
+              userCache.syncWithServer(users);
             }
-            
-            console.log("User loaded from storage:", parsedUser.username);
-            
-            if (parsedUser.username === "DigQuestor") {
-              fetch(`/api/users/${parsedUser.id}`)
-                .then(response => response.json())
-                .then(freshUser => {
-                  console.log("Fetched fresh DigQuestor data with avatar:", freshUser.avatarUrl);
-                  setUser(freshUser);
-                  localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(freshUser));
-                })
-                .catch(error => {
-                  console.error("Error fetching fresh user data:", error);
-                  setUser(parsedUser);
-                });
-            } else {
-              if (parsedUser.avatarUrl) {
-                const avatarPreview = parsedUser.avatarUrl.substring(0, 30) + "...";
-                console.log("Loaded avatar URL from storage:", avatarPreview);
-              } else {
-                console.log("No avatar URL found in stored user data");
-              }
-              setUser(parsedUser);
-            }
-          }
-        }
+          })
+          .catch(error => {
+            console.error("Error fetching users for cache:", error);
+          });
       } catch (error) {
-        console.error("Failed to initialize auth:", error);
-        localStorage.removeItem(USER_STORAGE_KEY);
+        console.error("Error refreshing user from server:", error);
+
+        const fallbackUser = parseStoredUser();
+        if (fallbackUser) {
+          setUser(fallbackUser);
+        } else {
+          setUser(null);
+        }
       } finally {
         setIsLoading(false);
       }
     };
-    
+
     initializeAuth();
-  }, []);
-  
-  // Listen for auth changes from other instances of the hook
-  useEffect(() => {
-    const handleAuthChange = async () => {
-      console.log("Auth change detected, refreshing user state...");
-      
-      // Check for active server session
-      try {
-        const sessionResponse = await fetch('/api/auth/user', {
-          credentials: 'include'
-        });
-        
-        if (sessionResponse.ok) {
-          const serverUser = await sessionResponse.json();
-          console.log("Refreshed user from server session:", serverUser.username);
-          
-          if (typeof serverUser.created_at === 'string') {
-            serverUser.created_at = new Date(serverUser.created_at);
-          }
-          
-          setUser(serverUser);
-          return;
-        }
-      } catch (error) {
-        console.error("Error refreshing user from server:", error);
-      }
-      
-      // Fallback to localStorage
-      const storedUser = localStorage.getItem(USER_STORAGE_KEY);
-      if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        if (typeof parsedUser.created_at === 'string') {
-          parsedUser.created_at = new Date(parsedUser.created_at);
-        }
-        console.log("Refreshed user from localStorage:", parsedUser.username);
-        setUser(parsedUser);
-      } else {
-        setUser(null);
-      }
-    };
-    
-    // Listen for custom auth change events
     window.addEventListener('auth-changed', handleAuthChange);
-    
+
     return () => {
       window.removeEventListener('auth-changed', handleAuthChange);
     };
