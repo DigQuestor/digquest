@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { getApiErrorMessage } from "@/lib/apiError";
 
 interface FindLikeButtonProps {
   findId: number;
@@ -46,9 +47,10 @@ export const FindLikeButton = ({ findId, initialLikes, className }: FindLikeButt
     },
     onError: (error) => {
       console.error("Error toggling find like:", error);
+
       toast({
         title: "Error",
-        description: "Failed to update like status. Please try again.",
+        description: getApiErrorMessage(error, "Failed to update like status. Please try again."),
         variant: "destructive",
       });
     },

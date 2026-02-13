@@ -13,6 +13,7 @@ import { KmlImporter } from "@/components/map/KmlImporter";
 import { useToast } from "@/hooks/use-toast";
 import { loadGoogleMapsAPI, initializeMap, DEFAULT_CENTER, DEFAULT_ZOOM } from "@/lib/mapService";
 import { apiRequest } from "@/lib/queryClient";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { removeLocationFromLocalStorage, clearAllLocationData } from "@/lib/storageUtils";
 import { IndexedBrowser } from "@/components/IndexedBrowser";
 
@@ -58,7 +59,7 @@ const SimpleLocationCard = ({ location }: SimpleLocationCardProps) => {
       console.error("Error deleting location:", error);
       toast({
         title: "Error",
-        description: "Failed to delete location. Please try again.",
+        description: getApiErrorMessage(error, "Failed to delete location. Please try again."),
         variant: "destructive",
       });
     },

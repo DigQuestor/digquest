@@ -23,6 +23,7 @@ import { useAuth } from "@/hooks/use-auth-simple";
 import { apiRequest } from "@/lib/queryClient";
 import { removeForumPost } from "@/lib/storageUtils";
 import { useToast } from "@/hooks/use-toast";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { useState, useEffect } from "react";
 
 interface ForumPostProps {
@@ -179,11 +180,11 @@ const ForumPost = ({ post, isLink = true }: ForumPostProps) => {
         title: "Post Deleted",
         description: "Your post has been successfully deleted.",
       });
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error deleting post:", error);
       toast({
         title: "Delete Failed",
-        description: error.message || "Failed to delete post. Please try again.",
+        description: getApiErrorMessage(error, "Failed to delete post. Please try again."),
         variant: "destructive",
       });
     }

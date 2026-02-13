@@ -4,6 +4,7 @@ import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { getApiErrorMessage } from "@/lib/apiError";
 
 interface LikeButtonProps {
   postId: number;
@@ -46,9 +47,10 @@ export function LikeButton({ postId, initialLikes = 0, initialIsLiked = false, c
     },
     onError: (error) => {
       console.error("Error toggling like:", error);
+
       toast({
         title: "Error",
-        description: "Failed to update promotion status",
+        description: getApiErrorMessage(error, "Failed to update promotion status"),
         variant: "destructive",
       });
     },

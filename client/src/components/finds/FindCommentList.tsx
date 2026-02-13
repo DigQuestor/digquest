@@ -11,6 +11,7 @@ import { FindComment, User } from "@shared/schema";
 import { userCache } from '@/hooks/use-auth-simple';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
+import { getApiErrorMessage } from '@/lib/apiError';
 
 type FindCommentItem = FindComment & {
   userId?: number;
@@ -98,10 +99,10 @@ export function FindCommentList({ findId }: FindCommentListProps) {
         description: "Your comment has been updated successfully.",
       });
     },
-    onError: () => {
+    onError: (error) => {
       toast({
         title: "Error",
-        description: "Failed to update comment. Please try again.",
+        description: getApiErrorMessage(error, "Failed to update comment. Please try again."),
         variant: "destructive",
       });
     }
@@ -120,10 +121,10 @@ export function FindCommentList({ findId }: FindCommentListProps) {
         description: "Your comment has been deleted successfully.",
       });
     },
-    onError: () => {
+    onError: (error) => {
       toast({
         title: "Error",
-        description: "Failed to delete comment. Please try again.",
+        description: getApiErrorMessage(error, "Failed to delete comment. Please try again."),
         variant: "destructive",
       });
     }

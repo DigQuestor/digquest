@@ -1927,7 +1927,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/posts/:id/like", async (req, res) => {
     try {
       const postId = parseInt(req.params.id);
-      const userId = 1; // For now, using user ID 1 (DigQuestor) as current user
+      
+      if (!req.session?.userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const userId = req.session.userId;
+
+      const post = await storage.getPost(postId);
+      if (!post) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+
+      if (post.userId === userId) {
+        return res.status(403).json({ message: "You cannot promote your own post" });
+      }
       
       const success = await storage.likePost(userId, postId);
       
@@ -1939,7 +1953,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           isLiked: true 
         });
       } else {
-        res.status(400).json({ message: "Post already liked or error occurred" });
+        res.status(400).json({ message: "Post already promoted or could not be promoted" });
       }
     } catch (error) {
       console.error("Error liking post:", error);
@@ -1950,7 +1964,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete("/api/posts/:id/like", async (req, res) => {
     try {
       const postId = parseInt(req.params.id);
-      const userId = 1; // For now, using user ID 1 (DigQuestor) as current user
+      
+      if (!req.session?.userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const userId = req.session.userId;
       
       const success = await storage.unlikePost(userId, postId);
       
@@ -1974,10 +1993,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/posts/:id/like-status", async (req, res) => {
     try {
       const postId = parseInt(req.params.id);
-      const userId = 1; // For now, using user ID 1 (DigQuestor) as current user
+      const likeCount = await storage.getPostLikeCount(postId);
+
+      if (!req.session?.userId) {
+        return res.json({
+          isLiked: false,
+          likes: likeCount,
+        });
+      }
+
+      const userId = req.session.userId;
       
       const isLiked = await storage.isPostLikedByUser(userId, postId);
-      const likeCount = await storage.getPostLikeCount(postId);
       
       res.json({ 
         isLiked, 
