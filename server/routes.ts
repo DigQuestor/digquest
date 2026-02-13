@@ -1746,12 +1746,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!post) {
         return res.status(404).json({ message: "Post not found" });
       }
+
+      // Require authenticated user
+      if (!req.session?.userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const currentUser = await storage.getUser(req.session.userId);
+      if (!currentUser) {
+        return res.status(401).json({ message: "User not found" });
+      }
+
+      const isAuthor = Number(post.userId) === Number(currentUser.id);
+      const isDigQuestModerator = (currentUser.username || "").toLowerCase() === "digquest";
+
+      if (!isAuthor && !isDigQuestModerator) {
+        return res.status(403).json({ message: "You do not have permission to delete this post" });
+      }
       
       // Store the category ID before deleting the post
       const categoryId = post.categoryId;
-      
-      // For security, we could check if the user is authorized to delete this post
-      // For now, we'll allow any user to delete any post since we're not handling auth
       
       const success = await storage.deletePost(postId);
       

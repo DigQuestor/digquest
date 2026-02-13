@@ -125,10 +125,12 @@ const ForumPostDetail = () => {
     
     // Check if the user has permission to delete this post
     const isAuthor = user.id === post.userId;
-    if (!isAuthor) {
+    const isDigQuestModerator = (user.username || "").toLowerCase() === "digquest";
+    const canDeletePost = isAuthor || isDigQuestModerator;
+    if (!canDeletePost) {
       toast({
         title: "Permission Denied",
-        description: "You can only delete your own posts.",
+        description: "Only the post author or DigQuest moderator can delete this post.",
         variant: "destructive",
       });
       return;
@@ -159,7 +161,7 @@ const ForumPostDetail = () => {
       
       toast({
         title: "Post Deleted",
-        description: "Your post has been successfully deleted.",
+        description: isAuthor ? "Your post has been successfully deleted." : "Post removed by moderator.",
       });
       
       // Navigate back to the forum
@@ -340,8 +342,8 @@ const ForumPostDetail = () => {
               </Button>
             </Link>
             
-            {/* Only show delete button if user is the author */}
-            {user && post && user.id === post.userId && (
+            {/* Show delete button for author or DigQuest moderator */}
+            {user && post && (user.id === post.userId || (user.username || "").toLowerCase() === "digquest") && (
               <Button 
                 variant="destructive" 
                 className="bg-red-600 hover:bg-red-700"

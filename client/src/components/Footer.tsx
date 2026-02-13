@@ -40,7 +40,7 @@ export default function Footer() {
               <Link href="/wellbeing" className="block text-muted-foreground hover:text-foreground transition-colors">
                 Wellbeing Hub
               </Link>
-              <Link href="/guides" className="block text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/wellbeing" className="block text-muted-foreground hover:text-foreground transition-colors">
                 Beginner Guides
               </Link>
               <span className="block text-muted-foreground/70 cursor-not-allowed" aria-disabled="true" title="Coming soon">

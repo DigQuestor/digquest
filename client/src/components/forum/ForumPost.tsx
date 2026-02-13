@@ -143,15 +143,17 @@ const ForumPost = ({ post, isLink = true }: ForumPostProps) => {
     queryKey: [`/api/categories/${post.categoryId}`],
   });
   
-  // Check if current user is the author of this post (ensure both are numbers for comparison)
-  const isAuthor = user && post.userId && Number(post.userId) === Number(user.id);
+  // Check post deletion permissions
+  const isAuthor = !!(user && post.userId && Number(post.userId) === Number(user.id));
+  const isDigQuestModerator = (user?.username || "").toLowerCase() === "digquest";
+  const canDeletePost = isAuthor || isDigQuestModerator;
   
   // Handle post deletion
   const handleDeletePost = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    if (!isAuthor) return;
+    if (!canDeletePost) return;
     
     try {
       // Call the delete API endpoint
@@ -178,7 +180,7 @@ const ForumPost = ({ post, isLink = true }: ForumPostProps) => {
       
       toast({
         title: "Post Deleted",
-        description: "Your post has been successfully deleted.",
+        description: isAuthor ? "Your post has been successfully deleted." : "Post removed by moderator.",
       });
     } catch (error) {
       console.error("Error deleting post:", error);
@@ -221,8 +223,8 @@ const ForumPost = ({ post, isLink = true }: ForumPostProps) => {
               </Badge>
             )}
             
-            {/* Delete button - only show if user is the author */}
-            {isAuthor && (
+            {/* Delete button - show for author or DigQuest moderator */}
+            {canDeletePost && (
               <Button 
                 size="sm"
                 variant="ghost"
@@ -285,7 +287,7 @@ const ForumPost = ({ post, isLink = true }: ForumPostProps) => {
               <div className="p-3 bg-red-50 border border-red-200 rounded">
                 <p className="font-semibold text-red-900 mb-2">This will permanently delete:</p>
                 <ul className="list-disc list-inside space-y-1 text-red-800 text-sm">
-                  <li>Your forum post{post.imageUrl ? ' and attached image' : ''}</li>
+                  <li>{isAuthor ? 'Your forum post' : 'This forum post'}{post.imageUrl ? ' and attached image' : ''}</li>
                   <li>All comments on this post ({post.comments || 0})</li>
                   <li>All likes on this post ({post.likes || 0})</li>
                 </ul>
