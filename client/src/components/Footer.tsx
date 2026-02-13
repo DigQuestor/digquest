@@ -1,12 +1,6 @@
 import { Link } from "wouter";
 import { Shovel, Heart, Mail, Phone, MapPin } from "lucide-react";
 export default function Footer() {
-  const handleQuickLinkClick = () => {
-    window.setTimeout(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    }, 0);
-  };
-
   return (
     <footer className="bg-muted/50 border-t">
       <div className="container mx-auto px-4 py-8">
@@ -25,16 +19,16 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="font-semibold">Quick Links</h3>
             <div className="space-y-2 text-sm">
-              <Link href="/forum" onClick={handleQuickLinkClick} className="block text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/forum" className="block text-muted-foreground hover:text-foreground transition-colors">
                 Community Forum
               </Link>
-              <Link href="/finds" onClick={handleQuickLinkClick} className="block text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/finds" className="block text-muted-foreground hover:text-foreground transition-colors">
                 Finds Gallery
               </Link>
-              <Link href="/map" onClick={handleQuickLinkClick} className="block text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/map" className="block text-muted-foreground hover:text-foreground transition-colors">
                 Detecting Map
               </Link>
-              <Link href="/events" onClick={handleQuickLinkClick} className="block text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/events" className="block text-muted-foreground hover:text-foreground transition-colors">
                 Events
               </Link>
             </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import { 
   LogIn, 
   UserPlus, 
@@ -34,14 +34,7 @@ const Header = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-  const [location] = useLocation();
   const [displayName, setDisplayName] = useState<string>("");
-
-  const handleNavClick = () => {
-    window.setTimeout(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    }, 0);
-  };
   
   // Using our mock auth from use-auth-simple
   const { user, logout } = useAuth();
@@ -82,7 +75,7 @@ const Header = () => {
       
       <div className="container mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-center relative z-10">
         <div className="flex items-center mb-4 md:mb-0">
-          <Link href="/" onClick={handleNavClick}>
+          <Link href="/">
             <div className="flex items-center cursor-pointer">
               <Shovel className="h-8 w-8 text-metallic-gold mr-3" />
               <h1 className="font-display text-3xl md:text-4xl font-bold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">DigQuest</h1>
@@ -120,7 +113,7 @@ const Header = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-gray-800">
                     <DropdownMenuItem className="flex items-center" asChild>
-                      <Link href="/profile/edit" onClick={handleNavClick}>
+                      <Link href="/profile/edit">
                         <Settings className="mr-2 h-4 w-4" />
                         <span>Edit Profile</span>
                       </Link>
