@@ -7,9 +7,11 @@ export const FIND_TIME_PERIODS = [
   "Byzantine Era",
   "Medieval",
   "Renaissance",
+  "Elizabethan",
   "Early Modern",
   "Georgian",
   "Victorian",
+  "Edwardian",
   "Modern",
   "Unknown",
 ] as const;
