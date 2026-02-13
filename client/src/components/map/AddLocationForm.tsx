@@ -52,7 +52,7 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
   const [manualCoordinatesEntered, setManualCoordinatesEntered] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState<google.maps.LatLng | null>(null);
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuth();
   const queryClient = useQueryClient();
   const currentMarkerRef = useRef<google.maps.Marker | null>(null);
 
@@ -167,6 +167,14 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
   }, [map, form, toast]);
 
   const onSubmit = async (data: LocationFormValues) => {
+    if (isAuthLoading) {
+      toast({
+        title: "Checking Authentication",
+        description: "Please wait while we verify your session.",
+      });
+      return;
+    }
+
     if (!user) {
       toast({
         title: "❌ Authentication Required",
@@ -645,9 +653,13 @@ const AddLocationForm = ({ onLocationAdded, onSuccess, map, userPosition }: AddL
                   ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   : 'bg-green-600 hover:bg-green-700 text-white animate-pulse'
               }`}
-              disabled={isSubmitting || (!selectedPosition && !hasValidCoordinates())}
+              disabled={isAuthLoading || isSubmitting || (!selectedPosition && !hasValidCoordinates())}
             >
-              {isSubmitting ? (
+              {isAuthLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Checking Session...
+                </>
+              ) : isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Adding Location...
                 </>

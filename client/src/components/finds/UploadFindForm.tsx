@@ -35,7 +35,7 @@ const UploadFindForm = ({ onFindUploaded, onCancel }: UploadFindFormProps) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuth();
   const queryClient = useQueryClient();
 
   const form = useForm<FindFormValues>({
@@ -109,6 +109,14 @@ const UploadFindForm = ({ onFindUploaded, onCancel }: UploadFindFormProps) => {
   };
 
   const onSubmit = async (data: FindFormValues) => {
+    if (isAuthLoading) {
+      toast({
+        title: "Checking Authentication",
+        description: "Please wait while we verify your session.",
+      });
+      return;
+    }
+
     if (!user) {
       toast({
         title: "Authentication Required",

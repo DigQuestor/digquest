@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import EditFindForm from "@/components/finds/EditFindForm";
 import { FindLikeButton } from "@/components/finds/FindLikeButton";
+import { removeFindFromStorage } from "@/lib/storageUtils";
 
 type TreasureFind = Find & {
   title?: string;
@@ -216,9 +217,7 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
             queryClient.invalidateQueries({ queryKey: ['/api/finds'] });
             
             // Also remove from local storage to keep things in sync
-            import('@/lib/storageUtils').then(({ removeFindFromStorage }) => {
-              removeFindFromStorage(find.id);
-            });
+            removeFindFromStorage(find.id);
           } else {
             // Show error toast with message from API
             const errorData = await response.json();

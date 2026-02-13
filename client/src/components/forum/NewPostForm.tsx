@@ -34,7 +34,7 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuth();
   const queryClient = useQueryClient();
 
   const { data: categories, isLoading: isLoadingCategories } = useQuery<Category[]>({
@@ -115,6 +115,15 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
   };
 
   const onSubmit = async (values: PostFormValues) => {
+    if (isAuthLoading) {
+      toast({
+        title: "Checking Authentication",
+        description: "Please wait a moment while we verify your session.",
+        duration: 3000,
+      });
+      return;
+    }
+
     if (!user) {
       toast({
         title: "⚠️ Authentication Required",
@@ -266,7 +275,7 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
                   <Input 
                     placeholder="Enter your post title..." 
                     {...field} 
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isAuthLoading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -283,7 +292,7 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
                 <Select 
                   onValueChange={(value) => field.onChange(parseInt(value))} 
                   defaultValue={field.value?.toString()}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isAuthLoading}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -314,7 +323,7 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
                     placeholder="Share your thoughts, findings, or questions..."
                     className="min-h-[100px] resize-none"
                     {...field}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isAuthLoading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -362,7 +371,7 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
                         accept="image/*"
                         onChange={handleImageSelect}
                         className="hidden"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || isAuthLoading}
                       />
                     </label>
                   </div>
@@ -379,13 +388,13 @@ const NewPostForm = ({ onPostCreated }: NewPostFormProps) => {
               type="button"
               variant="outline"
               onClick={() => form.reset()}
-              disabled={isSubmitting}
+              disabled={isSubmitting || isAuthLoading}
             >
               Clear
             </Button>
-            <Button type="submit" disabled={isSubmitting || isUploadingImage}>
-              {(isSubmitting || isUploadingImage) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isUploadingImage ? "Uploading Image..." : isSubmitting ? "Creating Post..." : "Create Post"}
+            <Button type="submit" disabled={isAuthLoading || isSubmitting || isUploadingImage}>
+              {(isAuthLoading || isSubmitting || isUploadingImage) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isAuthLoading ? "Checking Session..." : isUploadingImage ? "Uploading Image..." : isSubmitting ? "Creating Post..." : "Create Post"}
             </Button>
           </div>
         </form>

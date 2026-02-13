@@ -18,7 +18,7 @@ const Forum = () => {
   const [isNewPostOpen, setIsNewPostOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const { user } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuth();
   const queryClient = useQueryClient();
 
   // Fetch all posts - simplified to use API data only
@@ -119,10 +119,14 @@ const Forum = () => {
           </div>
           <Button 
             className="bg-metallic-gold hover:bg-yellow-600 text-forest-green font-semibold transition duration-300 flex items-center"
-            onClick={() => setIsNewPostOpen(true)}
-            disabled={!user}
+            onClick={() => {
+              if (!isAuthLoading && user) {
+                setIsNewPostOpen(true);
+              }
+            }}
+            disabled={isAuthLoading || !user}
           >
-            <Plus className="h-4 w-4 mr-2" /> New Post
+            <Plus className="h-4 w-4 mr-2" /> {isAuthLoading ? "Checking Session..." : "New Post"}
           </Button>
         </div>
 
@@ -235,7 +239,7 @@ const Forum = () => {
                 <TabsTrigger value="popular" className="data-[state=active]:bg-earth-brown data-[state=active]:text-sand-beige">
                   Most Popular
                 </TabsTrigger>
-                {user && (
+                {!isAuthLoading && user && (
                   <TabsTrigger value="my-posts" className="data-[state=active]:bg-earth-brown data-[state=active]:text-sand-beige">
                     My Posts
                   </TabsTrigger>

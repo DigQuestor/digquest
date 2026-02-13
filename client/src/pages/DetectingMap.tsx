@@ -105,6 +105,14 @@ const DetectingMap = () => {
 
   // Function to handle KML import
   const handleKmlImport = async (importedLocations: Array<{name: string, description?: string, coordinates: {lat: number, lng: number}}>) => {
+    if (authLoading) {
+      toast({
+        title: "Checking Authentication",
+        description: "Please wait while we verify your session.",
+      });
+      return;
+    }
+
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -1084,20 +1092,20 @@ const DetectingMap = () => {
                     variant="outline" 
                     className="w-full"
                     onClick={() => setIsAddLocationOpen(true)}
-                    disabled={!user}
+                    disabled={authLoading || !user}
                   >
                     <MapPin className="mr-2 h-4 w-4" />
-                    Add New Spot
+                    {authLoading ? "Checking Session..." : "Add New Spot"}
                   </Button>
                   
                   <Button 
                     variant="outline" 
                     className="w-full"
                     onClick={() => setIsKmlImportOpen(true)}
-                    disabled={!user}
+                    disabled={authLoading || !user}
                   >
                     <Upload className="mr-2 h-4 w-4" />
-                    Import .kml/.kmi Files
+                    {authLoading ? "Checking Session..." : "Import .kml/.kmi Files"}
                   </Button>
                 </div>
               </CardContent>

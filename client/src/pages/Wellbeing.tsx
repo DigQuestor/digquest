@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { Helmet } from "react-helmet";
 import { useQuery } from "@tanstack/react-query";
-import { Story, User } from "@shared/schema";
 import { Heart, CheckCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -21,22 +20,36 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 // Extend the story schema for form validation
 const storyFormSchema = z.object({
   content: z.string().min(20, "Your story must be at least 20 characters long"),
-  yearsDetecting: z.coerce.number().min(0, "Years must be 0 or greater").optional(),
+  yearsDetecting: z.number().min(0, "Years must be 0 or greater").optional(),
 });
 
-type StoryFormValues = z.infer<typeof storyFormSchema>;
+type StoryFormInput = z.input<typeof storyFormSchema>;
+type StoryFormValues = z.output<typeof storyFormSchema>;
+
+interface WellbeingStory {
+  id: number;
+  userId?: number;
+  content?: string;
+  yearsDetecting?: number;
+}
+
+interface WellbeingUser {
+  id: number;
+  username?: string;
+  avatarUrl?: string;
+}
 
 const Wellbeing = () => {
   const [location, navigate] = useLocation();
   const [isShareStoryOpen, setIsShareStoryOpen] = useState(false);
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuth();
 
-  const { data: stories, isLoading: isLoadingStories } = useQuery<Story[]>({
+  const { data: stories, isLoading: isLoadingStories } = useQuery<WellbeingStory[]>({
     queryKey: ['/api/stories'],
   });
 
-  const form = useForm<StoryFormValues>({
+  const form = useForm<StoryFormInput, any, StoryFormValues>({
     resolver: zodResolver(storyFormSchema),
     defaultValues: {
       content: "",
@@ -45,6 +58,14 @@ const Wellbeing = () => {
   });
 
   const onSubmit = async (data: StoryFormValues) => {
+    if (isAuthLoading) {
+      toast({
+        title: "Checking Authentication",
+        description: "Please wait while we verify your session.",
+      });
+      return;
+    }
+
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -97,9 +118,9 @@ const Wellbeing = () => {
           <Button 
             className="bg-metallic-gold hover:bg-yellow-600 text-forest-green font-semibold transition duration-300 flex items-center"
             onClick={() => setIsShareStoryOpen(true)}
-            disabled={!user}
+            disabled={isAuthLoading || !user}
           >
-            <Heart className="h-4 w-4 mr-2" /> Share Your Story
+            <Heart className="h-4 w-4 mr-2" /> {isAuthLoading ? "Checking Session..." : "Share Your Story"}
           </Button>
         </div>
 
@@ -377,7 +398,14 @@ const Wellbeing = () => {
                       <Input 
                         type="number" 
                         placeholder="0" 
-                        {...field} 
+                        value={field.value ?? ""}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          field.onChange(value === "" ? undefined : Number(value));
+                        }}
+                        onBlur={field.onBlur}
+                        name={field.name}
+                        ref={field.ref}
                       />
                     </FormControl>
                     <FormMessage />
@@ -421,18 +449,18 @@ const Wellbeing = () => {
 
 // Story card component
 interface StoryCardProps {
-  story: Story;
+  story: WellbeingStory;
 }
 
 const StoryCard = ({ story }: StoryCardProps) => {
   // Modify to handle the case when userId might not be available
-  const { data: user, isLoading: isLoadingUser } = useQuery<User | null>({
+  const { data: user, isLoading: isLoadingUser } = useQuery<WellbeingUser | null>({
     queryKey: ['/api/users', story.userId],
     enabled: !!story.userId, // Only run the query if userId is present
   });
 
   // Generate a deterministic seed for the avatar
-  const avatarSeed = story.userId?.toString() || story.content.substring(0, 5) || 'user';
+  const avatarSeed = story.userId?.toString() || story.content?.substring(0, 5) || 'user';
 
   return (
     <Card className="bg-sand-beige/50">
@@ -452,7 +480,7 @@ const StoryCard = ({ story }: StoryCardProps) => {
             </p>
           </div>
         </div>
-        <p className="text-gray-700 text-sm">"{story.content}"</p>
+        <p className="text-gray-700 text-sm">"{story.content || "No story content provided."}"</p>
       </CardContent>
     </Card>
   );

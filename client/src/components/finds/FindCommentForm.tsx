@@ -28,7 +28,7 @@ interface FindCommentFormProps {
 }
 
 export function FindCommentForm({ findId, onCommentAdded }: FindCommentFormProps) {
-  const { user } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,6 +43,14 @@ export function FindCommentForm({ findId, onCommentAdded }: FindCommentFormProps
 
   // Handle form submission
   const onSubmit = async (data: FindCommentFormValues) => {
+    if (isAuthLoading) {
+      toast({
+        title: "Checking Authentication",
+        description: "Please wait while we verify your session.",
+      });
+      return;
+    }
+
     if (!user) {
       toast({
         title: "Please log in",
@@ -92,6 +100,14 @@ export function FindCommentForm({ findId, onCommentAdded }: FindCommentFormProps
     }
   };
 
+  if (isAuthLoading) {
+    return (
+      <div className="bg-gray-50 p-4 rounded-md border border-gray-200 mb-6 text-center">
+        <p className="text-gray-600">Checking your session...</p>
+      </div>
+    );
+  }
+
   if (!user) {
     return (
       <div className="bg-gray-50 p-4 rounded-md border border-gray-200 mb-6 text-center">
@@ -130,7 +146,7 @@ export function FindCommentForm({ findId, onCommentAdded }: FindCommentFormProps
           <Button 
             type="submit" 
             className="bg-forest-green hover:bg-meadow-green"
-            disabled={isSubmitting}
+            disabled={isAuthLoading || isSubmitting}
           >
             {isSubmitting ? "Posting..." : "Post Comment"}
           </Button>

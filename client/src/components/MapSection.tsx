@@ -493,6 +493,14 @@ const MapSection = () => {
 
   // Function to handle KML import
   const handleKmlImport = async (importedLocations: Array<{name: string, description?: string, coordinates: {lat: number, lng: number}}>) => {
+    if (authLoading) {
+      toast({
+        title: "Checking Authentication",
+        description: "Please wait while we verify your session.",
+      });
+      return;
+    }
+
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -594,18 +602,24 @@ const MapSection = () => {
           <Button 
             className="bg-amber-600 hover:bg-amber-700 text-sand-beige transition duration-300 flex items-center justify-center mobile-button"
             onClick={() => setIsKmlImportOpen(true)}
-            disabled={!user}
+            disabled={authLoading || !user}
           >
             <Upload className="h-4 w-4 mr-2" /> 
-            <span className="hidden sm:inline">Import .kml/.kmi Files</span>
-            <span className="sm:hidden">Import Files</span>
+            {authLoading ? (
+              <span>Checking Session...</span>
+            ) : (
+              <>
+                <span className="hidden sm:inline">Import .kml/.kmi Files</span>
+                <span className="sm:hidden">Import Files</span>
+              </>
+            )}
           </Button>
           <Button 
             className="bg-forest-green hover:bg-green-900 text-sand-beige transition duration-300 flex items-center justify-center mobile-button"
             onClick={() => setIsAddLocationOpen(true)}
-            disabled={!user}
+            disabled={authLoading || !user}
           >
-            <MapPin className="h-4 w-4 mr-2" /> Add New Spot
+            <MapPin className="h-4 w-4 mr-2" /> {authLoading ? "Checking Session..." : "Add New Spot"}
           </Button>
         </div>
       </div>

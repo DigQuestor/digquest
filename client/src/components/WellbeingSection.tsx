@@ -39,6 +39,14 @@ const WellbeingSection = () => {
   });
 
   const onSubmit = async (data: StoryFormValues) => {
+    if (authLoading) {
+      toast({
+        title: "Checking Authentication",
+        description: "Please wait while we verify your session.",
+      });
+      return;
+    }
+
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -225,9 +233,9 @@ const WellbeingSection = () => {
             <Button 
               className="bg-metallic-gold hover:bg-yellow-600 text-forest-green font-bold py-3 px-6 rounded-lg text-lg transition duration-300 transform hover:scale-105 shadow-lg"
               onClick={() => setIsShareStoryOpen(true)}
-              disabled={!user}
+              disabled={authLoading || !user}
             >
-              <Heart className="h-5 w-5 mr-2" /> Share Your Story
+              <Heart className="h-5 w-5 mr-2" /> {authLoading ? "Checking Session..." : "Share Your Story"}
             </Button>
           </div>
         </CardContent>
@@ -285,9 +293,11 @@ const WellbeingSection = () => {
                 <Button 
                   type="submit" 
                   className="bg-metallic-gold hover:bg-yellow-600 text-forest-green"
-                  disabled={isSubmitting}
+                  disabled={authLoading || isSubmitting}
                 >
-                  {isSubmitting ? (
+                  {authLoading ? (
+                    "Checking Session..."
+                  ) : isSubmitting ? (
                     <span className="flex items-center">
                       <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-forest-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

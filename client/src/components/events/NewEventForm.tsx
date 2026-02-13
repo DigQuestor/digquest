@@ -38,7 +38,7 @@ interface NewEventFormProps {
 const NewEventForm = ({ onEventCreated }: NewEventFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuth();
   const queryClient = useQueryClient();
 
   // Set up the form with react-hook-form and zod validation
@@ -62,6 +62,14 @@ const NewEventForm = ({ onEventCreated }: NewEventFormProps) => {
   }, [user, form]);
 
   const onSubmit = async (data: EventFormValues) => {
+    if (isAuthLoading) {
+      toast({
+        title: "Checking Authentication",
+        description: "Please wait while we verify your session.",
+      });
+      return;
+    }
+
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -204,14 +212,14 @@ const NewEventForm = ({ onEventCreated }: NewEventFormProps) => {
           <Button 
             type="submit" 
             className="bg-metallic-gold hover:bg-yellow-600 text-forest-green"
-            disabled={isSubmitting}
+            disabled={isAuthLoading || isSubmitting}
           >
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating...
               </>
             ) : (
-              "Create Event"
+              isAuthLoading ? "Checking Session..." : "Create Event"
             )}
           </Button>
         </div>

@@ -42,7 +42,7 @@ const ForumPostDetail = () => {
   const [editCommentText, setEditCommentText] = useState("");
   const [deletingCommentId, setDeletingCommentId] = useState<number | null>(null);
   const [commentDeleteDialogOpen, setCommentDeleteDialogOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
@@ -399,7 +399,13 @@ const ForumPostDetail = () => {
         
         <h2 className="text-xl font-semibold text-earth-brown mb-4">Comments {comments?.length ? `(${comments.length})` : ''}</h2>
         
-        {user ? (
+        {isAuthLoading ? (
+          <Card className="shadow-md mb-6">
+            <CardContent className="py-8 flex justify-center">
+              <Loader2 className="h-6 w-6 animate-spin text-forest-green" />
+            </CardContent>
+          </Card>
+        ) : user ? (
           <Card className="shadow-md mb-6">
             <CardContent className="pt-6">
               <form onSubmit={handleCommentSubmit}>
