@@ -39,10 +39,32 @@ export function LikeButton({ postId, initialLikes = 0, initialIsLiked = false, c
       
       // Invalidate posts list to update like counts
       queryClient.invalidateQueries({ queryKey: ["/api/posts"] });
+
+      const isPromoted = !!data.isLiked;
       
       toast({
-        title: data.isLiked ? "Post Promoted!" : "Promotion Removed",
-        description: data.isLiked ? "You've promoted this post" : "You've removed your promotion",
+        title: (
+          <div className="flex items-center gap-2 text-white">
+            <span className="text-lg leading-none">{isPromoted ? "🚀" : "↩️"}</span>
+            <span className="text-base font-bold leading-none">
+              {isPromoted ? "Post Promoted!" : "Promotion Removed"}
+            </span>
+          </div>
+        ),
+        description: (
+          <div className="mt-2 space-y-2 text-white">
+            <p className="text-sm font-medium text-white/90">
+              {isPromoted ? "You've promoted this post" : "You've removed your promotion"}
+            </p>
+            <div className="rounded border border-metallic-gold/70 bg-metallic-gold px-3 py-1.5">
+              <p className="text-sm font-bold text-black">Community visibility updated</p>
+            </div>
+          </div>
+        ),
+        duration: 4000,
+        className: isPromoted
+          ? "border-forest-green bg-forest-green text-white shadow-xl"
+          : "border-earth-brown bg-earth-brown text-white shadow-xl",
       });
     },
     onError: (error) => {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Post, Category } from "@shared/schema";
@@ -75,6 +75,23 @@ const Forum = () => {
     
     return result;
   }) || [];
+
+  const popularPosts = useMemo(() => {
+    return [...filteredPosts].sort((a, b) => {
+      const likesDiff = (b.likes || 0) - (a.likes || 0);
+      if (likesDiff !== 0) return likesDiff;
+
+      const commentsDiff = (b.comments || 0) - (a.comments || 0);
+      if (commentsDiff !== 0) return commentsDiff;
+
+      const viewsDiff = (b.views || 0) - (a.views || 0);
+      if (viewsDiff !== 0) return viewsDiff;
+
+      const createdAtA = a.created_at ? new Date(a.created_at).getTime() : 0;
+      const createdAtB = b.created_at ? new Date(b.created_at).getTime() : 0;
+      return createdAtB - createdAtA;
+    });
+  }, [filteredPosts]);
   
   // Debug log for filtered posts
   useEffect(() => {
@@ -262,13 +279,29 @@ const Forum = () => {
                   <div className="flex items-center justify-center p-12">
                     <Loader2 className="h-8 w-8 animate-spin text-earth-brown" />
                   </div>
-                ) : (
+                ) : popularPosts.length > 0 ? (
                   <div className="space-y-4">
-                    {filteredPosts
-                      ?.sort((a, b) => (b.views || 0) - (a.views || 0))
-                      .map(post => (
+                    {popularPosts.map(post => (
                         <ForumPost key={post.id} post={post} />
                       ))}
+                  </div>
+                ) : (
+                  <div className="bg-sand-beige/50 rounded-lg p-8 text-center">
+                    <h3 className="text-xl font-display text-earth-brown mb-2">No posts found</h3>
+                    <p className="text-gray-600 mb-4">
+                      {searchQuery
+                        ? "Try adjusting your search or filters"
+                        : "Be the first to start a discussion!"
+                      }
+                    </p>
+                    {user && (
+                      <Button
+                        className="bg-metallic-gold hover:bg-yellow-600 text-forest-green"
+                        onClick={() => setIsNewPostOpen(true)}
+                      >
+                        <Plus className="h-4 w-4 mr-2" /> Create New Post
+                      </Button>
+                    )}
                   </div>
                 )}
               </TabsContent>
