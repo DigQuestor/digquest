@@ -43,12 +43,12 @@ export default function Footer() {
               <Link href="/guides" className="block text-muted-foreground hover:text-foreground transition-colors">
                 Beginner Guides
               </Link>
-              <Link href="/equipment" className="block text-muted-foreground hover:text-foreground transition-colors">
+              <span className="block text-muted-foreground/70 cursor-not-allowed" aria-disabled="true" title="Coming soon">
                 Equipment Reviews
-              </Link>
-              <Link href="/legal" className="block text-muted-foreground hover:text-foreground transition-colors">
+              </span>
+              <span className="block text-muted-foreground/70 cursor-not-allowed" aria-disabled="true" title="Coming soon">
                 Legal Guidelines
-              </Link>
+              </span>
             </div>
           </div>
           {/* Contact */}
@@ -57,7 +57,7 @@ export default function Footer() {
             <div className="space-y-2 text-sm text-muted-foreground">
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <span>contact@digquest.com</span>
+                <span>Contact options coming soon</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />

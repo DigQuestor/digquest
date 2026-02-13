@@ -24,7 +24,7 @@ const {
   userAchievements
 } = schema;
 import { db } from "./db/db.js";
-import { eq, desc, and, inArray, sql } from "drizzle-orm";
+import { eq, desc, and, or, inArray, sql } from "drizzle-orm";
 
 // Storage interface
 export interface IStorage {
@@ -1533,7 +1533,7 @@ export class MemStorage implements IStorage {
       .map(membership => membership.groupId);
     
     return Array.from(this.groups.values())
-      .filter(group => userGroupIds.includes(group.id) && !isLegacyMindSweepersGroup(group.name));
+      .filter(group => (userGroupIds.includes(group.id) || group.creatorId === userId) && !isLegacyMindSweepersGroup(group.name));
   }
 
   async getPublicGroups(): Promise<Group[]> {
@@ -2670,10 +2670,18 @@ export class DatabaseStorage implements IStorage {
     const userGroups = await db
       .select()
       .from(groups)
-      .innerJoin(groupMemberships, eq(groups.id, groupMemberships.groupId))
+      .leftJoin(groupMemberships, and(
+        eq(groups.id, groupMemberships.groupId),
+        eq(groupMemberships.userId, userId)
+      ))
       .where(and(
-        eq(groupMemberships.userId, userId),
-        eq(groupMemberships.status, 'active'),
+        or(
+          eq(groups.creatorId, userId),
+          and(
+            eq(groupMemberships.userId, userId),
+            eq(groupMemberships.status, 'active')
+          )
+        ),
         sql`LOWER(REGEXP_REPLACE(${groups.name}, '\\s+', '', 'g')) <> ${legacyMindSweepersGroupName}`
       ));
     
