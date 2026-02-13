@@ -138,7 +138,27 @@ export default function ProfileEdit() {
       }
       
       // If we have a new profile picture, use the profile preview (which is a base64 string)
-      if (profilePreview) {
+      if (profilePicture) {
+        const formData = new FormData();
+        formData.append("avatar", profilePicture);
+
+        const avatarResponse = await fetch(`/api/users/${user.id}/avatar`, {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        });
+
+        if (!avatarResponse.ok) {
+          const errorData = await avatarResponse.json().catch(() => ({}));
+          throw new Error(errorData.message || "Failed to upload profile picture");
+        }
+
+        const avatarData = await avatarResponse.json();
+        if (avatarData.avatarUrl) {
+          userData.avatarUrl = avatarData.avatarUrl;
+          setProfilePreview(avatarData.avatarUrl);
+        }
+      } else if (profilePreview && profilePreview === user.avatarUrl) {
         userData.avatarUrl = profilePreview;
       }
       

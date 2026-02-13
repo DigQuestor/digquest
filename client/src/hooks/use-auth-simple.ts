@@ -608,8 +608,7 @@ export function useAuth() {
       const finalUserData = {
         ...updatedUser,
         ...serverUpdatedUser,
-        // Ensure we preserve the avatar URL from our update (in case it's a data URL)
-        avatarUrl: updatedUser.avatarUrl
+        avatarUrl: updatedData.avatarUrl ?? serverUpdatedUser.avatarUrl ?? updatedUser.avatarUrl
       };
       
       // Save the updated user to localStorage

@@ -133,7 +133,7 @@ export default function SocialDashboard() {
 
   const updateProfileMutation = useMutation({
     mutationFn: async (profileData: { username: string; bio: string; email: string }) => {
-      await apiRequest('PATCH', `/api/users/${currentUser?.id}`, profileData);
+      await apiRequest('PUT', `/api/users/${currentUser?.id}`, profileData);
       
       if (selectedImage) {
         const formData = new FormData();
