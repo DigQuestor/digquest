@@ -9,8 +9,8 @@ import { Loader2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
+import Home from "@/pages/Home";
 
-const Home = lazy(() => import("@/pages/Home"));
 const Forum = lazy(() => import("@/pages/Forum"));
 const ForumPostDetail = lazy(() => import("@/pages/ForumPostDetail"));
 const FindsGallery = lazy(() => import("@/pages/FindsGallery"));
@@ -31,9 +31,30 @@ function Router() {
   const [location] = useLocation();
 
   useEffect(() => {
+    const prefetchers: Array<() => Promise<unknown>> = [
+      () => import("@/pages/Forum"),
+      () => import("@/pages/ForumPostDetail"),
+      () => import("@/pages/FindsGallery"),
+      () => import("@/pages/FindDetail"),
+      () => import("@/pages/DetectingMap"),
+      () => import("@/pages/ARRoutes"),
+      () => import("@/pages/Wellbeing"),
+      () => import("@/pages/SocialDashboard"),
+      () => import("@/pages/DiggersMatch"),
+      () => import("@/pages/Events"),
+      () => import("@/pages/EventCreate"),
+      () => import("@/pages/EventDetail"),
+      () => import("@/pages/ProfileEdit"),
+      () => import("@/pages/EmailVerification"),
+      () => import("@/pages/not-found"),
+    ];
+
     const prefetchRoutes = () => {
-      void import("@/pages/Forum");
-      void import("@/pages/FindsGallery");
+      prefetchers.forEach((loadChunk, index) => {
+        window.setTimeout(() => {
+          void loadChunk();
+        }, index * 120);
+      });
     };
 
     const requestIdle = (window as Window & {
@@ -55,7 +76,42 @@ function Router() {
       };
     }
 
-    const timeoutHandle = window.setTimeout(prefetchRoutes, 1200);
+    const timeoutHandle = window.setTimeout(prefetchRoutes, 900);
+    return () => window.clearTimeout(timeoutHandle);
+  }, []);
+
+  useEffect(() => {
+    const prefetchCoreData = () => {
+      const warmups = [
+        queryClient.prefetchQuery({ queryKey: ["/api/posts"] }),
+        queryClient.prefetchQuery({ queryKey: ["/api/finds"] }),
+        queryClient.prefetchQuery({ queryKey: ["/api/events"] }),
+        queryClient.prefetchQuery({ queryKey: ["/api/categories"] }),
+      ];
+
+      void Promise.allSettled(warmups);
+    };
+
+    const requestIdle = (window as Window & {
+      requestIdleCallback?: (callback: IdleRequestCallback) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    }).requestIdleCallback;
+
+    const cancelIdle = (window as Window & {
+      requestIdleCallback?: (callback: IdleRequestCallback) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    }).cancelIdleCallback;
+
+    if (requestIdle) {
+      const idleHandle = requestIdle(() => prefetchCoreData());
+      return () => {
+        if (cancelIdle) {
+          cancelIdle(idleHandle);
+        }
+      };
+    }
+
+    const timeoutHandle = window.setTimeout(prefetchCoreData, 1300);
     return () => window.clearTimeout(timeoutHandle);
   }, []);
   
