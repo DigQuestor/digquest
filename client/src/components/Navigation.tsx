@@ -12,6 +12,12 @@ import {
 const Navigation = () => {
   const [location] = useLocation();
 
+  const handleNavClick = () => {
+    window.setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    }, 0);
+  };
+
   return (
     <nav className="bg-forest-green py-3 shadow-md">
       <div className="container mx-auto px-4">
@@ -24,7 +30,7 @@ const Navigation = () => {
             scrollBehavior: 'smooth'
           }}
         >
-          <Link href="/" 
+          <Link href="/" onClick={handleNavClick}
             className={`whitespace-nowrap transition-colors duration-300 px-3 py-2 font-medium flex items-center text-sm md:text-base flex-shrink-0 min-w-fit cursor-pointer
               ${location === '/' 
                 ? 'text-metallic-gold border-b-2 border-metallic-gold' 
@@ -34,7 +40,7 @@ const Navigation = () => {
             <Home className="h-4 w-4 mr-1 md:mr-2" /> Home
           </Link>
           
-          <Link href="/forum" 
+          <Link href="/forum" onClick={handleNavClick}
             className={`whitespace-nowrap transition-colors duration-300 px-3 py-2 font-medium flex items-center text-sm md:text-base flex-shrink-0 min-w-fit cursor-pointer
               ${location === '/forum' 
                 ? 'text-metallic-gold border-b-2 border-metallic-gold' 
@@ -44,7 +50,7 @@ const Navigation = () => {
             <MessageSquare className="h-4 w-4 mr-1 md:mr-2" /> Community
           </Link>
           
-          <Link href="/events" 
+          <Link href="/events" onClick={handleNavClick}
             className={`whitespace-nowrap transition-colors duration-300 px-3 py-2 font-medium flex items-center text-sm md:text-base flex-shrink-0 min-w-fit cursor-pointer
               ${location === '/events' 
                 ? 'text-metallic-gold border-b-2 border-metallic-gold' 
@@ -54,7 +60,7 @@ const Navigation = () => {
             <Calendar className="h-4 w-4 mr-1 md:mr-2" /> Events
           </Link>
           
-          <Link href="/finds" 
+          <Link href="/finds" onClick={handleNavClick}
             className={`whitespace-nowrap transition-colors duration-300 px-3 py-2 font-medium flex items-center text-sm md:text-base flex-shrink-0 min-w-fit cursor-pointer
               ${location === '/finds' 
                 ? 'text-metallic-gold border-b-2 border-metallic-gold' 
@@ -64,7 +70,7 @@ const Navigation = () => {
             <Camera className="h-4 w-4 mr-1 md:mr-2" /> Finds Gallery
           </Link>
           
-          <Link href="/map" 
+          <Link href="/map" onClick={handleNavClick}
             className={`whitespace-nowrap transition-colors duration-300 px-3 py-2 font-medium flex items-center text-sm md:text-base flex-shrink-0 min-w-fit cursor-pointer
               ${location === '/map' 
                 ? 'text-metallic-gold border-b-2 border-metallic-gold' 
@@ -74,7 +80,7 @@ const Navigation = () => {
             <Map className="h-4 w-4 mr-1 md:mr-2" /> Detecting Map
           </Link>
           
-          <Link href="/social" 
+          <Link href="/social" onClick={handleNavClick}
             className={`whitespace-nowrap transition-colors duration-300 px-3 py-2 font-medium flex items-center text-sm md:text-base flex-shrink-0 min-w-fit cursor-pointer
               ${location === '/social' 
                 ? 'text-metallic-gold border-b-2 border-metallic-gold' 
@@ -84,7 +90,7 @@ const Navigation = () => {
             <Users className="h-4 w-4 mr-1 md:mr-2" /> Social
           </Link>
           
-          <Link href="/wellbeing" 
+          <Link href="/wellbeing" onClick={handleNavClick}
             className={`whitespace-nowrap transition-colors duration-300 px-3 py-2 font-medium flex items-center text-sm md:text-base flex-shrink-0 min-w-fit cursor-pointer
               ${location === '/wellbeing' 
                 ? 'text-metallic-gold border-b-2 border-metallic-gold' 
@@ -94,7 +100,7 @@ const Navigation = () => {
             <Heart className="h-4 w-4 mr-1 md:mr-2" /> Wellbeing
           </Link>
           
-          <Link href="/diggers-match" 
+          <Link href="/diggers-match" onClick={handleNavClick}
             className={`whitespace-nowrap transition-colors duration-300 px-3 py-2 font-medium flex items-center text-sm md:text-base relative flex-shrink-0 min-w-fit cursor-pointer
               ${location === '/diggers-match' 
                 ? 'text-metallic-gold border-b-2 border-metallic-gold' 
