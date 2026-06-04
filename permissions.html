@@ -10,40 +10,34 @@
 
 <header class="hero">
   <div class="hero-overlay"></div>
+
   <div class="hero-content">
     <h1>Permissions</h1>
     <p>Restricted access</p>
-  <nav>
-  <a href="index.html">Home</a>
-  <a href="gallery.html">Finds</a>
-  <a href="permissions.html">Permissions</a>
-</nav>
 
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="gallery.html">Finds</a>
+      <a href="permissions.html">Permissions</a>
+    </nav>
   </div>
 </header>
 
 <main style="text-align:center; padding:40px;">
 
   <h2>Access Permissions Area</h2>
+  <p style="color:#666;">
+    This section is restricted. Please enter the password to continue.
+  </p>
 
-  <input type="password" id="passwordBox" placeholder="Enter password">
-  <br><br>
+  <!-- ✅ FORM -->
+  <form id="loginForm">
+    <input type="password" id="passwordBox" placeholder="Enter password">
+    <br><br>
+    <button type="submit" class="button">Enter</button>
+  </form>
 
-  <button onclick="checkPassword()" class="button">Enter</button>
-
-  <p id="error" style="color:red;"></p>
-
-  <div id="secretContent" style="display:none; margin-top:30px;">
-    <h3>Permissions Area</h3>
-
-    <p style="color:#666;">This section is restricted. Please enter the password to continue.</p>
-
-    <p>
-      - Landowner permissions  
-      <br>- Location notes  
-      <br>- Agreements  
-    </p>
-  </div>
+  <p id="error" style="color:red; margin-top:15px;"></p>
 
 </main>
 
@@ -51,23 +45,19 @@
   <p>© DigQuest | Metal detecting adventures</p>
 </footer>
 
+<!-- ✅ SCRIPT -->
 <script>
-function checkPassword() {
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+  event.preventDefault(); // stop page reload
+
   var password = document.getElementById("passwordBox").value;
 
   if (password === "V1king75") {
-  window.location.href = "secret.html";
-}
-    document.getElementById("error").innerText = "";
-
-    // ✅ HIDE login form after success
-    document.getElementById("passwordBox").style.display = "none";
-    document.querySelector("button").style.display = "none";
+    window.location.href = "secret.html";
   } else {
     document.getElementById("error").innerText = "Incorrect password";
   }
-}
-``
+});
 </script>
 
 </body>
