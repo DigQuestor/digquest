@@ -1,1 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Permissions - DigQuest</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
 
+<body>
+
+<header class="hero">
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <h1>Permissions</h1>
+    <p>Restricted access</p>
+  </div>
+</header>
+
+<main style="text-align:center; padding:40px;">
+
+  <h2>Enter Password</h2>
+
+  <input type="password" id="passwordBox" placeholder="Enter password">
+  <br><br>
+
+  <button onclick="checkPassword()" class="button">Enter</button>
+
+  <p id="error" style="color:red;"></p>
+
+  <div id="secretContent" style="display:none; margin-top:30px;">
+    <h3>Permissions Area</h3>
+
+    <p>
+      This is a private section for tracking permissions and agreements.
+    </p>
+
+    <p>
+      You can use this space to store:
+      <br>- Landowner permissions  
+      <br>- Notes about locations  
+      <br>- Agreements and rules  
+    </p>
+  </div>
+
+</main>
+
+<footer>
+  <p>© DigQuest | Metal detecting adventures</p>
+</footer>
+
+<script>
+function checkPassword() {
+  var password = document.getElementById("passwordBox").value;
+
+  if (password === "digquest123") {
+    document.getElementById("secretContent").style.display = "block";
+    document.getElementById("error").innerText = "";
+  } else {
+    document.getElementById("error").innerText = "Incorrect password";
+  }
+}
+</script>
+
+</body>
+</html>
