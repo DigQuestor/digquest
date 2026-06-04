@@ -47,16 +47,20 @@
 
 <!-- ✅ SCRIPT -->
 <script>
-document.getElementById("loginForm").addEventListener("submit", function(event) {
-  event.preventDefault(); // stop page reload
+window.addEventListener("DOMContentLoaded", function () {
 
-  var password = document.getElementById("passwordBox").value;
+  document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault();
 
-  if (password === "V1king75") {
-    window.location.href = "secret.html";
-  } else {
-    document.getElementById("error").innerText = "Incorrect password";
-  }
+    var password = document.getElementById("passwordBox").value;
+
+    if (password === "V1king75") {
+      window.location.href = "secret.html";
+    } else {
+      document.getElementById("error").innerText = "Incorrect password";
+    }
+  });
+
 });
 </script>
 
