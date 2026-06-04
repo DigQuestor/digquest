@@ -9,21 +9,29 @@ body {
 
 /* HERO HEADER */
 .hero {
-  background: linear-gradient(135deg, rgba(58,47,27,0.9), rgba(90,68,40,0.9));
+  position: relative;
+  background: url("https://via.placeholder.com/1400x600") center/cover;
   color: white;
   text-align: center;
-  padding: 80px 20px;
+  padding: 100px 20px;
 }
 
-.hero h1 {
-  margin: 0;
-  font-size: 50px;
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(58, 47, 27, 0.75);
 }
 
-.hero p {
-  margin: 10px 0 20px;
-  font-size: 20px;
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: auto;
 }
+``
 
 /* NAVIGATION */
 nav {
@@ -46,8 +54,52 @@ a.button {
   display: inline-block;
   background: #f4d03f;
   color: #3a2f1b !important;
-  padding: 12px 25px;
-  border-radius: 6px;
+  padding: 14px 30px;
+  border-radius: 8px;
   text-decoration: none;
   font-weight: bold;
-  margin: 15px 0;
+  margin: 20px 0;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+  transition: all 0.25s ease;
+}
+
+a.button:hover {
+  background: #ffffff;
+  transform: translateY(-3px);
+}
+
+h1 {
+  font-size: 52px;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 18px;
+  line-height: 1.7;
+}
+``
+  section {
+  margin-bottom: 80px;
+  padding: 0 20px;
+}
+
+.card {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.card img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+}
