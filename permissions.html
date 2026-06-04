@@ -56,7 +56,8 @@ function checkPassword() {
   var password = document.getElementById("passwordBox").value;
 
   if (password === "V1king75") {
-    document.getElementById("secretContent").style.display = "block";
+  window.location.href = "secret.html";
+}
     document.getElementById("error").innerText = "";
 
     // ✅ HIDE login form after success
