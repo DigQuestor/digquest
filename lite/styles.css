@@ -1,4 +1,4 @@
-/* GENERAL PAGE STYLING */
+/* ===== GENERAL PAGE ===== */
 body {
   margin: 0;
   font-family: "Segoe UI", Arial, sans-serif;
@@ -7,10 +7,10 @@ body {
   line-height: 1.6;
 }
 
-/* HERO HEADER */
+/* ===== HERO SECTION ===== */
 .hero {
   position: relative;
-  background: url("https://via.placeholder.com/1400x600") center/cover;
+  background: url("https://via.placeholder.com/1400x600") center/cover no-repeat;
   color: white;
   text-align: center;
   padding: 100px 20px;
@@ -31,11 +31,27 @@ body {
   max-width: 800px;
   margin: auto;
 }
-``
 
-/* NAVIGATION */
+/* ===== TYPOGRAPHY ===== */
+h1 {
+  font-size: 52px;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+p {
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+/* ===== NAVIGATION ===== */
 nav {
-  margin-top: 15px;
+  margin-top: 20px;
 }
 
 nav a {
@@ -49,7 +65,7 @@ nav a:hover {
   color: white;
 }
 
-/* ✅ FIXED BUTTON (MOST IMPORTANT PART) */
+/* ===== BUTTON ===== */
 a.button {
   display: inline-block;
   background: #f4d03f;
@@ -68,26 +84,27 @@ a.button:hover {
   transform: translateY(-3px);
 }
 
-h1 {
-  font-size: 52px;
-  margin-bottom: 10px;
+/* ===== MAIN CONTENT ===== */
+main {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
 }
 
-h2 {
-  font-size: 32px;
-  margin-bottom: 20px;
-}
-
-p {
-  font-size: 18px;
-  line-height: 1.7;
-}
-``
-  section {
+/* ===== SECTIONS ===== */
+section {
   margin-bottom: 80px;
   padding: 0 20px;
 }
 
+/* ===== INTRO ===== */
+.intro {
+  text-align: center;
+  max-width: 700px;
+  margin: 60px auto;
+}
+
+/* ===== FEATURED CARD ===== */
 .card {
   display: flex;
   gap: 30px;
@@ -103,3 +120,34 @@ p {
   max-width: 500px;
   border-radius: 10px;
 }
+
+.card-text {
+  max-width: 400px;
+}
+
+/* ===== GALLERY ===== */
+.gallery {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.gallery img {
+  width: 300px;
+  border-radius: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #ddd;
+}
+``
