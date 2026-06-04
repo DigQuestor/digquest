@@ -1,60 +1,87 @@
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
-  background-color: #f4f1ea;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f4f1ea;
   color: #333;
+  line-height: 1.6;
 }
 
-/* Header */
-header {
-  background: linear-gradient(135deg, #3a2f1b, #5a4428);
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, rgba(58,47,27,0.9), rgba(90,68,40,0.9)),
+              url("https://via.placeholder.com/1200x500");
+  background-size: cover;
+  background-position: center;
   color: white;
-  padding: 40px 20px;
   text-align: center;
+  padding: 80px 20px;
 }
 
-/* Navigation */
-nav {
-  margin-top: 15px;
+.hero h1 {
+  margin: 0;
+  font-size: 50px;
 }
 
+.hero p {
+  margin: 10px 0 20px;
+  font-size: 20px;
+}
+
+/* NAV */
 nav a {
   margin: 0 15px;
   color: #f4d03f;
   text-decoration: none;
   font-weight: bold;
-  font-size: 18px;
 }
 
 nav a:hover {
-  color: #fff;
+  color: white;
 }
 
-/* Main sections */
-section {
-  padding: 40px 20px;
-  max-width: 800px;
+/* MAIN */
+main {
+  max-width: 1000px;
   margin: auto;
+  padding: 20px;
 }
 
-/* Titles */
-h1 {
-  font-size: 40px;
+section {
+  margin-bottom: 60px;
 }
 
 h2 {
+  text-align: center;
   font-size: 30px;
 }
 
-h3 {
-  margin-top: 40px;
+/* CARD */
+.card {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* Footer */
-footer {
-  text-align: center;
-  padding: 20px;
-  background-color: #ddd;
-  margin-top: 30px;
+.card img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
 }
-``
+
+.card-text {
+  max-width: 400px;
+}
+
+/* GALLERY */
+.gallery {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.gallery img {
