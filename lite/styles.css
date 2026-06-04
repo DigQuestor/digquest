@@ -86,20 +86,6 @@ h2 {
 
 .gallery img {
 
-  .button {
-  display: inline-block;
-  background: #f4d03f;
-  color: #3a2f1b;
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.button:hover {
-  background: #fff;
-}
 .hero-content {
   max-width: 800px;
   margin: auto;
@@ -125,4 +111,18 @@ h2 {
 p {
   font-size: 18px;
 }
+.button {
+  display: inline-block;
+  background: #f4d03f;
+  color: #3a2f1b;
+  padding: 12px 25px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 15px 0;
+}
 
+.button:hover {
+  background: #ffffff;
+}
+``
