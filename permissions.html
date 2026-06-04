@@ -58,10 +58,15 @@ function checkPassword() {
   if (password === "V1king75") {
     document.getElementById("secretContent").style.display = "block";
     document.getElementById("error").innerText = "";
+
+    // ✅ HIDE login form after success
+    document.getElementById("passwordBox").style.display = "none";
+    document.querySelector("button").style.display = "none";
   } else {
     document.getElementById("error").innerText = "Incorrect password";
   }
 }
+``
 </script>
 
 </body>
