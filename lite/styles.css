@@ -1,3 +1,4 @@
+/* GENERAL PAGE STYLING */
 body {
   margin: 0;
   font-family: "Segoe UI", Arial, sans-serif;
@@ -6,12 +7,9 @@ body {
   line-height: 1.6;
 }
 
-/* HERO */
+/* HERO HEADER */
 .hero {
-  background: linear-gradient(135deg, rgba(58,47,27,0.9), rgba(90,68,40,0.9)),
-              url("https://via.placeholder.com/1200x500");
-  background-size: cover;
-  background-position: center;
+  background: linear-gradient(135deg, rgba(58,47,27,0.9), rgba(90,68,40,0.9));
   color: white;
   text-align: center;
   padding: 80px 20px;
@@ -27,7 +25,11 @@ body {
   font-size: 20px;
 }
 
-/* NAV */
+/* NAVIGATION */
+nav {
+  margin-top: 15px;
+}
+
 nav a {
   margin: 0 15px;
   color: #f4d03f;
@@ -39,90 +41,13 @@ nav a:hover {
   color: white;
 }
 
-/* MAIN */
-main {
-  max-width: 1000px;
-  margin: auto;
-  padding: 20px;
-}
-
-section {
-  margin-bottom: 60px;
-}
-
-h2 {
-  text-align: center;
-  font-size: 30px;
-}
-
-/* CARD */
-.card {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.card img {
-  width: 100%;
-  max-width: 500px;
-  border-radius: 10px;
-}
-
-.card-text {
-  max-width: 400px;
-}
-
-/* GALLERY */
-.gallery {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.gallery img {
-
-.hero-content {
-  max-width: 800px;
-  margin: auto;
-}
-
-.intro {
-  text-align: center;
-  max-width: 700px;
-  margin: 60px auto;
-}
-
-.featured {
-  margin: 60px 0;
-}
-section {
-  margin-bottom: 80px;
-}
-
-h2 {
-  margin-bottom: 20px;
-}
-
-p {
-  font-size: 18px;
-}
-.button {
+/* ✅ FIXED BUTTON (MOST IMPORTANT PART) */
+a.button {
   display: inline-block;
   background: #f4d03f;
-  color: #3a2f1b;
+  color: #3a2f1b !important;
   padding: 12px 25px;
   border-radius: 6px;
   text-decoration: none;
   font-weight: bold;
   margin: 15px 0;
-}
-
-.button:hover {
-  background: #ffffff;
-}
-``
