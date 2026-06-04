@@ -215,3 +215,27 @@ footer {
 .featured .card-text {
   flex: 1;
 }
+/* ===== PERMISSIONS PAGE ===== */
+
+main input[type="password"] {
+  padding: 12px;
+  width: 250px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+main .button {
+  padding: 12px 25px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+#secretContent {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  max-width: 500px;
+  margin: 30px auto;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
