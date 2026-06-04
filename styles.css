@@ -196,3 +196,22 @@ footer {
   padding: 20px;
   background: #ddd;
 }
+/* ===== FORCE FEATURED SIDE-BY-SIDE ===== */
+.featured .card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Fix image size */
+.featured .card img {
+  width: 320px;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* Let text use remaining space */
+.featured .card-text {
+  flex: 1;
+}
