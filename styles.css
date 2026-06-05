@@ -363,3 +363,33 @@ body {
   font-size: 12px;
   font-weight: 500;
 }
+@media (max-width: 768px) {
+
+  .hero {
+    height: 200px;
+  }
+
+  .hero-content h1 {
+    font-size: 28px;
+  }
+
+  .hero-content p {
+    font-size: 14px;
+  }
+
+}
+nav a {
+  display: inline-block;
+  margin: 5px;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
