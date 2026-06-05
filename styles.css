@@ -425,3 +425,35 @@ nav a {
     max-width: 250px;
   }
 }
+/* ===== EXISTING STYLES ABOVE ===== */
+
+
+/* ✅ INVENTORY LAYOUT */
+.inventory-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.inventory-card img {
+  width: 100px;
+  height: auto;
+  border-radius: 6px;
+}
+
+.inventory-text {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .inventory-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .inventory-card img {
+    width: 70%;
+    max-width: 250px;
+  }
+}
