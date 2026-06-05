@@ -168,12 +168,11 @@ section {
 /* ===== GALLERY PAGE GRID ===== */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 1fr;   /* ✅ force 2 columns */
   gap: 25px;
   margin-top: 30px;
-  justify-items: center;
 }
-``
+
 }
 
 
