@@ -10,10 +10,9 @@ body {
 /* ===== HERO SECTION ===== */
 .hero {
   position: relative;
-  background: url("https://images.unsplash.com/photo-1500382017468-9049fed747ef") center/cover no-repeat;
-  color: white;
-  text-align: center;
-  padding: 130px 20px;
+  height: 250px;
+  background: url('images/hero.jpg') center no-repeat;
+  background-size: cover;
 }
 
 }
