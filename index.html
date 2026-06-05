@@ -113,8 +113,8 @@
 
   </div>
 </div>
-      <div class="gallery-item">
   <div class="gallery-item" data-type="jewellery">
+
   <div class="inventory-card">
 
     <img src="images/Brooch.jpg" alt="Silver Brooch" loading="lazy">
@@ -129,13 +129,17 @@
     </div>
 
   </div>
+
+</div>
+
+  </div>
 </div>
 
 
 
       
-<div class="gallery-item">
- <div class="gallery-item" data-type="tool">
+<div class="gallery-item" data-type="tool">
+
   <div class="inventory-card">
 
     <img src="images/Stamp.jpg" alt="Stamp" loading="lazy">
@@ -150,7 +154,9 @@
     </div>
 
   </div>
+
 </div>
+
 
 
 
@@ -177,9 +183,24 @@ function searchInventory() {
     }
   });
 }
-</script>
 
-        function filterItems(type) {
+  <script>
+function searchInventory() {
+  var input = document.getElementById("searchInput").value.toLowerCase();
+  var items = document.querySelectorAll(".gallery-item");
+
+  items.forEach(function(item) {
+    var text = item.innerText.toLowerCase();
+
+    if (text.includes(input)) {
+      item.style.display = "block";
+    } else {
+      item.style.display = "none";
+    }
+  });
+}
+
+function filterItems(type) {
   var items = document.querySelectorAll(".gallery-item");
 
   items.forEach(function(item) {
@@ -194,6 +215,9 @@ function searchInventory() {
     }
   });
 }
+</script>
+</script>
+
 
 </body>
 </html>
