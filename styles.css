@@ -88,10 +88,11 @@ a.button:hover {
 
 /* ===== MAIN CONTENT ===== */
 main {
-  max-width: 1000px;
-  margin: auto;
+  max-width: 1200px;
+  margin: 40px auto;
   padding: 20px;
 }
+
 
 /* ===== SECTIONS ===== */
 section {
