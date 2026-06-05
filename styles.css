@@ -5,15 +5,13 @@ body {
   background: #ffffff;
 }
 
-/* ===== HERO SECTION ===== */
+/* ===== HERO ===== */
 .hero {
   position: relative;
   height: 250px;
-  background-size: cover;
-  background-position: center;
+  background: url('images/hero.jpg') center/cover no-repeat;
 }
 
-/* Overlay */
 .hero-overlay {
   position: absolute;
   width: 100%;
@@ -23,7 +21,6 @@ body {
 
 .hero-content {
   position: relative;
-  z-index: 1;
   text-align: center;
   color: white;
   top: 50%;
@@ -31,10 +28,6 @@ body {
 }
 
 /* ===== NAV ===== */
-nav {
-  margin-top: 15px;
-}
-
 nav a {
   color: white;
   margin: 0 10px;
@@ -42,27 +35,14 @@ nav a {
   font-weight: bold;
 }
 
-nav a:hover {
-  text-decoration: underline;
-}
-
-/* ===== MAIN LAYOUT (VERY IMPORTANT FIX) ===== */
+/* ===== MAIN ===== */
 main {
   max-width: 900px;
   margin: 40px auto;
   padding: 0 20px;
 }
 
-/* ===== TEXT ===== */
-h2 {
-  margin-bottom: 10px;
-}
-
-p {
-  line-height: 1.5;
-}
-
-/* ===== IMAGE FIX (CRITICAL) ===== */
+/* ===== IMAGES ===== */
 img {
   max-width: 100%;
   height: auto;
@@ -70,56 +50,17 @@ img {
   margin: 20px auto;
 }
 
-/* ===== FEATURED IMAGE ===== */
-.featured-image {
-  max-width: 500px;
-}
-
 /* ===== BUTTON ===== */
 .button {
   background: #f4d03f;
   color: #333;
   padding: 10px 20px;
-  border: none;
   border-radius: 6px;
+  border: none;
   cursor: pointer;
 }
 
-/* ===== SEARCH ===== */
-.search-box {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.search-box input {
-  width: 300px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.search-box input:focus {
-  border-color: #f4d03f;
-  outline: none;
-}
-
-/* ===== FILTERS ===== */
-.filters {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.filters .button {
-  background: #ddd;
-  margin: 5px;
-}
-
-.filter-btn.active {
-  background: #f4d03f;
-  border: 2px solid #d4ac0d;
-}
-
-/* ===== PERMISSION GRID ===== */
+/* ===== GRID ===== */
 .permission-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -128,40 +69,3 @@ img {
 
 /* ===== CARD ===== */
 .permission-card {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-/* ===== MAP ===== */
-.permission-card iframe {
-  width: 100%;
-  height: 300px;
-  border-radius: 8px;
-}
-
-/* ===== TAGS ===== */
-.tag {
-  display: inline-block;
-  background: #f4d03f;
-  padding: 5px 10px;
-  border-radius: 5px;
-  margin: 3px;
-  font-size: 12px;
-}
-
-/* ===== FOOTER ===== */
-footer {
-  background: #333;
-  color: white;
-  text-align: center;
-  padding: 20px;
-}
-
-/* ===== MOBILE ===== */
-@media (max-width: 768px) {
-  .permission-grid {
-    grid-template-columns: 1fr;
-  }
-}
