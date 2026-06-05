@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <title>DigQuest</title>
   <link rel="stylesheet" href="styles.css">
-  
-  <link rel="preload" as="image" href="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=1600&auto=format&fit=crop">
 
+  <link rel="preload" as="image"
+    href="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=1600&auto=format&fit=crop">
 </head>
 
 <body>
@@ -19,124 +19,129 @@
     <h1>DigQuest</h1>
     <p>Exploring history one signal at a time</p>
 
-    
-
     <nav>
-  <a href="index.html">Home</a>
- <a href="#inventory">Finds Inventory</a>
-  <a href="permissions.html">Permissions</a>
-</nav>
-
+      <a href="index.html">Home</a>
+      <a href="#inventory">Finds Inventory</a>
+      <a href="permissions.html">Permissions</a>
+    </nav>
   </div>
 </header>
 
 <main>
 
-  <!-- ===== INTRO ===== -->
-  <section class="intro">
-    <h2>History Unearthed</h2>
-    <p>
-      Every signal tells a story. DigQuest documents the search for artefacts,
-      coins, and relics — connecting the present with the past.
-    </p>
-  </section>
+<!-- ===== INTRO ===== -->
+<section class="intro">
+  <h2>History Unearthed</h2>
+  <p>
+    Every signal tells a story. DigQuest documents the search for artefacts,
+    coins, and relics — connecting the present with the past.
+  </p>
+</section>
 
-  <!-- ===== FEATURED ===== -->
-  <section class="featured">
-    <h2>Featured Discovery</h2>
+<!-- ===== FEATURED ===== -->
+<section class="featured">
+  <h2>Featured Discovery</h2>
 
-    <div class="card">
-      <img src="images/Brooch.jpg" alt="Silver Brooch">
+  <div class="card">
+    <img src="images/Brooch.jpg" alt="Silver Brooch">
 
-      <div class="card-text">
-        <h3>Silver Brooch</h3>
-        <p>
-          A beautiful silver brooch dating from the early 20th century.
-          Finds like this make every outing worthwhile.
-        </p>
-      </div>
-   
-  </section>
-
-  <!-- ===== RECENT FINDS ===== -->
- <section id="inventory" class="gallery-section">
-    <h2>Recent Finds</h2>
-    <div style="text-align:center; margin-bottom:20px;">
-  <input 
-    type="text" 
-    id="searchInput" 
-    placeholder="Search inventory..." 
-    onkeyup="searchInventory()"
-    style="padding:10px; width:300px; border-radius:6px; border:1px solid #ccc;">
-</div>
-
-   <div style="text-align:center; margin-bottom:20px;">
-  <button onclick="filterItems('all')">Show All</button>
-  <button onclick="filterItems('coin')">Coins</button>
-  <button onclick="filterItems('jewellery')">Jewellery</button>
-  <button onclick="filterItems('tool')">Tools</button>
-</div>
-
-   <div class="gallery-grid">
-
-  <!-- Coin 1 -->
-  <div class="gallery-item" data-type="coin">
-    <div class="inventory-card">
-      <img src="images/Coin1.jpg" alt="Coin 1">
-      <div class="inventory-text">
-        <h3>King Christian IV 8 Skilling coin 1607</h3>
-        <p><strong>Type:</strong> Coin</p>
-        <p><strong>Age:</strong> 1607</p>
-        <p><strong>Description:</strong> Danish silver coin from King Christian IV era.</p>
-      </div>
+    <div class="card-text">
+      <h3>Silver Brooch</h3>
+      <p>
+        A beautiful silver brooch dating from the early 20th century.
+        Finds like this make every outing worthwhile.
+      </p>
     </div>
   </div>
+</section>
 
-  <!-- Coin 2 -->
-  <div class="gallery-item" data-type="coin">
-    <div class="inventory-card">
-      <img src="images/Coin2.jpg" alt="Coin 2">
-      <div class="inventory-text">
-        <h3>Hermann II von Katzenelnbogen Silver Pfennig</h3>
-        <p><strong>Type:</strong> Coin</p>
-        <p><strong>Age:</strong> 1174–1203</p>
-        <p><strong>Material:</strong> Silver</p>
-      </div>
-    </div>
+<!-- ===== INVENTORY ===== -->
+<section id="inventory" class="gallery-section">
+  <h2>Recent Finds</h2>
+
+  <!-- Search -->
+  <div style="text-align:center; margin-bottom:20px;">
+    <input 
+      type="text" 
+      id="searchInput" 
+      placeholder="Search inventory..." 
+      onkeyup="searchInventory()"
+      style="padding:10px; width:300px; border-radius:6px; border:1px solid #ccc;">
   </div>
 
-  <!-- Jewellery -->
-  <div class="gallery-item" data-type="jewellery">
-    <div class="inventory-card">
-      <img src="images/Brooch.jpg" alt="Silver Brooch">
-      <div class="inventory-text">
-        <h3>Silver Brooch</h3>
-        <p><strong>Type:</strong> Jewellery</p>
-        <p><strong>Age:</strong> Early 20th Century</p>
+  <!-- Filter buttons -->
+  <div style="text-align:center; margin-bottom:20px;">
+    <button onclick="filterItems('all')">Show All</button>
+    <button onclick="filterItems('coin')">Coins</button>
+    <button onclick="filterItems('jewellery')">Jewellery</button>
+    <button onclick="filterItems('tool')">Tools</button>
+  </div>
 
-  </section>
+  <!-- Gallery -->
+  <div class="gallery-grid">
+
+    <!-- Coin 1 -->
+    <div class="gallery-item" data-type="coin">
+      <div class="inventory-card">
+        <img src="images/Coin1.jpg" alt="Coin 1">
+        <div class="inventory-text">
+          <h3>King Christian IV 8 Skilling coin 1607</h3>
+          <p><strong>Type:</strong> Coin</p>
+          <p><strong>Age:</strong> 1607</p>
+          <p><strong>Description:</strong> Danish silver coin from King Christian IV era.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coin 2 -->
+    <div class="gallery-item" data-type="coin">
+      <div class="inventory-card">
+        <img src="images/Coin2.jpg" alt="Coin 2">
+        <div class="inventory-text">
+          <h3>Hermann II von Katzenelnbogen Silver Pfennig</h3>
+          <p><strong>Type:</strong> Coin</p>
+          <p><strong>Age:</strong> 1174–1203</p>
+          <p><strong>Material:</strong> Silver</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Jewellery -->
+    <div class="gallery-item" data-type="jewellery">
+      <div class="inventory-card">
+        <img src="images/Brooch.jpg" alt="Silver Brooch">
+        <div class="inventory-text">
+          <h3>Silver Brooch</h3>
+          <p><strong>Type:</strong> Jewellery</p>
+          <p><strong>Age:</strong> Early 20th Century</p>
+          <p><strong>Material:</strong> Silver</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tool -->
+    <div class="gallery-item" data-type="tool">
+      <div class="inventory-card">
+        <img src="images/Stamp.jpg" alt="Stamp">
+        <div class="inventory-text">
+          <h3>Metal Stamp</h3>
+          <p><strong>Type:</strong> Tool / Object</p>
+          <p><strong>Age:</strong> 1700s</p>
+          <p><strong>Material:</strong> Metal</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
 
 </main>
 
 <footer>
   <p>© DigQuest | Metal detecting adventures</p>
 </footer>
-<script>
-function searchInventory() {
-  var input = document.getElementById("searchInput").value.toLowerCase();
-  var items = document.querySelectorAll(".gallery-item");
 
-  items.forEach(function(item) {
-    var text = item.innerText.toLowerCase();
-
-    if (text.includes(input)) {
-      item.style.display = "block";
-    } else {
-      item.style.display = "none";
-    }
-  });
-}
-
+<!-- ✅ CLEAN SCRIPT -->
 <script>
 function searchInventory() {
   var input = document.getElementById("searchInput").value.toLowerCase();
@@ -170,6 +175,6 @@ function filterItems(type) {
 }
 </script>
 
-
 </body>
 </html>
+``
