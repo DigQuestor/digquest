@@ -155,10 +155,19 @@ input {
   align-items: center;   /* ✅ aligns image + text nicely */
 }
 
-  .inventory-card img {
-    width: 70%;
-    max-width: 250px;
-  }
+.inventory-card img {
+  width: 100px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+  .inventory-text h3 {
+  margin-top: 0;
+}
+
+.inventory-text {
+  text-align: left;
+}
 
   .card {
     flex-direction: column;
@@ -173,7 +182,9 @@ input {
   background: white;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
   margin-bottom: 25px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 
