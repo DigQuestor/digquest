@@ -71,6 +71,15 @@ h2 { text-align: center; }
   color: #2c2c2c;
 }
 
+.intro h2::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: #f4d03f;
+  margin: 10px auto 0;
+}
+
 .intro p {
   font-size: 18px;
   color: #555;
