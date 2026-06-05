@@ -27,10 +27,15 @@ body {
 }
 
 .hero-content {
-  position: relative;
-  z-index: 1;
-  max-width: 800px;
-  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  text-align: center;
+  color: white;
+  width: 100%;
+  max-width: 900px;
 }
 
 /* ===== TYPOGRAPHY ===== */
