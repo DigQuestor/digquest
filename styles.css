@@ -346,3 +346,6 @@ main .button {
 .button:hover {
   background: #e1bc34;
 }
+body {
+  background: #f7f7f7;
+}
