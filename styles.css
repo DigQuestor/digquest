@@ -363,3 +363,11 @@ body {
   font-size: 12px;
   font-weight: 500;
 }
+.filters {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.filters .button {
+  margin: 5px;
+}
