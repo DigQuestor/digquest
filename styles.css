@@ -82,11 +82,15 @@ h2 { text-align: center; }
 
 /* ===== INVENTORY GRID (FIXED + WORKING) ===== */
 .gallery-grid {
-  max-width: 720px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
 /* ===== INVENTORY CARD ===== */
+
+.inventory-text p {
+  margin: 6px 0;
+}
 
 /* ===== SIDE-BY-SIDE LAYOUT ===== */
 .inventory-card {
@@ -163,7 +167,6 @@ input {
   .permission-grid {
     grid-template-columns: 1fr;
   }
-}
 }
 .gallery-item {
   background: white;
