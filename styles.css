@@ -150,9 +150,10 @@ input {
 @media (max-width: 768px) {
 
   .inventory-card {
-    flex-direction: column;
-    text-align: center;
-  }
+  display: flex;
+  gap: 15px;
+  align-items: center;   /* ✅ aligns image + text nicely */
+}
 
   .inventory-card img {
     width: 70%;
