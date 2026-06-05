@@ -308,3 +308,10 @@ main .button {
     grid-template-columns: 1fr;
   }
 }
+.permission-card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
