@@ -186,5 +186,9 @@ input {
   margin-bottom: 25px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+.gallery-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
 
 
