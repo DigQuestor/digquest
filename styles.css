@@ -11,8 +11,7 @@ body {
 .hero {
   position: relative;
   height: 250px;
-  background: url('images/hero.jpg') center no-repeat;
-  background-size: cover;
+  background: url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
 }
 
 }
