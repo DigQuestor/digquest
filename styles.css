@@ -32,8 +32,11 @@ body {
 .hero-content {
   position: relative;
   z-index: 1;
-  max-width: 800px;
-  margin: auto;
+  text-align: center;
+  color: white;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
 }
 
 /* ===== TYPOGRAPHY ===== */
