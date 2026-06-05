@@ -166,3 +166,7 @@ footer {
   font-size: 14px;
 }
 ``
+.search-box input:focus {
+  border-color: #f4d03f;
+  outline: none;
+}
