@@ -8,7 +8,6 @@
 
 <body>
 
-<!-- ===== HEADER ===== -->
 <header class="hero">
   <div class="hero-overlay"></div>
 
@@ -24,7 +23,6 @@
   </div>
 </header>
 
-<!-- ===== MAIN CONTENT ===== -->
 <main style="text-align:center; padding:40px;">
 
   <h2>Access Permissions Area</h2>
@@ -32,7 +30,6 @@
     This section is restricted. Please enter the password to continue.
   </p>
 
-  <!-- ✅ LOGIN FORM -->
   <form id="loginForm">
     <input type="password" id="passwordBox" placeholder="Enter password">
     <br><br>
@@ -43,37 +40,23 @@
 
 </main>
 
-<!-- ===== FOOTER ===== -->
 <footer>
   <p>© DigQuest | Metal detecting adventures</p>
 </footer>
 
-<!-- ✅ LOGIN SCRIPT -->
 <script>
 window.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById("loginForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-    // ✅ Get password and clean it
     var password = document.getElementById("passwordBox").value.trim();
 
-    console.log("Entered password:", password);
-
-    // ✅ Case-insensitive comparison for reliability
     if (password.toLowerCase() === "v1king75") {
-
-      // ✅ Store login
       localStorage.setItem("loggedIn", "true");
-
-      console.log("Login stored:", localStorage.getItem("loggedIn"));
-
-      // ✅ Redirect
       window.location.href = "secret.html";
-
     } else {
       document.getElementById("error").innerText = "Incorrect password";
-      console.log("Password incorrect");
     }
   });
 
