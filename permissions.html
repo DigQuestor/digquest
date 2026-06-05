@@ -4,15 +4,18 @@ window.addEventListener("DOMContentLoaded", function () {
   document.getElementById("loginForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-  var password = document.getElementById("passwordBox").value.trim();
-``
+var password = document.getElementById("passwordBox").value.trim();
 
- if (password === "V1king75") {
+console.log("Password entered:", password);
+
+if (password === "V1king75") {
   localStorage.setItem("loggedIn", "true");
+  console.log("Login stored:", localStorage.getItem("loggedIn"));
   window.location.href = "secret.html";
 } else {
   document.getElementById("error").innerText = "Incorrect password";
 }
+
 
       // ✅ DEBUG CHECK (important)
       console.log("Login successful, stored loggedIn =", localStorage.getItem("loggedIn"));
