@@ -315,3 +315,8 @@ main .button {
   box-shadow: 0 10px 25px rgba(0,0,0,0.12);
   transition: transform 0.3s, box-shadow 0.3s;
 }
+.permission-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+``
