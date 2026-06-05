@@ -320,3 +320,13 @@ main .button {
   box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 ``
+.permission-card h3 {
+  margin-top: 0;
+  font-size: 20px;
+}
+
+.permission-card p {
+  font-size: 14px;
+  color: #555;
+}
+``
