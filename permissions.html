@@ -55,7 +55,10 @@ window.addEventListener("DOMContentLoaded", function () {
     var password = document.getElementById("passwordBox").value;
 
     if (password === "V1king75") {
-      window.location.href = "secret.html";
+  localStorage.setItem("loggedIn", "true");
+  window.location.href = "secret.html";
+}
+
     } else {
       document.getElementById("error").innerText = "Incorrect password";
     }
