@@ -1,30 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Permissions - DigQuest</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="hero">
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <h1>Permissions</h1>
+    <p>Restricted access</p>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="gallery.html">Finds</a>
+      <a href="permissions.html">Permissions</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main style="text-align:center; padding:40px;">
+
+  <h2>Access Permissions Area</h2>
+  <p style="color:#666;">
+    This section is restricted. Please enter the password to continue.
+  </p>
+
+  <!-- ✅ LOGIN FORM -->
+  <form id="loginForm">
+    <input type="password" id="passwordBox" placeholder="Enter password">
+    <br><br>
+    <button type="submit" class="button">Enter</button>
+  </form>
+
+  <p id="error" style="color:red; margin-top:15px;"></p>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>© DigQuest | Metal detecting adventures</p>
+</footer>
+
+<!-- ✅ LOGIN SCRIPT -->
 <script>
 window.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById("loginForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-var password = document.getElementById("passwordBox").value.trim();
+    // ✅ Get password and clean it
+    var password = document.getElementById("passwordBox").value.trim();
 
-console.log("Password entered:", password);
+    console.log("Entered password:", password);
 
-if (password === "V1king75") {
-  localStorage.setItem("loggedIn", "true");
-  console.log("Login stored:", localStorage.getItem("loggedIn"));
-  window.location.href = "secret.html";
-} else {
-  document.getElementById("error").innerText = "Incorrect password";
-}
+    // ✅ Case-insensitive comparison for reliability
+    if (password.toLowerCase() === "v1king75") {
 
+      // ✅ Store login
+      localStorage.setItem("loggedIn", "true");
 
-      // ✅ DEBUG CHECK (important)
-      console.log("Login successful, stored loggedIn =", localStorage.getItem("loggedIn"));
+      console.log("Login stored:", localStorage.getItem("loggedIn"));
 
+      // ✅ Redirect
       window.location.href = "secret.html";
+
     } else {
       document.getElementById("error").innerText = "Incorrect password";
+      console.log("Password incorrect");
     }
   });
 
 });
 </script>
+
+</body>
+</html>
