@@ -9,15 +9,8 @@ body {
 .hero {
   position: relative;
   height: 250px;
-  background: url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
-}
-
-
-.hero-overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.4);
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+              url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
 }
 
 .hero-content {
@@ -59,101 +52,22 @@ nav a:hover {
   background: #e1bc34;
 }
 
-/* ===== FILTER BUTTONS ===== */
+/* ===== FILTERS ===== */
 .filters {
   text-align: center;
   margin-bottom: 25px;
 }
 
-/* Override default button color for filters */
 .filters .button {
   background: #ddd;
 }
 
-.filter-btn {
-  margin: 5px;
-}
-
-/* Active filter */
 .filter-btn.active {
   background: #f4d03f;
   border: 2px solid #d4ac0d;
 }
 
-/* ===== GRID ===== */
-.permission-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-/* ===== CARD ===== */
-.permission-card {
-  background: white;
-  padding: 20px;
-  border-radius: 14px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-  border-left: 5px solid #f4d03f;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.permission-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-}
-
-/* ===== CARD TEXT ===== */
-.permission-card h3 {
-  margin-top: 0;
-  font-size: 20px;
-}
-
-.permission-card p {
-  font-size: 14px;
-  color: #555;
-}
-
-/* ===== MAP ===== */
-.permission-card iframe {
-  width: 100%;
-  height: 300px;
-  border-radius: 8px;
-  margin-top: 10px;
-}
-
-/* ===== TAGS ===== */
-.tags {
-  margin: 10px 0;
-}
-
-.tag {
-  display: inline-block;
-  background: #f4d03f;
-  color: #333;
-  padding: 5px 10px;
-  border-radius: 6px;
-  margin: 3px;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-/* ===== FOOTER ===== */
-footer {
-  text-align: center;
-  padding: 20px;
-  background: #333;
-  color: white;
-  margin-top: 40px;
-}
-
-/* ===== MOBILE ===== */
-@media (max-width: 768px) {
-  .permission-grid {
-    grid-template-columns: 1fr;
-  }
-}
+/* ===== SEARCH ===== */
 .search-box {
   text-align: center;
   margin-bottom: 20px;
@@ -164,15 +78,74 @@ footer {
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
-  font-size: 14px;
 }
+
 .search-box input:focus {
   border-color: #f4d03f;
   outline: none;
 }
+
+/* ===== LAYOUT FIX (IMPORTANT) ===== */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+};
+
+/* ===== GRID ===== */
+.permission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .permission-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== CARD ===== */
+.permission-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* ===== MAP ===== */
+.permission-card iframe {
+  width: 100%;
+  height: 300px;
+  border-radius: 8px;
+}
+
+/* ===== TAGS ===== */
+.tags {
+  margin: 10px 0;
+}
+
+.tag {
+  display: inline-block;
+  background: #f4d03f;
+  padding: 5px 10px;
+  border-radius: 6px;
+  margin: 3px;
+  font-size: 12px;
+}
+
+/* ===== FIX FOR ALL IMAGES ===== */
 img {
   max-width: 100%;
   height: auto;
   display: block;
   margin: 0 auto;
 }
+
+/* ===== FOOTER ===== */
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #333;
+  color: white;
+}
+``
