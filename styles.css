@@ -100,9 +100,12 @@ h2 { text-align: center; }
 
 /* Thumbnail */
 .inventory-card img {
-  width: 100px;
-  border-radius: 6px;
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
 }
+
 
 /* Text */
 .inventory-text {
