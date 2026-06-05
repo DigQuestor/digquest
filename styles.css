@@ -171,6 +171,9 @@ section {
   grid-template-columns: repeat(2, 1fr);
   gap: 25px;
   margin-top: 30px;
+  justify-items: center;
+}
+``
 }
 
 
