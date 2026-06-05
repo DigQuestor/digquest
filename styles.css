@@ -11,12 +11,9 @@ body {
 .hero {
   position: relative;
   height: 250px;
-  background-image: url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=1600&auto=format&fit=crop');
+  background: url('images/hero.jpg') center no-repeat;
   background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 }
-
 
 }
 
@@ -32,11 +29,8 @@ body {
 .hero-content {
   position: relative;
   z-index: 1;
-  text-align: center;
-  color: white;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 100%;
+  max-width: 800px;
+  margin: auto;
 }
 
 /* ===== TYPOGRAPHY ===== */
