@@ -6,9 +6,12 @@ window.addEventListener("DOMContentLoaded", function () {
 
     var password = document.getElementById("passwordBox").value.trim();
 
-    if (password === "V1king75") {
-      // ✅ SET LOGIN FLAG
-      localStorage.setItem("loggedIn", "true");
+ if (password === "V1king75") {
+  localStorage.setItem("loggedIn", "true");
+  window.location.href = "secret.html";
+} else {
+  document.getElementById("error").innerText = "Incorrect password";
+}
 
       // ✅ DEBUG CHECK (important)
       console.log("Login successful, stored loggedIn =", localStorage.getItem("loggedIn"));
