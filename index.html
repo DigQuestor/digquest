@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>DigQuest</title>
@@ -23,95 +23,88 @@
 </header>
 
 <main>
+
   <section class="intro">
-  <h2>History Unearthed</h2>
-  <p>
-    Every signal tells a story. DigQuest documents the search for artefacts,
-    coins, and relics — connecting the present with the past.
-  </p>
-</section>
+    <h2>History Unearthed</h2>
+    <p>
+      Every signal tells a story. DigQuest documents the search for artefacts,
+      coins, and relics — connecting the present with the past.
+    </p>
+  </section>
 
-<section class="gallery-section" id="inventory">
+  <section class="gallery-section" id="inventory">
 
-  <!-- SEARCH -->
-  <div style="text-align:center; margin-bottom:20px;">
-    <input 
-      type="text" 
-      id="searchInput" 
-      placeholder="Search inventory..." 
-      onkeyup="searchInventory()">
-  </div>
+    <!-- SEARCH -->
+    <div style="text-align:center; margin-bottom:20px;">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search inventory..."
+        onkeyup="searchInventory()">
+    </div>
 
-  <!-- FILTER BUTTONS -->
-  <div style="text-align:center; margin-bottom:20px;">
-    <button onclick="filterItems('all')">Show All</button>
-    <button onclick="filterItems('coin')">Coins</button>
-    <button onclick="filterItems('jewellery')">Jewellery</button>
-    <button onclick="filterItems('tool')">Tools</button>
-  </div>
+    <!-- FILTER BUTTONS -->
+    <div style="text-align:center; margin-bottom:20px;">
+      <button onclick="filterItems('all')">Show All</button>
+      <button onclick="filterItems('coin')">Coins</button>
+      <button onclick="filterItems('jewellery')">Jewellery</button>
+      <button onclick="filterItems('tool')">Tools</button>
+    </div>
 
-  <!-- GRID -->
-  <!-- GRID -->
-<div class="gallery-grid">
+    <!-- GRID -->
+    <div class="gallery-grid">
 
- <!-- Coin -->
-<div class="gallery-item" data-type="coin">
-  <div class="inventory-card">
-      images/Coin1.jpg
-
-      <div class="inventory-text">
-        <h3>King Christian IV 8 Skilling coin 1607</h3>
-        <p><b>Type:</b> Coin</p>
-        <p><b>Age:</b> 1607</p>
+      <!-- Coin 1 -->
+      <div class="gallery-item" data-type="coin">
+        <div class="inventory-card">
+          <img src="images/Coin1.jpg" alt="King Christian IV 8 Skilling coin 1607">
+          <div class="inventory-text">
+            <h3>King Christian IV 8 Skilling coin 1607</h3>
+            <p><b>Type:</b> Coin</p>
+            <p><b>Age:</b> 1607</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
- <div class="gallery-item" data-type="coin">
-  <div class="inventory-card">
-    <img src="images/Coin1.jpg" alt="King Christian IV 8 Skilling coin 1607">
-    <div class="inventory-text">
-      <h3>King Christian IV 8 Skilling coin 1607</h3>
-      <p><b>Type:</b> Coin</p>
-      <p><b>Age:</b> 1607</p>
-    </div>
-  </div>
-</div>
-
-  <img src="images/Coin1.jpg" alt="King Christian IV 8 Skilling coin 1607">
-
-  <!-- Jewellery -->
-<div class="gallery-item" data-type="jewellery">
-  <div class="inventory-card">
-      images/Brooch.jpg
-
-      <div class="inventory-text">
-        <h3>Silver Brooch</h3>
-        <p><b>Type:</b> Jewellery</p>
-        <p><b>Age:</b> Early 20th Century</p>
+      <!-- Coin 2 -->
+      <div class="gallery-item" data-type="coin">
+        <div class="inventory-card">
+          <img src="images/Coin2.jpg" alt="Hermann II von Katzenelnbogen Silver Pfennig">
+          <div class="inventory-text">
+            <h3>Hermann II von Katzenelnbogen Silver Pfennig</h3>
+            <p><b>Type:</b> Coin</p>
+            <p><b>Age:</b> 1174–1203</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <img src="images/Brooch.jpg" alt="Brooch">
-
-  <!-- Tool -->
-<div class="gallery-item" data-type="tool">
-  <div class="inventory-card">
-      images/Stamp.jpg
-
-      <div class="inventory-text">
-        <h3>Metal Stamp</h3>
-        <p><b>Type:</b> Tool</p>
-        <p><b>Age:</b> 1700s</p>
+      <!-- Jewellery -->
+      <div class="gallery-item" data-type="jewellery">
+        <div class="inventory-card">
+          <img src="images/Brooch.jpg" alt="Silver Brooch">
+          <div class="inventory-text">
+            <h3>Silver Brooch</h3>
+            <p><b>Type:</b> Jewellery</p>
+            <p><b>Age:</b> Early 20th Century</p>
+          </div>
+        </div>
       </div>
+
+      <!-- Tool -->
+      <div class="gallery-item" data-type="tool">
+        <div class="inventory-card">
+          <img src="images/Stamp.jpg" alt="Metal Stamp">
+          <div class="inventory-text">
+            <h3>Metal Stamp</h3>
+            <p><b>Type:</b> Tool</p>
+            <p><b>Age:</b> 1700s</p>
+          </div>
+        </div>
+      </div>
+
     </div>
-  </div>
 
-  <img src="images/Stamp.jpg" alt="Stamp">
-
-</div>
-</section>
+  </section>
 
 </main>
 
@@ -119,14 +112,13 @@
   <p>© DigQuest</p>
 </footer>
 
-<!-- ✅ WORKING SCRIPT -->
 <script>
 function searchInventory() {
   var input = document.getElementById("searchInput").value.toLowerCase();
   var items = document.querySelectorAll(".gallery-item");
 
   items.forEach(function(item) {
-    if (item.innerText.toLowerCase().includes(input)) {
+    if (item.textContent.toLowerCase().includes(input)) {
       item.style.display = "block";
     } else {
       item.style.display = "none";
@@ -145,7 +137,6 @@ function filterItems(type) {
     }
   });
 }
-
 </script>
 
 </body>
