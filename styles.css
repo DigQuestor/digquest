@@ -239,3 +239,22 @@ input {
     color: white;
     border-color: #d4af37;
 }
+.search-container {
+    text-align: center;
+    margin: 20px 0 30px;
+}
+
+#permissionSearch {
+    width: 60%;
+    max-width: 500px;
+    padding: 12px 16px;
+    border: 1px solid #d4d4d4;
+    border-radius: 25px;
+    font-size: 16px;
+    outline: none;
+}
+
+#permissionSearch:focus {
+    border-color: #d4af37;
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
+}
