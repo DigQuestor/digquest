@@ -4,6 +4,63 @@
   <meta charset="UTF-8">
   <title>DigQuest</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ===== IMAGE-ONLY GALLERY + POPUP ===== */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+    }
+
+    .inventory-card {
+      display: block;
+    }
+
+    .inventory-card .inventory-text {
+      display: none;
+    }
+
+    .inventory-card img {
+      display: block;
+      width: 100%;
+      max-width: none;
+      height: auto;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    #item-modal {
+      box-sizing: border-box;
+      width: 480px;
+      max-width: 90vw;
+      border: none;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    #item-modal::backdrop {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    #item-modal img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 60vh;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    #modal-close {
+      float: right;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
