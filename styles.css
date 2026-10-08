@@ -10,7 +10,7 @@ body {
 /* ===== HERO ===== */
 .hero {
   position: relative;
-  background: url("https://images.unsplash.com/photo-1500382017468-9049fed747ef") center/cover no-repeat;
+  background: url( center/cover no-repeat;
   color: white;
   text-align: center;
   padding: 90px 20px;
@@ -108,67 +108,68 @@ h2 { text-align: center; }
 /* ===== INVENTORY GRID ===== */
 
 .gallery-grid {
- *  display: grid;
-    grid-template*columns: repeat(auto-fit, minmax(2*0px, 1fr));
-    gap: 25px;
-    max*width: 1000px;
-    margin: 0 auto;*    justify-items: center;
+    display: gr*d;
+    grid-template-columns: repe*t(auto-fit, minmax(250px, 1fr));
+ *  gap: 25px;
+    max-width: 1000px*
+    margin: 0 auto;
+    justify-i*ems: center;
 }
 
-.gal*ery-item {
-    text-align: center;*}
+.gallery-item {
+  * text-align: center;
+}
 
-.inventory-card {
-    cursor: p*inter;
+.inventory*card {
+    cursor: pointer;
 }
 
 .inventory-card img {
-  * width: 220px;
+    width: 220px;
     height: 220px;
-*   object-fit: cover;
-    border-r*dius: 10px;
-    transition: transf*rm 0.3s ease;
-    box-shadow: 0 4p* 12px rgba(0,0,0,0.15);
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.invent*ry-card img:hover {
-    transform:*scale(1.05);
+.inventory-card img:hover {
+    transform: scale(1.05);
 }
 
-/* ===== POPUP MOD*L ===== */
+/* ===== POPUP MODAL ===== */
 
 .modal {
-    display: *one;
+    display: none;
     position: fixed;
-    z-in*ex: 9999;
+    z-index: 9999;
     inset: 0;
-    backgr*und: rgba(0,0,0,0.85);
+    background: rgba(0,0,0,0.85);
 }
 
-.modal-c*ntent {
+.modal-content {
     background: white;
-   *width: 90%;
+    width: 90%;
     max-width: 700px;
-*   margin: 50px auto;
-    padding:*25px;
+    margin: 50px auto;
+    padding: 25px;
     border-radius: 12px;
-   *text-align: center;
-    position: *elative;
+    text-align: center;
+    position: relative;
 }
 
 .modal-image {
-    wid*h: 100%;
+    width: 100%;
     max-height: 500px;
-  * object-fit: contain;
-    margin-b*ttom: 20px;
+    object-fit: contain;
+    margin-bottom: 20px;
 }
 
 .close {
-    positi*n: absolute;
+    position: absolute;
     right: 15px;
-    *op: 10px;
+    top: 10px;
     font-size: 32px;
-   *cursor: pointer;
-    font-weight: *old;
+    cursor: pointer;
+    font-weight: bold;
 }
-
