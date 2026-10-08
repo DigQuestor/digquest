@@ -53,17 +53,18 @@
   <!-- GRID -->
   <div class="gallery-grid">
 
-    <!-- Coin -->
     <div class="gallery-item" data-type="coin">
-      <div class="inventory-card">
-        <img src="images/Coin1.jpg">
-        <div>
-          <h3>King Christian IV 8 Skilling coin 1607</h3>
-          <p><b>Type:</b> Coin</p>
-          <p><b>Age:</b> 1607</p>
-        </div>
-      </div>
-    </div>
+
+  <div class="inventory-card"
+       onclick="openModal(
+       'images/Coin1.jpg',
+       'King Christian IV 8 Skilling coin 1607',
+       'Coin',
+       '1607'
+       )">
+
+    <img src="images/Coin1.jpg"
+         alt="King
 
     <!-- Coin -->
     <div class="gallery-item" data-type="coin">
@@ -137,6 +138,50 @@ function filterItems(type) {
   });
 }
 </script>
+<div id="findModal" class="modal">
 
+  <div class="modal-content">
+
+    <span class="close" onclick="closeModal()">&times;</span>
+
+    <img id="modalImage" class="modal-image">
+
+    <h2 id="modalTitle"></h2>
+
+    <p><strong>Type:</strong> <span id="modalType"></span></p>
+
+    <p><strong>Age:</strong> <span id="modalAge"></span></p>
+
+  </div>
+
+</div>
+
+  <script>
+
+function openModal(image, title, type, age) {
+
+  document.getElementById("modalImage").src = image;
+  document.getElementById("modalTitle").textContent = title;
+  document.getElementById("modalType").textContent = type;
+  document.getElementById("modalAge").textContent = age;
+
+  document.getElementById("findModal").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("findModal").style.display = "none";
+}
+
+window.onclick = function(event) {
+
+  const modal = document.getElementById("findModal");
+
+  if (event.target === modal) {
+    closeModal();
+  }
+};
+
+</script>
+  
 </body>
 </html>
