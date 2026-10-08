@@ -243,7 +243,7 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
       <div className="treasure-card bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 w-full h-80 flex flex-col relative">
         <Link href={`/finds/${find.id}`} className="block">
           {/* Card-style photo area */}
-          <div className="aspect-[4/3] w-full bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+          <div className="aspect-square w-full bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
             {find.imageUrl ? (
               <img 
                 src={find.imageUrl} 
