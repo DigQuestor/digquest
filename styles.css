@@ -10,7 +10,7 @@ body {
 /* ===== HERO ===== */
 .hero {
   position: relative;
-  background: url("images/hero.jpg") center/cover no-repeat;
+  background: url("https://images.unsplash.com/photo-1500382017468-9049fed747ef") center/cover no-repeat;
   color: white;
   text-align: center;
   padding: 90px 20px;
