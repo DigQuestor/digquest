@@ -1,58 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Field Reports - DigQuest</title>
-    styles.css
+  <meta charset="UTF-8">
+  <title>Field Reports - DigQuest</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
+<script>
+window.addEventListener("DOMContentLoaded", function () {
+  if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "permissions.html";
+  }
+});
+</script>
+
 <header class="hero">
-    <div class="hero-overlay"></div>
+  <div class="hero-overlay"></div>
 
-    <div class="hero-content">
-        <h1>Field Reports</h1>
-        <p>Recording visits, conditions and discoveries.</p>
+  <div class="hero-content">
+    <h1>Field Reports</h1>
+    <p>Permission visit records and observations.</p>
 
-        <nav>
-            index.htmlHome</a>
-            <allery.htmlFinds Inventory</a>
-            <a href="permissions.html">Permissions</a>
-            <a href="field-reports.html">Field Reports</a>
-        </nav>
-    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="gallery.html">Finds Inventory</a>
+      <a href="secret.html">Permissions Area</a>
+      <a href="field-reports.html">Field Reports</a>
+    </nav>
+  </div>
 </header>
 
-<main>
+<main style="max-width:900px; margin:auto; padding:40px;">
 
-    <section>
-        <h2>Recent Reports</h2>
+  <h2>Recent Field Reports</h2>
 
-        <div class="report-card">
-            <h3>North Zealand Permission</h3>
+  <div class="card">
 
-            <p><strong>Date Visited:</strong> 8 October 2026</p>
+    <h3>North Zealand Permission</h3>
 
-            <p><strong>Weather:</strong> Dry and overcast with light winds.</p>
+    <p><strong>Date Visited:</strong> 8 October 2026</p>
 
-            <p><strong>Finds:</strong></p>
-            <ul>
-                <li>Copper coin fragment</li>
-                <li>Musket ball</li>
-                <li>Harness buckle</li>
-            </ul>
+    <p><strong>Weather:</strong> Dry and overcast with light winds.</p>
 
-            <p><strong>Notes:</strong></p>
-            <p>
-                Freshly ploughed ground with excellent signal clarity.
-                Most finds were concentrated near the western boundary.
-            </p>
-        </div>
+    <p><strong>Finds:</strong></p>
 
-    </section>
+    <ul>
+      <li>Copper coin fragment</li>
+      <li>Musket ball</li>
+      <li>Harness buckle</li>
+    </ul>
+
+    <p><strong>Notes:</strong></p>
+
+    <p>
+      Freshly ploughed field with excellent signal clarity. Most finds were
+      concentrated near the western boundary.
+    </p>
+
+  </div>
 
 </main>
+
+<footer>
+  <p>© DigQuest | Metal detecting adventures</p>
+</footer>
 
 </body>
 </html>
