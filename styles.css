@@ -263,3 +263,42 @@ input {
     border-color: #d4af37;
     box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
 }
+.inventory-card img {
+    width: 100%;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.inventory-card img:hover {
+    transform: scale(1.05);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.modal-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+}
+
+.close {
+    float: right;
+    font-size: 32px;
+    cursor: pointer;
+}
