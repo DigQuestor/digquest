@@ -112,6 +112,13 @@
   <p>© DigQuest</p>
 </footer>
 
+<!-- POPUP -->
+<dialog id="item-modal">
+  <button type="button" id="modal-close" aria-label="Close">×</button>
+  <img id="modal-img" src="" alt="">
+  <div id="modal-text"></div>
+</dialog>
+
 <script>
 function searchInventory() {
   var input = document.getElementById("searchInput").value.toLowerCase();
@@ -137,6 +144,22 @@ function filterItems(type) {
     }
   });
 }
+
+var modal = document.getElementById("item-modal");
+
+document.addEventListener("click", function (e) {
+  var img = e.target.closest(".inventory-card img");
+  if (img) {
+    var card = img.closest(".inventory-card");
+    document.getElementById("modal-img").src = img.src;
+    document.getElementById("modal-img").alt = img.alt;
+    document.getElementById("modal-text").innerHTML =
+      card.querySelector(".inventory-text").innerHTML;
+    modal.showModal();
+  } else if (e.target.id === "modal-close" || e.target === modal) {
+    modal.close();
+  }
+});
 </script>
 
 </body>
