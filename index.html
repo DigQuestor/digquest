@@ -1,205 +1,216 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>DigQuest</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>DigQuest</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
 <header class="hero">
-    <div class="hero-overlay"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>DigQuest</h1>
+    <p>Exploring history one signal at a time</p>
 
-    <div class="hero-content">
-        <h1>DigQuest</h1>
-        <p>Exploring history one signal at a time</p>
-
-        <nav>
-            <a href="index.html">Home</a>
-            #inventoryFinds Inventory</a>
-            <a href="permissions.html">Permissions</a>
-        </nav>
-    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="#inventory">Finds Inventory</a>
+      <a href="permissions.html">Permissions</a>
+    </nav>
+  </div>
 </header>
 
 <main>
-
-<section class="intro">
-    <h2>History Unearthed</h2>
-
-    <p>
-        Every signal tells a story. DigQuest documents the search for artefacts,
-        coins and relics, connecting the present with the past.
-    </p>
+  <section class="intro">
+  <h2>History Unearthed</h2>
+  <p>
+    Every signal tells a story. DigQuest documents the search for artefacts,
+    coins, and relics — connecting the present with the past.
+  </p>
 </section>
 
 <section class="gallery-section" id="inventory">
 
-    <div style="text-align:center; margin-bottom:20px;">
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search inventory..."
-            onkeyup="searchInventory()">
-    </div>
+  <!-- SEARCH -->
+  <div style="text-align:center; margin-bottom:20px;">
+    <input 
+      type="text" 
+      id="searchInput" 
+      placeholder="Search inventory..." 
+      onkeyup="searchInventory()">
+  </div>
 
-    <div style="text-align:center; margin-bottom:20px;">
-        <button onclick="filterItems('all')">Show All</button>
-        <button onclick="filterItems('coin')">Coins</button>
-        <button onclick="filterItems('jewellery')">Jewellery</button>
-        <button onclick="filterItems('tool')">Tools</button>
-    </div>
+  <!-- FILTER BUTTONS -->
+  <div style="text-align:center; margin-bottom:20px;">
+    <button onclick="filterItems('all')">Show All</button>
+    <button onclick="filterItems('coin')">Coins</button>
+    <button onclick="filterItems('jewellery')">Jewellery</button>
+    <button onclick="filterItems('tool')">Tools</button>
+  </div>
 
-    <div class="gallery-grid">
+  <!-- GRID -->
+  <div class="gallery-grid">
 
-        <!-- Coin 1 -->
-        <div class="gallery-item" data-type="coin">
-            <div class="inventory-card"
-                 onclick="openModal('images/Coin1.jpg','King Christian IV 8 Skilling coin 1607','Coin','1607')">
+    <div class="gallery-item" data-type="coin">
 
-               <img src="images/Coin1.jpg" alt="King Christian IV 8 Skilling
+  <div class="inventory-card"
+       onclick="openModal(
+       'images/Coin1.jpg',
+       'King Christian IV 8 Skilling coin 1607',
+       'Coin',
+       '1607'
+       )">
 
-            </div>
-        </div>
+    <img src="images/Coin1.jpg"
+         alt="King
 
-        <!-- Coin 2 -->
-        <div class="gallery-item" data-type="coin">
-            <div class="inventory-card"
-                 onclick="openModal('images/Coin2.jpg','Hermann II von Katzenelnbogen Silver Pfennig','Coin','1174-1203')">
+    <!-- Coin -->
+  <div class="gallery-item" data-type="coin">
 
-                images/Coin2.jpg
+  <div class="inventory-card"
+       onclick="openModal(
+       'images/Coin1.jpg',
+       'King Christian IV 8 Skilling coin 1607',
+       'Coin',
+       '1607'
+       )">
 
-            </div>
-        </div>
+    images/Coin1.jpg
 
-        <!-- Jewellery -->
-        <div class="gallery-item" data-type="jewellery">
-            <div class="inventory-card"
-                 onclick="openModal('images/Brooch.jpg','Silver Brooch','Jewellery','Early 20th Century')">
+  </div>
 
-                images/Brooch.jpg
+</div>
 
-            </div>
-        </div>
+    <!-- Jewellery -->
+    <div class="gallery-item" data-type="jewellery">
 
-        <!-- Tool -->
-        <div class="gallery-item" data-type="tool">
-            <div class="inventory-card"
-                 onclick="openModal('images/Stamp.jpg','Metal Stamp','Tool','1700s')">
+  <div class="inventory-card"
+       onclick="openModal(
+       'images/Brooch.jpg',
+       'Silver Brooch',
+       'Jewellery',
+       'Early 20th Century'
+       )">
 
-                images/Stamp.jpg
+    <imges/Brooch.jpg
 
-            </div>
-        </div>
+  </div>
 
-    </div>
+</div>
 
+    <!-- ✅ TOOL (this was missing before) -->
+ <div class="gallery-item" data-type="tool">
+
+  <div class="inventory-card"
+       onclick="openModal(
+       'images/Stamp.jpg',
+       'Metal Stamp',
+       'Tool',
+       '1700s'
+       )">
+
+    images/Stamp.jpg
+
+  </div>
+
+   <div class="gallery-item" data-type="coin">
+
+  <div class="inventory-card"
+       onclick="openModal(
+       'images/Coin2.jpg',
+       'Hermann II von Katzenelnbogen Silver Pfennig',
+       'Coin',
+       '1174–1203'
+       )">
+
+    images/Coin2.jpg
+
+  </div>
+
+</div>
+
+</div>
 </section>
 
 </main>
 
 <footer>
-    <p>© DigQuest</p>
+  <p>© DigQuest</p>
 </footer>
 
-<!-- Search -->
-
+<!-- ✅ WORKING SCRIPT -->
 <script>
-
 function searchInventory() {
+  var input = document.getElementById("searchInput").value.toLowerCase();
+  var items = document.querySelectorAll(".gallery-item");
 
-    var input =
-        document.getElementById("searchInput")
-        .value
-        .toLowerCase();
-
-    var items =
-        document.querySelectorAll(".gallery-item");
-
-    items.forEach(function(item) {
-
-        if (item.innerText.toLowerCase().includes(input)) {
-            item.style.display = "block";
-        } else {
-            item.style.display = "none";
-        }
-
-    });
+  items.forEach(function(item) {
+    if (item.innerText.toLowerCase().includes(input)) {
+      item.style.display = "block";
+    } else {
+      item.style.display = "none";
+    }
+  });
 }
 
 function filterItems(type) {
+  var items = document.querySelectorAll(".gallery-item");
 
-    var items =
-        document.querySelectorAll(".gallery-item");
-
-    items.forEach(function(item) {
-
-        if (type === "all" || item.dataset.type === type) {
-            item.style.display = "block";
-        } else {
-            item.style.display = "none";
-        }
-
-    });
+  items.forEach(function(item) {
+    if (type === "all" || item.dataset.type === type) {
+      item.style.display = "block";
+    } else {
+      item.style.display = "none";
+    }
+  });
 }
-
 </script>
-
-<!-- Modal -->
-
 <div id="findModal" class="modal">
 
-    <div class="modal-content">
+  <div class="modal-content">
 
-        <span class="close" onclick="closeModal()">&times;</span>
+    <span class="close" onclick="closeModal()">&times;</span>
 
-        <img id="modalImage" class="modal-image">
+    <img id="modalImage" class="modal-image">
 
-        <h2 id="modalTitle"></h2>
+    <h2 id="modalTitle"></h2>
 
-        <p>
-            <strong>Type:</strong>
-            <span id="modalType"></span>
-        </p>
+    <p><strong>Type:</strong> <span id="modalType"></span></p>
 
-        <p>
-            <strong>Age:</strong>
-            <span id="modalAge"></span>
-        </p>
+    <p><strong>Age:</strong> <span id="modalAge"></span></p>
 
-    </div>
+  </div>
 
 </div>
 
-<script>
+  <script>
 
 function openModal(image, title, type, age) {
 
-    document.getElementById("modalImage").src = image;
-    document.getElementById("modalTitle").textContent = title;
-    document.getElementById("modalType").textContent = type;
-    document.getElementById("modalAge").textContent = age;
+  document.getElementById("modalImage").src = image;
+  document.getElementById("modalTitle").textContent = title;
+  document.getElementById("modalType").textContent = type;
+  document.getElementById("modalAge").textContent = age;
 
-    document.getElementById("findModal").style.display = "block";
+  document.getElementById("findModal").style.display = "block";
 }
 
 function closeModal() {
-    document.getElementById("findModal").style.display = "none";
+  document.getElementById("findModal").style.display = "none";
 }
 
 window.onclick = function(event) {
 
-    const modal =
-        document.getElementById("findModal");
+  const modal = document.getElementById("findModal");
 
-    if (event.target === modal) {
-        closeModal();
-    }
-
+  if (event.target === modal) {
+    closeModal();
+  }
 };
 
 </script>
-
+  
 </body>
 </html>
