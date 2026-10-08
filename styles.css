@@ -227,6 +227,11 @@ input {
     font-size: 0.9rem;
     transition: all 0.2s ease;
 }
+.filter-pill.active {
+    background: #d4af37;
+    color: white;
+    border-color: #d4af37;
+}
 
 .filter-pill:hover {
     background: #d4af37;
