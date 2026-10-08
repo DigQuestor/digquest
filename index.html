@@ -141,49 +141,6 @@ function filterItems(type) {
     }
   });
 }
-</script>
-<div id="findModal" class="modal">
-
-  <div class="modal-content">
-
-    <span class="close" onclick="closeModal()">&times;</span>
-
-    <img id="modalImage" class="modal-image">
-
-    <h2 id="modalTitle"></h2>
-
-    <p><strong>Type:</strong> <span id="modalType"></span></p>
-
-    <p><strong>Age:</strong> <span id="modalAge"></span></p>
-
-  </div>
-
-</div>
-
-  <script>
-
-function openModal(image, title, type, age) {
-
-  document.getElementById("modalImage").src = image;
-  document.getElementById("modalTitle").textContent = title;
-  document.getElementById("modalType").textContent = type;
-  document.getElementById("modalAge").textContent = age;
-
-  document.getElementById("findModal").style.display = "block";
-}
-
-function closeModal() {
-  document.getElementById("findModal").style.display = "none";
-}
-
-window.onclick = function(event) {
-
-  const modal = document.getElementById("findModal");
-
-  if (event.target === modal) {
-    closeModal();
-  }
-};
 
 </script>
   
