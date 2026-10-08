@@ -312,29 +312,7 @@ const TreasureCard = ({ find }: TreasureCardProps) => {
           </div>
           
           {/* Card-style info area */}
-          <div className="p-3 space-y-2 flex-1 flex flex-col justify-between">
-            {/* Title */}
-            <h3 className="font-display text-lg font-bold text-earth-brown text-center truncate">
-              {find.title}
-            </h3>
-            
-            {/* User info - compact */}
-            <div className="flex items-center justify-center gap-2 text-sm">
-              <Avatar className="w-6 h-6">
-                <AvatarImage
-                  src={userAvatarUrl || user?.avatarUrl || undefined}
-                  alt={user?.username || "User"}
-                  onError={(e) => {
-                    console.error("Failed to load avatar image:", e.currentTarget.src);
-                    e.currentTarget.src = `https://api.dicebear.com/7.x/personas/svg?seed=${user?.id || find.userId}`;
-                  }}
-                />
-                <AvatarFallback className="text-xs">{user?.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
-              </Avatar>
-              <span className="font-medium text-forest-green text-sm">
-                {user?.username || username || (find.userId ? `User #${find.userId}` : "Anonymous")}
-              </span>
-            </div>
+         <div className="hidden"></div>
             
             {/* Location, comments, and likes - compact row */}
             <div className="flex items-center justify-between text-xs text-gray-500 pt-1">
