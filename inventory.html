@@ -1,1 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Finds Inventory | DigQuest</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ===== FINDS INVENTORY LIST ===== */
+    .inventory-section {
+      max-width: 1160px;
+      margin: 0 auto;
+    }
 
+    .inventory-tools {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #inventorySearch {
+      width: 60%;
+      max-width: 500px;
+      padding: 12px 16px;
+      border: 1px solid #d4d4d4;
+      border-radius: 25px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    #inventorySearch:focus {
+      border-color: #d4af37;
+      box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
+    }
+
+    #inventoryFilters {
+      margin: 16px 0 6px;
+    }
+
+    #findCount {
+      color: #777;
+      font-size: 0.9rem;
+      margin: 8px 0 0;
+    }
+
+    .table-wrap {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      overflow-x: auto;
+    }
+
+    #findsTable {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    #findsTable th {
+      background: #3a2f1b;
+      color: #f4d03f;
+      text-align: left;
+      padding: 9px 12px;
+      font-size: 0.78rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    #findsTable td {
+      padding: 6px 12px;
+      border-top: 1px solid #eee;
+      vertical-align: top;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+
+    #findsTable td:first-child {
+      font-weight: 600;
+    }
+
+    /* Only the description may wrap, and only if it is too long to fit */
+    #findsTable td:last-child {
+      white-space: normal;
+      min-width: 260px;
+    }
+
+    #findsTable tbody tr:hover {
+      background: #faf7ee;
+    }
+
+    #noResults {
+      display: none;
+      text-align: center;
+      color: #777;
+      padding: 24px;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>DigQuest</h1>
+    <p>Exploring history one signal at a time</p>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="inventory.html">Finds Inventory</a>
+      <a href="permissions.html">Permissions</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="intro">
+    <h2>Finds Inventory</h2>
+    <p>A running list of everything recovered so far.</p>
+  </section>
+
+  <section class="inventory-section">
+
+    <div class="inventory-tools">
+      <input type="text" id="inventorySearch" placeholder="Search finds...">
+      <div id="inventoryFilters"></div>
+      <p id="findCount"></p>
+    </div>
+
+    <div class="table-wrap">
+      <table id="findsTable">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Type</th>
+            <th>Age</th>
+            <th>Material</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- TO ADD A FIND: copy one <tr> line below, paste it on a new line
+               after the last one, and change the text between the tags.
+               Order: Item, Type, Age, Material, Description. -->
+
+          <tr><td>King Christian IV 8 Skilling</td><td>Coin</td><td>1607</td><td>Silver</td><td>Danish silver coin showing the crowned bust of Christian IV.</td></tr>
+          <tr><td>Hermann II von Katzenelnbogen Pfennig</td><td>Coin</td><td>1174–1203</td><td>Silver</td><td>Hammered silver penny of the Bishop of Münster.</td></tr>
+          <tr><td>Silver Brooch</td><td>Jewellery</td><td>Early 20th Century</td><td>Silver</td><td>Flower-shaped brooch with an amber-coloured centre.</td></tr>
+          <tr><td>Metal Stamp</td><td>Tool</td><td>1700s</td><td>Copper alloy</td><td>Seal matrix engraved with a cursive monogram, read as "MCR".</td></tr>
+
+        </tbody>
+      </table>
+      <p id="noResults">No finds match your search.</p>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  <p>© DigQuest</p>
+</footer>
+
+<script>
+(function () {
+  var table = document.getElementById("findsTable");
+  var rows = Array.prototype.slice.call(table.tBodies[0].rows);
+  var headers = Array.prototype.map.call(table.tHead.rows[0].cells, function (th) {
+    return th.textContent.trim();
+  });
+  var typeColumn = headers.indexOf("Type");
+  var search = document.getElementById("inventorySearch");
+  var filters = document.getElementById("inventoryFilters");
+  var count = document.getElementById("findCount");
+  var noResults = document.getElementById("noResults");
+  var activeType = "all";
+
+  function typeOf(row) {
+    var cell = row.cells[typeColumn];
+    return cell ? cell.textContent.trim() : "";
+  }
+
+  // Build one filter button per type found in the list
+  var types = [];
+  rows.forEach(function (row) {
+    var t = typeOf(row);
+    if (t && types.indexOf(t) === -1) { types.push(t); }
+  });
+  types.sort();
+
+  function addButton(label, value) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "filter-pill" + (value === "all" ? " active" : "");
+    b.textContent = label;
+    b.addEventListener("click", function () {
+      activeType = value;
+      Array.prototype.forEach.call(filters.children, function (other) {
+        other.classList.remove("active");
+      });
+      b.classList.add("active");
+      update();
+    });
+    filters.appendChild(b);
+  }
+
+  addButton("Show All", "all");
+  types.forEach(function (t) { addButton(t, t); });
+
+  function update() {
+    var text = search.value.toLowerCase().trim();
+    var shown = 0;
+    rows.forEach(function (row) {
+      var matchesType = activeType === "all" || typeOf(row) === activeType;
+      var matchesText = row.textContent.toLowerCase().indexOf(text) !== -1;
+      var show = matchesType && matchesText;
+      row.style.display = show ? "" : "none";
+      if (show) { shown++; }
+    });
+    noResults.style.display = shown === 0 ? "block" : "none";
+    count.textContent = shown === rows.length
+      ? rows.length + (rows.length === 1 ? " find" : " finds")
+      : "Showing " + shown + " of " + rows.length + " finds";
+  }
+
+  search.addEventListener("input", update);
+  update();
+})();
+</script>
+
+</body>
+</html>
