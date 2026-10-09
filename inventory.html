@@ -35,6 +35,28 @@
       margin: 16px 0 6px;
     }
 
+    .inventory-sort {
+      margin: 12px 0 0;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    #inventorySort {
+      margin-left: 6px;
+      padding: 7px 12px;
+      border: 1px solid #d4d4d4;
+      border-radius: 25px;
+      background: white;
+      font-size: 0.9rem;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    #inventorySort:focus {
+      border-color: #d4af37;
+      outline: none;
+    }
+
     #findCount {
       color: #777;
       font-size: 0.9rem;
@@ -125,6 +147,17 @@
     <div class="inventory-tools">
       <input type="text" id="inventorySearch" placeholder="Search finds...">
       <div id="inventoryFilters"></div>
+      <div class="inventory-sort">
+        <label for="inventorySort">Sort by</label>
+        <select id="inventorySort">
+          <option value="added">Order added</option>
+          <option value="age-old">Age (oldest first)</option>
+          <option value="age-new">Age (newest first)</option>
+          <option value="Item">Item (A to Z)</option>
+          <option value="Type">Type (A to Z)</option>
+          <option value="Material">Material (A to Z)</option>
+        </select>
+      </div>
       <p id="findCount"></p>
     </div>
 
@@ -149,20 +182,20 @@
           <tr><td>Hermann II von Katzenelnbogen Pfennig</td><td>Coin</td><td>1174–1203</td><td>Silver</td><td>Hammered silver penny of the Bishop of Münster.</td></tr>
           <tr><td>Silver Brooch</td><td>Jewellery</td><td>Early 20th Century</td><td>Silver</td><td>Flower-shaped brooch with an amber-coloured centre.</td></tr>
           <tr><td>Metal Stamp</td><td>Tool</td><td>1700s</td><td>Copper alloy</td><td>Seal matrix engraved with a cursive monogram, read as "MCR".</td></tr>
-                    <tr><td>Silver 2 Schilling</td><td>Coin</td><td>1727</td><td>Silver</td><td>Crowned Imperial Eagle minted in Lubeck.</td></tr>
-                    <tr><td>King Frederik IV 12 Skilling</td><td>Coin</td><td>1718</td><td>Silver</td><td>Minted in the Norwegian Mint in Kongsberg.</td></tr>
-                    <tr><td>King Christian VII 1 Skilling</td><td>Coin</td><td>1771</td><td>Copper</td><td>One of the most common historical coins from the reign of King Christian VII.</td></tr>
-                    <tr><td>King Christian IX 25 Øre</td><td>Coin</td><td>1874</td><td>Silver</td><td>Issued in the first year of the Scandinavian Monetary Union.</td></tr>
-                    <tr><td>King Frederik VII 1 Skilling Rigsmønt</td><td>Coin</td><td>1856</td><td>Bronze</td><td>Common circulated coin from the reign of King Frederik VII.</td></tr>
-                    <tr><td>King Christian IX 2 Øre</td><td>Coin</td><td>1874</td><td>Bronze</td><td>Classic bronze circulation coin issued from 1874 to 1906.</td></tr>
-                    <tr><td>King Oscar II of Sweden 25 Øre</td><td>Coin</td><td>1874</td><td>Silver</td><td>Contains the motto "Brodrafolkens val" meaning "Welfare of the brother people".</td></tr>
-                    <tr><td>King Edward VII 1 Penny</td><td>Coin</td><td>1905</td><td>Bronze</td><td>Common circulated coin from the reign of King Edward VII.</td></tr>
+          <tr><td>Silver 2 Schilling</td><td>Coin</td><td>1727</td><td>Silver</td><td>Crowned Imperial Eagle minted in Lubeck.</td></tr>
+          <tr><td>King Frederik IV 12 Skilling</td><td>Coin</td><td>1718</td><td>Silver</td><td>Minted in the Norwegian Mint in Kongsberg.</td></tr>
+          <tr><td>King Christian VII 1 Skilling</td><td>Coin</td><td>1771</td><td>Copper</td><td>One of the most common historical coins from the reign of King Christian VII.</td></tr>
+          <tr><td>King Christian IX 25 Øre</td><td>Coin</td><td>1874</td><td>Silver</td><td>Issued in the first year of the Scandinavian Monetary Union.</td></tr>
+          <tr><td>King Frederik VII 1 Skilling Rigsmønt</td><td>Coin</td><td>1856</td><td>Bronze</td><td>Common circulated coin from the reign of King Frederik VII.</td></tr>
+          <tr><td>King Christian IX 2 Øre</td><td>Coin</td><td>1874</td><td>Bronze</td><td>Classic bronze circulation coin issued from 1874 to 1906.</td></tr>
+          <tr><td>King Oscar II of Sweden 25 Øre</td><td>Coin</td><td>1874</td><td>Silver</td><td>Contains the motto "Brodrafolkens val" meaning "Welfare of the brother people".</td></tr>
+          <tr><td>King Edward VII 1 Penny</td><td>Coin</td><td>1905</td><td>Bronze</td><td>Common circulated coin from the reign of King Edward VII.</td></tr>
           <tr><td>King George VI 3 Penny</td><td>Coin</td><td>1937</td><td>Nickel-brass</td><td>Coin minted in the first year of its release.</td></tr>
           <tr><td>Toy car (front)</td><td>Toy</td><td>unknown</td><td>Brass</td><td>Vehicle looks like a car from the early 1900s.</td></tr>
           <tr><td>King Christian VII 2 & a half Skilling Courant</td><td>Coin</td><td>Between 1771-1790</td><td>Copper</td><td>Heavily corroded. Date inelegible.</td></tr>
           <tr><td>Toy Soldier (rifleman)</td><td>Toy</td><td>unknown possibly 1920s</td><td>Lead</td><td>Toy Soldier. Missing rifle tip.</td></tr>
           <tr><td>Copper Shoe Buckle</td><td>Object</td><td>1600-1700s</td><td>Copper</td><td>Shoe buckle with fastener.</td></tr>
-              <tr><td>2 part Trefoil Fibula (Viking Times)</td><td>Jewellery</td><td>0800-950AD</td><td>Bronze</td><td>Danfae find</td></tr>
+          <tr><td>2 part Trefoil Fibula (Viking Times)</td><td>Jewellery</td><td>0800-950AD</td><td>Bronze</td><td>Danfae find</td></tr>
           <tr><td>Thimble 1</td><td>Object</td><td>1930-1960</td><td>Brass</td><td>Household sewing thimble</td></tr>
           <tr><td>Thimble 2</td><td>Object</td><td>1930-1960</td><td>Brass</td><td>Household sewing thimble</td></tr>
           <tr><td>Carlsberg Brewery Medal</td><td>Jewellery</td><td>1950s</td><td>Silvered Bronze</td><td>Features the iconic Elephant Gate on the reverse side</td></tr>
@@ -172,10 +205,7 @@
           <tr><td>King Christian X 2 Kroner</td><td>Coin</td><td>1925</td><td>Bronze</td><td>Standard circulation coin featuring a large crown in the centre</td></tr>
           <tr><td>King Christian IX 5 Øre</td><td>Coin</td><td>1894</td><td>Copper</td><td>Features the iconic dolphin motive on the reverse</td></tr>
           <tr><td>Silver Ring (Modern)</td><td>Jewellery</td><td>1960-1980s</td><td>Silver</td><td>Likely designed and manufactured by a local jewelsmith</td></tr>
-             <tr><td>BAN Bullfighting pendant</td><td>Jewellery</td><td>unknown</td><td>Bronze</td><td>Features an image of a bull on reverse side</td></tr>
-          
-          
-          
+          <tr><td>BAN Bullfighting pendant</td><td>Jewellery</td><td>unknown</td><td>Bronze</td><td>Features an image of a bull on reverse side</td></tr>
 
         </tbody>
       </table>
@@ -202,7 +232,73 @@
   var filters = document.getElementById("inventoryFilters");
   var count = document.getElementById("findCount");
   var noResults = document.getElementById("noResults");
+  var sortSelect = document.getElementById("inventorySort");
+  var body = table.tBodies[0];
   var activeType = "all";
+
+  // Remember the order the finds were added in
+  rows.forEach(function (row, i) { row.setAttribute("data-added", i); });
+
+  // Turn the text in the Age column into a year, so ages can be sorted.
+  // Understands "1607", "1174-1203", "1700s", "Early 20th Century", "950 AD", "200 BC".
+  // Anything without a date (such as "unknown") returns null and sorts last.
+  function yearOf(text) {
+    var t = text.toLowerCase();
+    var m = t.match(/(\d{1,4})\s*(bc|bce|ad|ce)\b/);
+    var first = t.match(/\d{3,4}/);
+    if (first && (!m || t.indexOf(first[0]) <= t.indexOf(m[1]))) {
+      var y = parseInt(first[0], 10);
+      return (m && /^bc/.test(m[2])) ? -y : y;
+    }
+    if (m) {
+      var n = parseInt(m[1], 10);
+      return /^bc/.test(m[2]) ? -n : n;
+    }
+    var c = t.match(/(\d{1,2})(st|nd|rd|th)\s+century/);
+    if (c) {
+      var start = (parseInt(c[1], 10) - 1) * 100;
+      if (t.indexOf("late") !== -1) { return start + 75; }
+      if (t.indexOf("mid") !== -1) { return start + 50; }
+      return start;
+    }
+    return null;
+  }
+
+  function cellText(row, column) {
+    var cell = row.cells[headers.indexOf(column)];
+    return cell ? cell.textContent.trim() : "";
+  }
+
+  function addedOrder(a, b) {
+    return a.getAttribute("data-added") - b.getAttribute("data-added");
+  }
+
+  function sortRows() {
+    var mode = sortSelect.value;
+    var sorted = rows.slice();
+    if (mode === "added") {
+      sorted.sort(addedOrder);
+    } else if (mode === "age-old" || mode === "age-new") {
+      sorted.sort(function (a, b) {
+        var ya = yearOf(cellText(a, "Age"));
+        var yb = yearOf(cellText(b, "Age"));
+        if (ya === null && yb === null) { return addedOrder(a, b); }
+        if (ya === null) { return 1; }
+        if (yb === null) { return -1; }
+        if (ya === yb) { return addedOrder(a, b); }
+        return mode === "age-old" ? ya - yb : yb - ya;
+      });
+    } else {
+      sorted.sort(function (a, b) {
+        var ta = cellText(a, mode);
+        var tb = cellText(b, mode);
+        if (!ta && tb) { return 1; }
+        if (ta && !tb) { return -1; }
+        return ta.localeCompare(tb, undefined, { sensitivity: "base", numeric: true }) || addedOrder(a, b);
+      });
+    }
+    sorted.forEach(function (row) { body.appendChild(row); });
+  }
 
   function typeOf(row) {
     var cell = row.cells[typeColumn];
@@ -253,6 +349,7 @@
   }
 
   search.addEventListener("input", update);
+  sortSelect.addEventListener("change", sortRows);
   update();
 })();
 </script>
